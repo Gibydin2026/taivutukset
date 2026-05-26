@@ -1755,4 +1755,19 @@ function wireUpdateBanner(reg) {
   });
 
   dismiss.addEventListener("click", hide);
+
+  if (el.appVersion) {
+    el.appVersion.addEventListener("click", () => {
+      const orig = el.appVersion.textContent;
+      el.appVersion.textContent = "checking…";
+      reg.update().then(() => {
+        setTimeout(() => {
+          if (!banner.classList.contains("hidden")) return; // banner will show
+          el.appVersion.textContent = orig;
+        }, 2000);
+      }).catch(() => {
+        el.appVersion.textContent = orig;
+      });
+    });
+  }
 }
