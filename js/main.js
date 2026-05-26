@@ -984,8 +984,9 @@ function submit() {
     const input = el.answer.value;
     if (!input.trim()) return;
     const result = checkAnswer(state.current, input);
-    score(result.ok ? "correct" : "wrong");
-    recordTestAnswer(result.ok ? "correct" : "wrong", input);
+    const testOutcome = result.ok && state.hintsShown === 0 ? "correct" : "wrong";
+    score(testOutcome);
+    recordTestAnswer(testOutcome, input);
     if (!state.test.finished) newChallenge();
     return;
   }
@@ -998,7 +999,7 @@ function submit() {
   const result = checkAnswer(state.current, input);
   if (result.ok) {
     setFeedback("\u2713 correct", "ok");
-    score("correct");
+    score(state.hintsShown > 0 ? "wrong" : "correct");
     state.awaitingNext = true;
     // Advance after the TTS finishes, not on a fixed timer. Finnish words
     // of even moderate length were getting clipped on mobile because the
@@ -1039,12 +1040,16 @@ function revealNextLetter() {
   if (!state.current || state.awaitingNext) return;
   if (blitzActive()) return;   // hints disabled during blitz
   const expected = state.current.word.inflections[state.current.key];
-  if (state.hintsShown >= expected.length) return;
-  state.hintsShown++;
+  const input = el.answer.value;
+  let correctPrefixLen = 0;
+  while (correctPrefixLen < input.length && correctPrefixLen < expected.length && input[correctPrefixLen] === expected[correctPrefixLen]) {
+    correctPrefixLen++;
+  }
+  if (correctPrefixLen >= expected.length) return;
+  state.hintsShown = Math.max(state.hintsShown, correctPrefixLen) + 1;
   el.answer.value = expected.slice(0, state.hintsShown);
   el.answer.focus();
   el.answer.setSelectionRange(el.answer.value.length, el.answer.value.length);
-  setFeedback(`hint: ${state.hintsShown} letter${state.hintsShown === 1 ? "" : "s"} shown`);
 }
 
 function showFullAnswer() {
