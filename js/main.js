@@ -1721,6 +1721,16 @@ if ("serviceWorker" in navigator) {
       .catch((err) => {
         console.warn("Service worker registration failed:", err);
       });
+
+    // Reload as soon as a new SW takes control (fired after SKIP_WAITING lands).
+    // Wired here at startup so it's always ready — the reload button just sends
+    // the SKIP_WAITING message and this handler does the rest.
+    let swRefreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (swRefreshing) return;
+      swRefreshing = true;
+      location.reload();
+    });
   });
 }
 
@@ -1749,18 +1759,11 @@ function wireUpdateBanner(reg) {
     });
   });
 
+  // Send SKIP_WAITING to the waiting worker; the global controllerchange
+  // listener (wired at startup) will reload the page once it activates.
   reload.addEventListener("click", () => {
-    const waiting = reg.waiting;
-    if (!waiting) { location.reload(); return; }
-    // Reload once the new worker takes control — controllerchange means
-    // skipWaiting has landed and we're now serving from the new cache.
-    let reloading = false;
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
-      if (reloading) return;
-      reloading = true;
-      location.reload();
-    });
-    waiting.postMessage({ type: "SKIP_WAITING" });
+    if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+    else location.reload();
   });
 
   dismiss.addEventListener("click", hide);
@@ -1768,15 +1771,11 @@ function wireUpdateBanner(reg) {
   if (el.appVersion) {
     el.appVersion.addEventListener("click", () => {
       const orig = el.appVersion.textContent;
+      if (orig === "checking…") return;
       el.appVersion.textContent = "checking…";
-      reg.update().then(() => {
-        setTimeout(() => {
-          if (!banner.classList.contains("hidden")) return; // banner will show
-          el.appVersion.textContent = orig;
-        }, 2000);
-      }).catch(() => {
-        el.appVersion.textContent = orig;
-      });
+      reg.update()
+        .then(() => setTimeout(() => { el.appVersion.textContent = orig; }, 1500))
+        .catch(() => { el.appVersion.textContent = orig; });
     });
   }
 }
