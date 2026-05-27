@@ -32,6 +32,12 @@ function overallLine(stats) {
   );
 }
 
+function todayLine(stats) {
+  const count = stats.todayCount || 0;
+  if (count === 0) return "No reviews yet today.";
+  return `Today: ${count.toLocaleString()} review${count === 1 ? "" : "s"}`;
+}
+
 // Average-reviews-per-day sub-line. Kept on its own line so it doesn't crowd
 // the accuracy summary and so an empty value (early in the tracking window)
 // degrades gracefully.
@@ -58,8 +64,8 @@ function renderTable(rows, labelFor) {
       <th>Form</th>
       <th class="num">Correct</th>
       <th class="num">Wrong</th>
-      <th class="num">Shown</th>
-      <th class="num">Skipped</th>
+      <th class="num mob-hide">Shown</th>
+      <th class="num mob-hide">Skipped</th>
       <th class="num">Accuracy</th>
     </tr>`;
   table.appendChild(thead);
@@ -72,8 +78,8 @@ function renderTable(rows, labelFor) {
       <td>${labelFor(r.id)}</td>
       <td class="num">${b.correct}</td>
       <td class="num">${b.wrong}</td>
-      <td class="num">${b.shown}</td>
-      <td class="num">${b.skipped}</td>
+      <td class="num mob-hide">${b.shown}</td>
+      <td class="num mob-hide">${b.skipped}</td>
       <td class="num">${fmtPct(r.accuracy)}</td>`;
     tbody.appendChild(tr);
   }
@@ -133,11 +139,11 @@ function renderWordTable(rows, labelFor) {
   thead.innerHTML = `
     <tr>
       <th>Word</th>
-      <th class="num">Forms</th>
+      <th class="num mob-hide">Forms</th>
       <th class="num">Attempts</th>
       <th class="num">Wrong</th>
       <th class="num">Accuracy</th>
-      <th>Weakest form</th>
+      <th class="mob-hide">Weakest form</th>
     </tr>`;
   table.appendChild(thead);
 
@@ -149,11 +155,11 @@ function renderWordTable(rows, labelFor) {
       : `<span class="muted">\u2014</span>`;
     tr.innerHTML = `
       <td class="word">${escapeHtml(r.word)}</td>
-      <td class="num">${r.formsAttempted}</td>
+      <td class="num mob-hide">${r.formsAttempted}</td>
       <td class="num">${r.attempts}</td>
       <td class="num">${r.wrong}</td>
       <td class="num">${fmtPct(r.accuracy)}</td>
-      <td>${worstCell}</td>`;
+      <td class="mob-hide">${worstCell}</td>`;
     tbody.appendChild(tr);
   }
   table.appendChild(tbody);
@@ -291,6 +297,11 @@ function sectionBlock(title, rows, labelFor) {
 
 export function renderStats(root, cfg, stats) {
   root.innerHTML = "";
+
+  const today = document.createElement("p");
+  today.className = "stats-today";
+  today.textContent = todayLine(stats);
+  root.appendChild(today);
 
   const overall = document.createElement("p");
   overall.className = "stats-overall";

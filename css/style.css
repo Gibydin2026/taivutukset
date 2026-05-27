@@ -1041,10 +1041,16 @@ kbd {
 .stats-panel[open] summary::before { transform: rotate(90deg); }
 .stats-panel summary > span:first-child { flex: 1; }
 
+.stats-today {
+  color: var(--accent);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0.95rem 0 0.3rem;
+}
 .stats-overall {
   color: var(--text);
   font-size: 1rem;
-  margin: 0.95rem 0 0.25rem;
+  margin: 0 0 0.25rem;
 }
 .stats-overall-sub {
   color: var(--muted);
@@ -1163,6 +1169,8 @@ kbd {
   .stats-overall { font-size: 0.95rem; }
   .headword     { font-size: 2rem; }
   .challenge    { padding: 1.6rem 1rem; }
+  .mob-hide     { display: none; }
+  .stats-section { overflow-x: unset; }
 }
 
 /* ---------- Status line ---------- */

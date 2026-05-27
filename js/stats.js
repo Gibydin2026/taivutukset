@@ -29,6 +29,11 @@ function emptyBucket() {
   return { correct: 0, wrong: 0, shown: 0, skipped: 0 };
 }
 
+function getTodayDate() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
 export function defaultStats() {
   return {
     totals:         emptyBucket(),
@@ -45,6 +50,8 @@ export function defaultStats() {
     // so the computation is one subtraction, one division. Honest but coarse.
     firstReviewAt:  null,  // ms since epoch, set on first recordOutcome
     totalReviews:   0,     // every outcome (correct/wrong/shown/skipped) counts
+    todayDate:      null,  // YYYY-MM-DD of last recorded outcome
+    todayCount:     0,     // outcomes recorded on todayDate
   };
 }
 
@@ -69,6 +76,8 @@ export function loadStats() {
     // know how long existing users have been drilling.
     firstReviewAt:  typeof stored.firstReviewAt === "number" ? stored.firstReviewAt : null,
     totalReviews:   typeof stored.totalReviews  === "number" ? stored.totalReviews  : 0,
+    todayDate:      typeof stored.todayDate === "string" ? stored.todayDate : null,
+    todayCount:     typeof stored.todayCount === "number" ? stored.todayCount : 0,
   };
 }
 
@@ -103,6 +112,10 @@ export function recordOutcome(stats, mode, challenge, outcome) {
   stats.totals[outcome]++;
   stats.totalReviews = (stats.totalReviews || 0) + 1;
   if (!stats.firstReviewAt) stats.firstReviewAt = Date.now();
+
+  const today = getTodayDate();
+  if (stats.todayDate !== today) { stats.todayDate = today; stats.todayCount = 0; }
+  stats.todayCount++;
 
   if (mode === "noun") {
     bump(stats.byNounCase,  challenge.key,        outcome);
