@@ -22816,45 +22816,6 @@
    "frequency_rank": 2630
   },
   {
-   "word": "pai",
-   "translations": [
-    "pie"
-   ],
-   "kotus_type": 18,
-   "group": "long_vowel",
-   "inflections": {
-    "nominative_singular": "pai",
-    "nominative_plural": "pait",
-    "genitive_singular": "pain",
-    "genitive_plural": "paiden",
-    "partitive_singular": "paita",
-    "partitive_plural": "paita",
-    "inessive_singular": "paissa",
-    "inessive_plural": "paissa",
-    "elative_singular": "paista",
-    "elative_plural": "paista",
-    "illative_singular": "paihin",
-    "illative_plural": "paihin",
-    "adessive_singular": "pailla",
-    "adessive_plural": "pailla",
-    "ablative_singular": "pailta",
-    "ablative_plural": "pailta",
-    "allative_singular": "paille",
-    "allative_plural": "paille",
-    "essive_singular": "paina",
-    "essive_plural": "paina",
-    "translative_singular": "paiksi",
-    "translative_plural": "paiksi",
-    "abessive_singular": "paitta",
-    "abessive_plural": "paitta",
-    "instructive_plural": "pain",
-    "comitative_plural": "paineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 2631
-  },
-  {
    "word": "vessa",
    "translations": [
     "toilet (room or seat)"
