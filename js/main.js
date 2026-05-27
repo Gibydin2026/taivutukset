@@ -1716,21 +1716,28 @@ function setImportFeedback(text, cls) {
 // banner bridges that gap — one click and the page reloads onto the new SW.
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js")
-      .then((reg) => wireUpdateBanner(reg))
-      .catch((err) => {
-        console.warn("Service worker registration failed:", err);
-      });
-
-    // Reload as soon as a new SW takes control (fired after SKIP_WAITING lands).
-    // Wired here at startup so it's always ready — the reload button just sends
-    // the SKIP_WAITING message and this handler does the rest.
+    // Wire controllerchange BEFORE registration so it's ready before any
+    // SKIP_WAITING message can be sent.
     let swRefreshing = false;
     navigator.serviceWorker.addEventListener("controllerchange", () => {
       if (swRefreshing) return;
       swRefreshing = true;
       location.reload();
     });
+
+    navigator.serviceWorker.register("sw.js")
+      .then((reg) => {
+        // A new SW is already waiting (e.g. installed on a previous visit).
+        // Apply it immediately on load — no banner needed.
+        if (reg.waiting) {
+          reg.waiting.postMessage({ type: "SKIP_WAITING" });
+          return;
+        }
+        wireUpdateBanner(reg);
+      })
+      .catch((err) => {
+        console.warn("Service worker registration failed:", err);
+      });
   });
 }
 
@@ -1748,28 +1755,26 @@ function wireUpdateBanner(reg) {
     else location.reload();
   }
 
-  // Already-waiting worker (opened tab after a previous update installed).
-  if (reg.waiting && navigator.serviceWorker.controller) show();
-
-  // Background update: new SW installed while page is open — show banner.
+  // Background update: new SW finished installing — show banner.
+  // Drop the navigator.serviceWorker.controller guard so this works
+  // even if the page was loaded via hard-refresh (controller is null then).
   reg.addEventListener("updatefound", () => {
     const nw = reg.installing;
     if (!nw) return;
     nw.addEventListener("statechange", () => {
-      if (nw.state === "installed" && navigator.serviceWorker.controller) show();
+      if (nw.state === "installed") show();
     });
   });
 
   reload.addEventListener("click", applyUpdate);
   dismiss.addEventListener("click", hide);
 
-  // Version badge: explicit user request — apply immediately without banner.
+  // Version badge: explicit check — apply immediately without banner.
   if (el.appVersion) {
     el.appVersion.addEventListener("click", () => {
       const orig = el.appVersion.textContent;
       if (orig === "checking…") return;
 
-      // Worker already waiting — apply straight away.
       if (reg.waiting) { applyUpdate(); return; }
 
       el.appVersion.textContent = "checking…";
