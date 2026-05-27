@@ -13189,47 +13189,6 @@
    "frequency_rank": 1372
   },
   {
-   "word": "a/languages A to L",
-   "translations": [
-    "A (note)"
-   ],
-   "kotus_type": null,
-   "group": "other",
-   "inflections": {
-    "nominative_singular": "a",
-    "nominative_plural": "a:t",
-    "genitive_singular": "a:n",
-    "genitive_plural": "a:iden",
-    "partitive_singular": "a:ta",
-    "partitive_plural": "a:ita",
-    "accusative_singular": "a",
-    "accusative_plural": "a:t",
-    "inessive_singular": "a:ssa",
-    "inessive_plural": "a:issa",
-    "elative_singular": "a:sta",
-    "elative_plural": "a:ista",
-    "illative_singular": "a:han",
-    "illative_plural": "a:ihin",
-    "adessive_singular": "a:lla",
-    "adessive_plural": "a:illa",
-    "ablative_singular": "a:lta",
-    "ablative_plural": "a:ilta",
-    "allative_singular": "a:lle",
-    "allative_plural": "a:ille",
-    "essive_singular": "a:na",
-    "essive_plural": "a:ina",
-    "translative_singular": "a:ksi",
-    "translative_plural": "a:iksi",
-    "abessive_singular": "a:tta",
-    "abessive_plural": "a:itta",
-    "instructive_plural": "a:in",
-    "comitative_plural": "a:ineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 1373
-  },
-  {
    "word": "sairaala",
    "translations": [
     "hospital (large medical facility)"
