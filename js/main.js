@@ -1048,8 +1048,17 @@ function revealNextLetter() {
   if (correctPrefixLen >= expected.length) return;
   state.hintsShown = Math.max(state.hintsShown, correctPrefixLen) + 1;
   el.answer.value = expected.slice(0, state.hintsShown);
-  el.answer.focus();
-  el.answer.setSelectionRange(el.answer.value.length, el.answer.value.length);
+
+  if (state.hintsShown >= expected.length) {
+    // Last letter revealed — score as wrong and auto-advance.
+    score("wrong");
+    setFeedback(`✗ ${expected}`, "bad");
+    maybeAutoPlayAnswer();
+    state.awaitingNext = true;
+  } else {
+    el.answer.focus();
+    el.answer.setSelectionRange(el.answer.value.length, el.answer.value.length);
+  }
 }
 
 function showFullAnswer() {
