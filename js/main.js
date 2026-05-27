@@ -1743,14 +1743,15 @@ function wireUpdateBanner(reg) {
   const show = () => banner.classList.remove("hidden");
   const hide = () => banner.classList.add("hidden");
 
-  // An already-waiting worker may exist if the user opened the tab after an
-  // update installed on a previous visit. Surface it straight away.
+  function applyUpdate() {
+    if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+    else location.reload();
+  }
+
+  // Already-waiting worker (opened tab after a previous update installed).
   if (reg.waiting && navigator.serviceWorker.controller) show();
 
-  // Normal update flow: updatefound fires when a new worker starts
-  // installing. Watch its state; once it hits "installed" and there's a
-  // controller (i.e. this page is currently being served by an older SW),
-  // we've got a pending upgrade.
+  // Background update: new SW installed while page is open — show banner.
   reg.addEventListener("updatefound", () => {
     const nw = reg.installing;
     if (!nw) return;
@@ -1759,22 +1760,38 @@ function wireUpdateBanner(reg) {
     });
   });
 
-  // Send SKIP_WAITING to the waiting worker; the global controllerchange
-  // listener (wired at startup) will reload the page once it activates.
-  reload.addEventListener("click", () => {
-    if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
-    else location.reload();
-  });
-
+  reload.addEventListener("click", applyUpdate);
   dismiss.addEventListener("click", hide);
 
+  // Version badge: explicit user request — apply immediately without banner.
   if (el.appVersion) {
     el.appVersion.addEventListener("click", () => {
       const orig = el.appVersion.textContent;
       if (orig === "checking…") return;
+
+      // Worker already waiting — apply straight away.
+      if (reg.waiting) { applyUpdate(); return; }
+
       el.appVersion.textContent = "checking…";
+      let applied = false;
+
+      const onUpdateFound = () => {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener("statechange", () => {
+          if (nw.state === "installed" && !applied) {
+            applied = true;
+            applyUpdate();
+          }
+        });
+      };
+      reg.addEventListener("updatefound", onUpdateFound, { once: true });
+
       reg.update()
-        .then(() => setTimeout(() => { el.appVersion.textContent = orig; }, 1500))
+        .then(() => setTimeout(() => {
+          reg.removeEventListener("updatefound", onUpdateFound);
+          if (!applied) el.appVersion.textContent = orig;
+        }, 4000))
         .catch(() => { el.appVersion.textContent = orig; });
     });
   }
