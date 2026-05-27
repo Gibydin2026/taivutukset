@@ -2175,45 +2175,6 @@
    "frequency_rank": 234
   },
   {
-   "word": "as",
-   "translations": [
-    "A-flat"
-   ],
-   "kotus_type": 5,
-   "group": "i_new",
-   "inflections": {
-    "nominative_singular": "as",
-    "nominative_plural": "asit",
-    "genitive_singular": "asin",
-    "genitive_plural": "asien",
-    "partitive_singular": "asia",
-    "partitive_plural": "aseja",
-    "inessive_singular": "asissa",
-    "inessive_plural": "aseissa",
-    "elative_singular": "asista",
-    "elative_plural": "aseista",
-    "illative_singular": "asiin",
-    "illative_plural": "aseihin",
-    "adessive_singular": "asilla",
-    "adessive_plural": "aseilla",
-    "ablative_singular": "asilta",
-    "ablative_plural": "aseilta",
-    "allative_singular": "asille",
-    "allative_plural": "aseille",
-    "essive_singular": "asina",
-    "essive_plural": "aseina",
-    "translative_singular": "asiksi",
-    "translative_plural": "aseiksi",
-    "abessive_singular": "asitta",
-    "abessive_plural": "aseitta",
-    "instructive_plural": "asein",
-    "comitative_plural": "aseineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 238
-  },
-  {
    "word": "asia",
    "translations": [
     "matter, issue, affair, concern, business, subject, case, thing (any abstract thing)",
@@ -10292,45 +10253,6 @@
     }
    ],
    "frequency_rank": 1022
-  },
-  {
-   "word": "es",
-   "translations": [
-    "E-flat"
-   ],
-   "kotus_type": 5,
-   "group": "i_new",
-   "inflections": {
-    "nominative_singular": "es",
-    "nominative_plural": "esit",
-    "genitive_singular": "esin",
-    "genitive_plural": "esien",
-    "partitive_singular": "esiä",
-    "partitive_plural": "esejä",
-    "inessive_singular": "esissä",
-    "inessive_plural": "eseissä",
-    "elative_singular": "esistä",
-    "elative_plural": "eseistä",
-    "illative_singular": "esiin",
-    "illative_plural": "eseihin",
-    "adessive_singular": "esillä",
-    "adessive_plural": "eseillä",
-    "ablative_singular": "esiltä",
-    "ablative_plural": "eseiltä",
-    "allative_singular": "esille",
-    "allative_plural": "eseille",
-    "essive_singular": "esinä",
-    "essive_plural": "eseinä",
-    "translative_singular": "esiksi",
-    "translative_plural": "eseiksi",
-    "abessive_singular": "esittä",
-    "abessive_plural": "eseittä",
-    "instructive_plural": "esein",
-    "comitative_plural": "eseineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 1023
   },
   {
    "word": "otin",
@@ -122154,45 +122076,6 @@
    "audio": null,
    "examples": [],
    "frequency_rank": 18194
-  },
-  {
-   "word": "des",
-   "translations": [
-    "D-flat"
-   ],
-   "kotus_type": 5,
-   "group": "i_new",
-   "inflections": {
-    "nominative_singular": "des",
-    "nominative_plural": "desit",
-    "genitive_singular": "desin",
-    "genitive_plural": "desien",
-    "partitive_singular": "desiä",
-    "partitive_plural": "desejä",
-    "inessive_singular": "desissä",
-    "inessive_plural": "deseissä",
-    "elative_singular": "desistä",
-    "elative_plural": "deseistä",
-    "illative_singular": "desiin",
-    "illative_plural": "deseihin",
-    "adessive_singular": "desillä",
-    "adessive_plural": "deseillä",
-    "ablative_singular": "desiltä",
-    "ablative_plural": "deseiltä",
-    "allative_singular": "desille",
-    "allative_plural": "deseille",
-    "essive_singular": "desinä",
-    "essive_plural": "deseinä",
-    "translative_singular": "desiksi",
-    "translative_plural": "deseiksi",
-    "abessive_singular": "desittä",
-    "abessive_plural": "deseittä",
-    "instructive_plural": "desein",
-    "comitative_plural": "deseineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 18198
   },
   {
    "word": "positiivi",
