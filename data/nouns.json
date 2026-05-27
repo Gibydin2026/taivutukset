@@ -16892,47 +16892,6 @@
    "frequency_rank": 1768
   },
   {
-   "word": "e",
-   "translations": [
-    "E (note)"
-   ],
-   "kotus_type": null,
-   "group": "other",
-   "inflections": {
-    "nominative_singular": "e",
-    "nominative_plural": "e:t",
-    "genitive_singular": "e:n",
-    "genitive_plural": "e:iden",
-    "partitive_singular": "e:tä",
-    "partitive_plural": "e:itä",
-    "accusative_singular": "e",
-    "accusative_plural": "e:t",
-    "inessive_singular": "e:ssä",
-    "inessive_plural": "e:issä",
-    "elative_singular": "e:stä",
-    "elative_plural": "e:istä",
-    "illative_singular": "e:hen",
-    "illative_plural": "e:ihin",
-    "adessive_singular": "e:llä",
-    "adessive_plural": "e:illä",
-    "ablative_singular": "e:ltä",
-    "ablative_plural": "e:iltä",
-    "allative_singular": "e:lle",
-    "allative_plural": "e:ille",
-    "essive_singular": "e:nä",
-    "essive_plural": "e:inä",
-    "translative_singular": "e:ksi",
-    "translative_plural": "e:iksi",
-    "abessive_singular": "e:ttä",
-    "abessive_plural": "e:ittä",
-    "instructive_plural": "e:in",
-    "comitative_plural": "e:ineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 1775
-  },
-  {
    "word": "sydän",
    "translations": [
     "heart (organ)",
@@ -19246,47 +19205,6 @@
    "frequency_rank": 2089
   },
   {
-   "word": "b",
-   "translations": [
-    "B flat"
-   ],
-   "kotus_type": null,
-   "group": "other",
-   "inflections": {
-    "nominative_singular": "b",
-    "nominative_plural": "b:t",
-    "genitive_singular": "b:n",
-    "genitive_plural": "b:iden",
-    "partitive_singular": "b:tä",
-    "partitive_plural": "b:itä",
-    "accusative_singular": "b",
-    "accusative_plural": "b:t",
-    "inessive_singular": "b:ssä",
-    "inessive_plural": "b:issä",
-    "elative_singular": "b:stä",
-    "elative_plural": "b:istä",
-    "illative_singular": "b:hen",
-    "illative_plural": "b:ihin",
-    "adessive_singular": "b:llä",
-    "adessive_plural": "b:illä",
-    "ablative_singular": "b:ltä",
-    "ablative_plural": "b:iltä",
-    "allative_singular": "b:lle",
-    "allative_plural": "b:ille",
-    "essive_singular": "b:nä",
-    "essive_plural": "b:inä",
-    "translative_singular": "b:ksi",
-    "translative_plural": "b:iksi",
-    "abessive_singular": "b:ttä",
-    "abessive_plural": "b:ittä",
-    "instructive_plural": "b:in",
-    "comitative_plural": "b:ineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 2098
-  },
-  {
    "word": "vieri",
    "translations": [
     "side (region next to something)"
@@ -20504,47 +20422,6 @@
     }
    ],
    "frequency_rank": 2229
-  },
-  {
-   "word": "d",
-   "translations": [
-    "D (note)"
-   ],
-   "kotus_type": null,
-   "group": "other",
-   "inflections": {
-    "nominative_singular": "d",
-    "nominative_plural": "d:t",
-    "genitive_singular": "d:n",
-    "genitive_plural": "d:iden",
-    "partitive_singular": "d:tä",
-    "partitive_plural": "d:itä",
-    "accusative_singular": "d",
-    "accusative_plural": "d:t",
-    "inessive_singular": "d:ssä",
-    "inessive_plural": "d:issä",
-    "elative_singular": "d:stä",
-    "elative_plural": "d:istä",
-    "illative_singular": "d:hen",
-    "illative_plural": "d:ihin",
-    "adessive_singular": "d:llä",
-    "adessive_plural": "d:illä",
-    "ablative_singular": "d:ltä",
-    "ablative_plural": "d:iltä",
-    "allative_singular": "d:lle",
-    "allative_plural": "d:ille",
-    "essive_singular": "d:nä",
-    "essive_plural": "d:inä",
-    "translative_singular": "d:ksi",
-    "translative_plural": "d:iksi",
-    "abessive_singular": "d:ttä",
-    "abessive_plural": "d:ittä",
-    "instructive_plural": "d:in",
-    "comitative_plural": "d:ineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 2231
   },
   {
    "word": "piru",
@@ -28267,47 +28144,6 @@
    "audio": null,
    "examples": [],
    "frequency_rank": 3282
-  },
-  {
-   "word": "c",
-   "translations": [
-    "C (note)"
-   ],
-   "kotus_type": null,
-   "group": "other",
-   "inflections": {
-    "nominative_singular": "c",
-    "nominative_plural": "c:t",
-    "genitive_singular": "c:n",
-    "genitive_plural": "c:iden",
-    "partitive_singular": "c:tä",
-    "partitive_plural": "c:itä",
-    "accusative_singular": "c",
-    "accusative_plural": "c:t",
-    "inessive_singular": "c:ssä",
-    "inessive_plural": "c:issä",
-    "elative_singular": "c:stä",
-    "elative_plural": "c:istä",
-    "illative_singular": "c:hen",
-    "illative_plural": "c:ihin",
-    "adessive_singular": "c:llä",
-    "adessive_plural": "c:illä",
-    "ablative_singular": "c:ltä",
-    "ablative_plural": "c:iltä",
-    "allative_singular": "c:lle",
-    "allative_plural": "c:ille",
-    "essive_singular": "c:nä",
-    "essive_plural": "c:inä",
-    "translative_singular": "c:ksi",
-    "translative_plural": "c:iksi",
-    "abessive_singular": "c:ttä",
-    "abessive_plural": "c:ittä",
-    "instructive_plural": "c:in",
-    "comitative_plural": "c:ineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 3284
   },
   {
    "word": "energia",
@@ -36742,47 +36578,6 @@
    "audio": null,
    "examples": [],
    "frequency_rank": 4341
-  },
-  {
-   "word": "h",
-   "translations": [
-    "B (note)"
-   ],
-   "kotus_type": null,
-   "group": "other",
-   "inflections": {
-    "nominative_singular": "h",
-    "nominative_plural": "h:t",
-    "genitive_singular": "h:n",
-    "genitive_plural": "h:iden",
-    "partitive_singular": "h:ta",
-    "partitive_plural": "h:ita",
-    "accusative_singular": "h",
-    "accusative_plural": "h:t",
-    "inessive_singular": "h:ssa",
-    "inessive_plural": "h:issa",
-    "elative_singular": "h:sta",
-    "elative_plural": "h:ista",
-    "illative_singular": "h:hon",
-    "illative_plural": "h:ihin",
-    "adessive_singular": "h:lla",
-    "adessive_plural": "h:illa",
-    "ablative_singular": "h:lta",
-    "ablative_plural": "h:ilta",
-    "allative_singular": "h:lle",
-    "allative_plural": "h:ille",
-    "essive_singular": "h:na",
-    "essive_plural": "h:ina",
-    "translative_singular": "h:ksi",
-    "translative_plural": "h:iksi",
-    "abessive_singular": "h:tta",
-    "abessive_plural": "h:itta",
-    "instructive_plural": "h:in",
-    "comitative_plural": "h:ineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 4342
   },
   {
    "word": "itsemurha",
@@ -46664,47 +46459,6 @@
    "audio": null,
    "examples": [],
    "frequency_rank": 5637
-  },
-  {
-   "word": "g",
-   "translations": [
-    "G (note)"
-   ],
-   "kotus_type": null,
-   "group": "other",
-   "inflections": {
-    "nominative_singular": "g",
-    "nominative_plural": "g:t",
-    "genitive_singular": "g:n",
-    "genitive_plural": "g:iden",
-    "partitive_singular": "g:tä",
-    "partitive_plural": "g:itä",
-    "accusative_singular": "g",
-    "accusative_plural": "g:t",
-    "inessive_singular": "g:ssä",
-    "inessive_plural": "g:issä",
-    "elative_singular": "g:stä",
-    "elative_plural": "g:istä",
-    "illative_singular": "g:hen",
-    "illative_plural": "g:ihin",
-    "adessive_singular": "g:llä",
-    "adessive_plural": "g:illä",
-    "ablative_singular": "g:ltä",
-    "ablative_plural": "g:iltä",
-    "allative_singular": "g:lle",
-    "allative_plural": "g:ille",
-    "essive_singular": "g:nä",
-    "essive_plural": "g:inä",
-    "translative_singular": "g:ksi",
-    "translative_plural": "g:iksi",
-    "abessive_singular": "g:ttä",
-    "abessive_plural": "g:ittä",
-    "instructive_plural": "g:in",
-    "comitative_plural": "g:ineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 5640
   },
   {
    "word": "juusto",
@@ -102144,47 +101898,6 @@
    "audio": null,
    "examples": [],
    "frequency_rank": 14624
-  },
-  {
-   "word": "f",
-   "translations": [
-    "F (note)"
-   ],
-   "kotus_type": null,
-   "group": "other",
-   "inflections": {
-    "nominative_singular": "f",
-    "nominative_plural": "f:t",
-    "genitive_singular": "f:n",
-    "genitive_plural": "f:ien",
-    "partitive_singular": "f:ää",
-    "partitive_plural": "f:iä",
-    "accusative_singular": "f",
-    "accusative_plural": "f:t",
-    "inessive_singular": "f:ssä",
-    "inessive_plural": "f:issä",
-    "elative_singular": "f:stä",
-    "elative_plural": "f:istä",
-    "illative_singular": "f:ään",
-    "illative_plural": "f:iin",
-    "adessive_singular": "f:llä",
-    "adessive_plural": "f:illä",
-    "ablative_singular": "f:ltä",
-    "ablative_plural": "f:iltä",
-    "allative_singular": "f:lle",
-    "allative_plural": "f:ille",
-    "essive_singular": "f:nä",
-    "essive_plural": "f:inä",
-    "translative_singular": "f:ksi",
-    "translative_plural": "f:iksi",
-    "abessive_singular": "f:ttä",
-    "abessive_plural": "f:ittä",
-    "instructive_plural": "f:in",
-    "comitative_plural": "f:ineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 14640
   },
   {
    "word": "varasuunnitelma",
