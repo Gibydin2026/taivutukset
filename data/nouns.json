@@ -27662,45 +27662,6 @@
    "frequency_rank": 3245
   },
   {
-   "word": "P/E-luku",
-   "translations": [
-    "price-earnings ratio, PE ratio, P-E ratio (ratio of share price to earnings per share used as an indication of the relative value of the share)"
-   ],
-   "kotus_type": 1,
-   "group": "o_oe",
-   "inflections": {
-    "nominative_singular": "P",
-    "nominative_plural": "P",
-    "genitive_singular": "P",
-    "genitive_plural": "P",
-    "partitive_singular": "P",
-    "partitive_plural": "P",
-    "inessive_singular": "P",
-    "inessive_plural": "P",
-    "elative_singular": "P",
-    "elative_plural": "P",
-    "illative_singular": "P",
-    "illative_plural": "P",
-    "adessive_singular": "P",
-    "adessive_plural": "P",
-    "ablative_singular": "P",
-    "ablative_plural": "P",
-    "allative_singular": "P",
-    "allative_plural": "P",
-    "essive_singular": "P",
-    "essive_plural": "P",
-    "translative_singular": "P",
-    "translative_plural": "P",
-    "abessive_singular": "P",
-    "abessive_plural": "P",
-    "instructive_plural": "P",
-    "comitative_plural": "P"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 3248
-  },
-  {
    "word": "tiimi",
    "translations": [
     "team"
