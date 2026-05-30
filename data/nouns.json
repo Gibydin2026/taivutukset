@@ -11984,45 +11984,6 @@
    "frequency_rank": 1225
   },
   {
-   "word": "henry",
-   "translations": [
-    "henry (unit of inductance)"
-   ],
-   "kotus_type": 1,
-   "group": "o_oe",
-   "inflections": {
-    "nominative_singular": "henry",
-    "nominative_plural": "henryt",
-    "genitive_singular": "henryn",
-    "genitive_plural": "henryjen",
-    "partitive_singular": "henryä",
-    "partitive_plural": "henryjä",
-    "inessive_singular": "henryssä",
-    "inessive_plural": "henryissä",
-    "elative_singular": "henrystä",
-    "elative_plural": "henryistä",
-    "illative_singular": "henryyn",
-    "illative_plural": "henryihin",
-    "adessive_singular": "henryllä",
-    "adessive_plural": "henryillä",
-    "ablative_singular": "henryltä",
-    "ablative_plural": "henryiltä",
-    "allative_singular": "henrylle",
-    "allative_plural": "henryille",
-    "essive_singular": "henrynä",
-    "essive_plural": "henryinä",
-    "translative_singular": "henryksi",
-    "translative_plural": "henryiksi",
-    "abessive_singular": "henryttä",
-    "abessive_plural": "henryittä",
-    "instructive_plural": "henryin",
-    "comitative_plural": "henryineen"
-   },
-   "audio": null,
-   "examples": [],
-   "frequency_rank": 1229
-  },
-  {
    "word": "yllätys",
    "translations": [
     "surprise"
