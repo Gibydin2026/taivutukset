@@ -26,8 +26,10 @@ export function defaultSettings() {
                               // used by scripts/extract.py at build time.
     theme:             "system", // "system" | "light" | "dark"
     // Challenge presentation. "standard" shows lemma + grammatical prompt;
-    // "cloze" shows an example sentence with the target form blanked out.
-    // Cloze restricts the pool to challenges that have a usable example.
+    // "cloze" shows an example sentence with the target form blanked out;
+    // "rection" (verb mode only) asks which complement a verb governs,
+    // answered by multiple choice. Cloze restricts the pool to challenges
+    // with a usable example; rection uses its own pool (data/rection.json).
     drillStyle:        "standard",
     // Gamification is opt-in for new users. Existing users with a stored
     // settings blob keep streak visibility via the migration below, so this

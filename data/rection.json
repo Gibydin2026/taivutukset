@@ -1,0 +1,1829 @@
+{
+ "_source": "Rection annotations from English Wiktionary Finnish verb glosses (en.wiktionary.org, via the kaikki.org extract), CC BY-SA 4.0. Parsed by scripts/extract_rection.py from data/verbs.json.",
+ "complements": [
+  "ablative",
+  "accusative",
+  "adessive",
+  "allative",
+  "elative",
+  "essive",
+  "illative",
+  "inessive",
+  "inf1",
+  "inf2_inessive",
+  "inf3_elative",
+  "inf3_illative",
+  "inf3_inessive",
+  "partitive",
+  "translative"
+ ],
+ "words": [
+  {
+   "word": "pitää",
+   "frequency_rank": 53,
+   "items": [
+    {
+     "key": "rection:partitive",
+     "glosses": [
+      "to hold (have and keep possession of something)"
+     ],
+     "hint": null,
+     "accept": [
+      "partitive"
+     ]
+    },
+    {
+     "key": "rection:elative:onto",
+     "glosses": [
+      "to hold (have and keep possession of something)"
+     ],
+     "hint": "onto",
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "tietää",
+   "frequency_rank": 59,
+   "items": [
+    {
+     "key": "rection:elative:about",
+     "glosses": [
+      "to know, be aware of (in some cases implying superficial knowledge, see the usage notes below)"
+     ],
+     "hint": "about",
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "saada",
+   "frequency_rank": 85,
+   "items": [
+    {
+     "key": "rection:elative:out-of",
+     "glosses": [
+      "to get, make, produce, yield"
+     ],
+     "hint": "out of",
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "tulla",
+   "frequency_rank": 86,
+   "items": [
+    {
+     "key": "rection:translative",
+     "glosses": [
+      "to become, get, go, turn (usually an adjective or a participle, only rarely a noun)"
+     ],
+     "hint": null,
+     "accept": [
+      "translative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "nähdä",
+   "frequency_rank": 108,
+   "items": [
+    {
+     "key": "rection:inf1:to-do",
+     "glosses": [
+      "can see (have enough vision to be able to do something)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf1"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "mennä",
+   "frequency_rank": 119,
+   "items": [
+    {
+     "key": "rection:inf3_illative:to-do",
+     "glosses": [
+      "to go (move away from a point of reference)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_illative"
+     ]
+    },
+    {
+     "key": "rection:illative+translative",
+     "glosses": [
+      "to go, enter, get, begin, start (general verb for describing entering some kind of state)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative",
+      "translative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "sanoa",
+   "frequency_rank": 157,
+   "items": [
+    {
+     "key": "rection:translative",
+     "glosses": [
+      "to call, name, dub; (passive) go by"
+     ],
+     "hint": null,
+     "accept": [
+      "translative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "päästää",
+   "frequency_rank": 171,
+   "items": [
+    {
+     "key": "rection:allative+illative",
+     "glosses": [
+      "to let (free someone of some restraint, obligation, etc. that prevents them from doing something or going somewhere)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative",
+      "allative"
+     ]
+    },
+    {
+     "key": "rection:inf3_illative:to-do",
+     "glosses": [
+      "to let (free someone of some restraint, obligation, etc. that prevents them from doing something or going somewhere)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "päästä",
+   "frequency_rank": 171,
+   "items": [
+    {
+     "key": "rection:allative+illative",
+     "glosses": [
+      "to get to, reach, arrive at/in (a place)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative",
+      "allative"
+     ]
+    },
+    {
+     "key": "rection:inf3_illative:to-do",
+     "glosses": [
+      "to get to, reach, arrive at/in (a place)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "puhua",
+   "frequency_rank": 172,
+   "items": [
+    {
+     "key": "rection:elative:about-of",
+     "glosses": [
+      "to speak, talk (communicate, discuss, converse; usually by speaking or with one's voice)"
+     ],
+     "hint": "about, of",
+     "accept": [
+      "elative"
+     ]
+    },
+    {
+     "key": "rection:allative:to",
+     "glosses": [
+      "to speak, talk (communicate, discuss, converse; usually by speaking or with one's voice)"
+     ],
+     "hint": "to",
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "näyttää",
+   "frequency_rank": 186,
+   "items": [
+    {
+     "key": "rection:ablative+allative",
+     "glosses": [
+      "to look like, resemble (to be similar in appearance to)"
+     ],
+     "hint": null,
+     "accept": [
+      "ablative",
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "vastata",
+   "frequency_rank": 226,
+   "items": [
+    {
+     "key": "rection:adessive:with",
+     "glosses": [
+      "to react, counter, respond, reciprocate (to take action in response to)"
+     ],
+     "hint": "with",
+     "accept": [
+      "adessive"
+     ]
+    },
+    {
+     "key": "rection:illative:to",
+     "glosses": [
+      "to react, counter, respond, reciprocate (to take action in response to)"
+     ],
+     "hint": "to",
+     "accept": [
+      "illative"
+     ]
+    },
+    {
+     "key": "rection:allative",
+     "glosses": [
+      "to account to (to be accountable or responsible to)"
+     ],
+     "hint": null,
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "uskoa",
+   "frequency_rank": 228,
+   "items": [
+    {
+     "key": "rection:illative:in",
+     "glosses": [
+      "to believe, have faith"
+     ],
+     "hint": "in",
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "lähteä",
+   "frequency_rank": 268,
+   "items": [
+    {
+     "key": "rection:inf3_illative",
+     "glosses": [
+      "to begin, start, start out, start off (often with more contrast than mennä, alkaa, ryhtyä etc.)"
+     ],
+     "hint": null,
+     "accept": [
+      "inf3_illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "lisätä",
+   "frequency_rank": 297,
+   "items": [
+    {
+     "key": "rection:illative:in-to",
+     "glosses": [
+      "to add (make an addition, augment, increase; say further information, add on)"
+     ],
+     "hint": "in/to",
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "kuulua",
+   "frequency_rank": 343,
+   "items": [
+    {
+     "key": "rection:allative:to",
+     "glosses": [
+      "to belong (showing ownership or location)"
+     ],
+     "hint": "to",
+     "accept": [
+      "allative"
+     ]
+    },
+    {
+     "key": "rection:illative:to",
+     "glosses": [
+      "to belong (to be member of)"
+     ],
+     "hint": "to",
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "kuulostaa",
+   "frequency_rank": 417,
+   "items": [
+    {
+     "key": "rection:ablative+allative",
+     "glosses": [
+      "to sound (convey an impression by one's sound)"
+     ],
+     "hint": null,
+     "accept": [
+      "ablative",
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "kuulla",
+   "frequency_rank": 444,
+   "items": [
+    {
+     "key": "rection:elative",
+     "glosses": [
+      "to hear of (to become aware of something through second-hand knowledge)"
+     ],
+     "hint": null,
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "pystyä",
+   "frequency_rank": 476,
+   "items": [
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to (be able to) cut into, (be able to) sink into, to bite into (of an axe, knife, etc.)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "jäädä",
+   "frequency_rank": 534,
+   "items": [
+    {
+     "key": "rection:translative",
+     "glosses": [
+      "to end up (as), to become (of negative or neutral states)"
+     ],
+     "hint": null,
+     "accept": [
+      "translative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "sopia",
+   "frequency_rank": 573,
+   "items": [
+    {
+     "key": "rection:allative",
+     "glosses": [
+      "to fit (to be of the correct size and shape; to be capable of being put into or passing through something; to be not too big)"
+     ],
+     "hint": null,
+     "accept": [
+      "allative"
+     ]
+    },
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to comport with, match (to be in agreement with; to be of an accord)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "syyttää",
+   "frequency_rank": 629,
+   "items": [
+    {
+     "key": "rection:elative:for",
+     "glosses": [
+      "to blame, blame (something) on, accuse"
+     ],
+     "hint": "for",
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "taitaa",
+   "frequency_rank": 662,
+   "items": [
+    {
+     "key": "rection:inf1",
+     "glosses": [
+      "to probably do, think that one does (active past participle: tainnut or taitanut)"
+     ],
+     "hint": null,
+     "accept": [
+      "inf1"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "vaikuttaa",
+   "frequency_rank": 739,
+   "items": [
+    {
+     "key": "rection:essive",
+     "glosses": [
+      "to act as, to work as, to do (to have as one's job)"
+     ],
+     "hint": null,
+     "accept": [
+      "essive"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "istua",
+   "frequency_rank": 744,
+   "items": [
+    {
+     "key": "rection:allative",
+     "glosses": [
+      "to suit, fit (e.g. of clothing)"
+     ],
+     "hint": null,
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "mahtaa",
+   "frequency_rank": 815,
+   "items": [
+    {
+     "key": "rection:inf1",
+     "glosses": [
+      "one supposes, probably do, must do (in suppositions)"
+     ],
+     "hint": null,
+     "accept": [
+      "inf1"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "sattua",
+   "frequency_rank": 981,
+   "items": [
+    {
+     "key": "rection:inf3_illative:to-do",
+     "glosses": [
+      "to happen (do or occur by chance or unexpectedly)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_illative"
+     ]
+    },
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to touch (to come involuntarily into contact with)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "panna",
+   "frequency_rank": 1077,
+   "items": [
+    {
+     "key": "rection:inf3_illative:to",
+     "glosses": [
+      "to send (make someone go somewhere)"
+     ],
+     "hint": "to",
+     "accept": [
+      "inf3_illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "haista",
+   "frequency_rank": 1161,
+   "items": [
+    {
+     "key": "rection:ablative+allative",
+     "glosses": [
+      "to smell, to have a smell/scent/odor; to stink"
+     ],
+     "hint": null,
+     "accept": [
+      "ablative",
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "valita",
+   "frequency_rank": 1193,
+   "items": [
+    {
+     "key": "rection:translative:as-into-the-position-of",
+     "glosses": [
+      "to elect, choose (into a position of power)"
+     ],
+     "hint": "as, into the position of",
+     "accept": [
+      "translative"
+     ]
+    },
+    {
+     "key": "rection:inf3_illative:to-do",
+     "glosses": [
+      "to elect, choose (into a position of power)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "valittaa",
+   "frequency_rank": 1193,
+   "items": [
+    {
+     "key": "rection:elative:about",
+     "glosses": [
+      "to complain, grouse, gripe, whine, bemoan, lament (orally or in writing)"
+     ],
+     "hint": "about",
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "koskea",
+   "frequency_rank": 1236,
+   "items": [
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to touch (physically disturb; to interfere with, molest, or attempt to harm through contact)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "kiittää",
+   "frequency_rank": 1310,
+   "items": [
+    {
+     "key": "rection:elative:for",
+     "glosses": [
+      "to thank, express one's gratitude"
+     ],
+     "hint": "for",
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "vaihtaa",
+   "frequency_rank": 1443,
+   "items": [
+    {
+     "key": "rection:illative+translative:for",
+     "glosses": [
+      "to trade (give in exchange for)"
+     ],
+     "hint": "for",
+     "accept": [
+      "illative",
+      "translative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "joutua",
+   "frequency_rank": 1472,
+   "items": [
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to get (into a negative position or situation)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    },
+    {
+     "key": "rection:allative+illative:in",
+     "glosses": [
+      "to end up (involuntarily, in a place considered negative)"
+     ],
+     "hint": "in",
+     "accept": [
+      "illative",
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "jaksaa",
+   "frequency_rank": 1627,
+   "items": [
+    {
+     "key": "rection:inf1:to-do",
+     "glosses": [
+      "to manage, to have enough strength"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf1"
+     ]
+    },
+    {
+     "key": "rection:accusative:for-with",
+     "glosses": [
+      "to manage, to have enough strength"
+     ],
+     "hint": "for/with",
+     "accept": [
+      "accusative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "puuttua",
+   "frequency_rank": 1838,
+   "items": [
+    {
+     "key": "rection:ablative+elative:from",
+     "glosses": [
+      "to be missing; to be lacking; (elative/ablative +) to lack"
+     ],
+     "hint": "from",
+     "accept": [
+      "elative",
+      "ablative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "suostua",
+   "frequency_rank": 1858,
+   "items": [
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to accept, approve (a request, an application, etc.)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "rakastua",
+   "frequency_rank": 1885,
+   "items": [
+    {
+     "key": "rection:illative:with",
+     "glosses": [
+      "to fall in love, enamor"
+     ],
+     "hint": "with",
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "muistuttaa",
+   "frequency_rank": 1900,
+   "items": [
+    {
+     "key": "rection:elative:of",
+     "glosses": [
+      "to remind (draw attention to an obligation)"
+     ],
+     "hint": "of",
+     "accept": [
+      "elative"
+     ]
+    },
+    {
+     "key": "rection:inf3_illative:to-do",
+     "glosses": [
+      "to remind (draw attention to an obligation)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_illative"
+     ]
+    },
+    {
+     "key": "rection:allative:to",
+     "glosses": [
+      "to remark (to state something as an observation)"
+     ],
+     "hint": "to",
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "valehdella",
+   "frequency_rank": 2283,
+   "items": [
+    {
+     "key": "rection:allative:to",
+     "glosses": [
+      "to lie (tell untruths)"
+     ],
+     "hint": "to",
+     "accept": [
+      "allative"
+     ]
+    },
+    {
+     "key": "rection:elative:about",
+     "glosses": [
+      "to lie (tell untruths)"
+     ],
+     "hint": "about",
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "välttää",
+   "frequency_rank": 2356,
+   "items": [
+    {
+     "key": "rection:inf3_elative:from-doing",
+     "glosses": [
+      "to refrain, make a point (of not doing)"
+     ],
+     "hint": "from doing",
+     "accept": [
+      "inf3_elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "osua",
+   "frequency_rank": 2368,
+   "items": [
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to hit, strike, get (a spot, target)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "kokea",
+   "frequency_rank": 2530,
+   "items": [
+    {
+     "key": "rection:essive+translative:as",
+     "glosses": [
+      "to see, regard, view, consider"
+     ],
+     "hint": "as",
+     "accept": [
+      "translative",
+      "essive"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "erottaa",
+   "frequency_rank": 2531,
+   "items": [
+    {
+     "key": "rection:elative:from",
+     "glosses": [
+      "to fire, dismiss (to relieve of a duty)",
+      "to expel (to terminate the membership of)"
+     ],
+     "hint": "from",
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "yltää",
+   "frequency_rank": 2927,
+   "items": [
+    {
+     "key": "rection:allative+illative",
+     "glosses": [
+      "to (be able to) reach (usually with one's limbs)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative",
+      "allative"
+     ]
+    },
+    {
+     "key": "rection:inf3_illative:to-do",
+     "glosses": [
+      "to (be able to) reach (usually with one's limbs)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "nauttia",
+   "frequency_rank": 2934,
+   "items": [
+    {
+     "key": "rection:elative",
+     "glosses": [
+      "to enjoy (receive enjoyment from)",
+      "to enjoy, use (a legal right)"
+     ],
+     "hint": null,
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "maistua",
+   "frequency_rank": 3125,
+   "items": [
+    {
+     "key": "rection:allative:to",
+     "glosses": [
+      "to taste good, taste appealing, suit someone's appetite",
+      "to be appealing, be to someone's liking"
+     ],
+     "hint": "to",
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "erota",
+   "frequency_rank": 3154,
+   "items": [
+    {
+     "key": "rection:elative",
+     "glosses": [
+      "to resign, quit (quit a job or position)",
+      "to divorce (dissolve a marriage)"
+     ],
+     "hint": null,
+     "accept": [
+      "elative"
+     ]
+    },
+    {
+     "key": "rection:elative:with",
+     "glosses": [
+      "to break up (end a relationship)"
+     ],
+     "hint": "with",
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "iskeä",
+   "frequency_rank": 3210,
+   "items": [
+    {
+     "key": "rection:illative:on",
+     "glosses": [
+      "to crack down (to enforce more stringently or more thoroughly)"
+     ],
+     "hint": "on",
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "yllättyä",
+   "frequency_rank": 3281,
+   "items": [
+    {
+     "key": "rection:elative+illative",
+     "glosses": [
+      "to be surprised (by) (become surprised by something)"
+     ],
+     "hint": null,
+     "accept": [
+      "elative",
+      "illative"
+     ]
+    },
+    {
+     "key": "rection:inf2_inessive:to-do",
+     "glosses": [
+      "to be surprised (by) (become surprised by something)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf2_inessive"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "ehdottaa",
+   "frequency_rank": 3421,
+   "items": [
+    {
+     "key": "rection:translative",
+     "glosses": [
+      "to nominate, propose (put someone forward as a candidate)"
+     ],
+     "hint": null,
+     "accept": [
+      "translative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "määrätä",
+   "frequency_rank": 3496,
+   "items": [
+    {
+     "key": "rection:inf3_illative:to-do",
+     "glosses": [
+      "to order, command, instruct, tell, enjoin (order someone to do something)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_illative"
+     ]
+    },
+    {
+     "key": "rection:translative:as",
+     "glosses": [
+      "to assign, ordain (to a position)"
+     ],
+     "hint": "as",
+     "accept": [
+      "translative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "turvata",
+   "frequency_rank": 3606,
+   "items": [
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to depend on, rely on, count on (e.g. God)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "palkata",
+   "frequency_rank": 3707,
+   "items": [
+    {
+     "key": "rection:translative:as-into-the-position-of",
+     "glosses": [
+      "to hire, employ, recruit (provide someone with a (new) job)"
+     ],
+     "hint": "as, into the position of",
+     "accept": [
+      "translative"
+     ]
+    },
+    {
+     "key": "rection:inf3_illative:to-do",
+     "glosses": [
+      "to hire, employ, recruit (provide someone with a (new) job)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "hirvetä",
+   "frequency_rank": 3863,
+   "items": [
+    {
+     "key": "rection:inf1",
+     "glosses": [
+      "to dare ((to) do), venture (to do), have the courage (to do), be brave enough (to do) (usually something very scary or frightening)"
+     ],
+     "hint": null,
+     "accept": [
+      "inf1"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "ryhtyä",
+   "frequency_rank": 4063,
+   "items": [
+    {
+     "key": "rection:translative",
+     "glosses": [
+      "to become (usually a proponent of a profession)"
+     ],
+     "hint": null,
+     "accept": [
+      "translative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "perustua",
+   "frequency_rank": 4079,
+   "items": [
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to be based on (e.g. of a work of art)",
+      "to be based on, be grounded in (e.g. of an opinion)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    },
+    {
+     "key": "rection:allative+illative",
+     "glosses": [
+      "to be founded on, be based on, rest on (e.g. of some sort of system)"
+     ],
+     "hint": null,
+     "accept": [
+      "allative",
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "osallistua",
+   "frequency_rank": 4249,
+   "items": [
+    {
+     "key": "rection:allative",
+     "glosses": [
+      "to attend (e.g. a lecture, a course)"
+     ],
+     "hint": null,
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "ihastua",
+   "frequency_rank": 4331,
+   "items": [
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to fall for, become infatuated with, fall in love with (a person or a thing)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "neuvoa",
+   "frequency_rank": 4757,
+   "items": [
+    {
+     "key": "rection:inf3_illative:to-do",
+     "glosses": [
+      "to advise, counsel; show (give advice to, offer as advice)",
+      "to show, advise (to advise by showing)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_illative"
+     ]
+    },
+    {
+     "key": "rection:inessive:with",
+     "glosses": [
+      "to advise, counsel; show (give advice to, offer as advice)"
+     ],
+     "hint": "with",
+     "accept": [
+      "inessive"
+     ]
+    },
+    {
+     "key": "rection:allative:who-is-shown-or-advised",
+     "glosses": [
+      "to show, advise (to advise by showing)"
+     ],
+     "hint": "who is shown or advised",
+     "accept": [
+      "allative"
+     ]
+    },
+    {
+     "key": "rection:allative+illative:to",
+     "glosses": [
+      "to direct, guide, tell (the way/how to get to) (point out to or show the right course or way)"
+     ],
+     "hint": "to",
+     "accept": [
+      "illative",
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "toimittaa",
+   "frequency_rank": 5036,
+   "items": [
+    {
+     "key": "rection:allative+illative",
+     "glosses": [
+      "to supply, provide (with), give"
+     ],
+     "hint": null,
+     "accept": [
+      "illative",
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "hävetä",
+   "frequency_rank": 5454,
+   "items": [
+    {
+     "key": "rection:inf1:doing",
+     "glosses": [
+      "to be ashamed (of), feel ashamed"
+     ],
+     "hint": "doing",
+     "accept": [
+      "inf1"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "sekaantua",
+   "frequency_rank": 5851,
+   "items": [
+    {
+     "key": "rection:illative:with",
+     "glosses": [
+      "to get involved, interfere"
+     ],
+     "hint": "with",
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "mahtua",
+   "frequency_rank": 6530,
+   "items": [
+    {
+     "key": "rection:allative+illative:into-onto",
+     "glosses": [
+      "to fit, have enough space (have sufficient space; conform to in size and shape; be of the right size and shape)"
+     ],
+     "hint": "into/onto",
+     "accept": [
+      "illative",
+      "allative"
+     ]
+    },
+    {
+     "key": "rection:inf3_illative:to-do",
+     "glosses": [
+      "to fit, have enough space (have sufficient space; conform to in size and shape; be of the right size and shape)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "hävettää",
+   "frequency_rank": 6563,
+   "items": [
+    {
+     "key": "rection:inf1:to-do",
+     "glosses": [
+      "to be ashamed, feel ashamed"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf1"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "opiskella",
+   "frequency_rank": 6579,
+   "items": [
+    {
+     "key": "rection:translative:to-be",
+     "glosses": [
+      "to study (to pursue studies of, e.g. at a university)"
+     ],
+     "hint": "to be",
+     "accept": [
+      "translative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "laskettaa",
+   "frequency_rank": 7010,
+   "items": [
+    {
+     "key": "rection:adessive:by",
+     "glosses": [
+      "To have (something) calculated, make (someone) calculate (something)"
+     ],
+     "hint": "by",
+     "accept": [
+      "adessive"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "opetella",
+   "frequency_rank": 7065,
+   "items": [
+    {
+     "key": "rection:inf3_illative:to-do-something",
+     "glosses": [
+      "to (gradually) learn, to teach oneself to"
+     ],
+     "hint": "to do something",
+     "accept": [
+      "inf3_illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "ruveta",
+   "frequency_rank": 7214,
+   "items": [
+    {
+     "key": "rection:allative",
+     "glosses": [
+      "to fuck with ((begin to) interact with a person in an inappropriate way)"
+     ],
+     "hint": null,
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "ojentaa",
+   "frequency_rank": 7851,
+   "items": [
+    {
+     "key": "rection:allative:to",
+     "glosses": [
+      "to reach, hand out (to give by stretching out)",
+      "to hand, give, reach, pass (to give, pass or transmit with the hand)"
+     ],
+     "hint": "to",
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "hurrata",
+   "frequency_rank": 7901,
+   "items": [
+    {
+     "key": "rection:allative",
+     "glosses": [
+      "to cheer (applaud or encourage with cheers or shouts)"
+     ],
+     "hint": null,
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "paljastua",
+   "frequency_rank": 8037,
+   "items": [
+    {
+     "key": "rection:translative:as-to-be",
+     "glosses": [
+      "to become exposed or revealed, turn out, to dawn on, to uncover, to come into daylight, to surface"
+     ],
+     "hint": "as, to be",
+     "accept": [
+      "translative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "myöhästyä",
+   "frequency_rank": 8265,
+   "items": [
+    {
+     "key": "rection:ablative+elative",
+     "glosses": [
+      "to miss (a bus, train, etc.)"
+     ],
+     "hint": null,
+     "accept": [
+      "elative",
+      "ablative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "inhottaa",
+   "frequency_rank": 8727,
+   "items": [
+    {
+     "key": "rection:inf1:to-do",
+     "glosses": [
+      "to disgust (to cause an intense dislike for something)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf1"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "sijoittaa",
+   "frequency_rank": 9554,
+   "items": [
+    {
+     "key": "rection:illative:in",
+     "glosses": [
+      "to set, locate, backdrop (a story into a location or point in time)"
+     ],
+     "hint": "in",
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "pyrkiä",
+   "frequency_rank": 9826,
+   "items": [
+    {
+     "key": "rection:allative+illative+inf3_illative",
+     "glosses": [
+      "to strive, endeavour, seek to, pursue (to attempt through application of effort)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative",
+      "allative",
+      "inf3_illative"
+     ]
+    },
+    {
+     "key": "rection:translative",
+     "glosses": [
+      "to plan to become, aspire to be, run for (office) (to work towards or hope to attain a position)"
+     ],
+     "hint": null,
+     "accept": [
+      "translative"
+     ]
+    },
+    {
+     "key": "rection:inf3_illative",
+     "glosses": [
+      "to tend (to have a tendency to)"
+     ],
+     "hint": null,
+     "accept": [
+      "inf3_illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "omistautua",
+   "frequency_rank": 11759,
+   "items": [
+    {
+     "key": "rection:allative:to",
+     "glosses": [
+      "to devote oneself, dedicate oneself (to commit oneself to a particular course of thought or action)"
+     ],
+     "hint": "to",
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "upota",
+   "frequency_rank": 11958,
+   "items": [
+    {
+     "key": "rection:illative:in",
+     "glosses": [
+      "to sink (descend into liquid)"
+     ],
+     "hint": "in",
+     "accept": [
+      "illative"
+     ]
+    },
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to bite (e.g. of a saw)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "kannella",
+   "frequency_rank": 12244,
+   "items": [
+    {
+     "key": "rection:elative:about",
+     "glosses": [
+      "to tattle (to notify someone of illicit behaviour)"
+     ],
+     "hint": "about",
+     "accept": [
+      "elative"
+     ]
+    },
+    {
+     "key": "rection:allative:to",
+     "glosses": [
+      "to tattle (to notify someone of illicit behaviour)"
+     ],
+     "hint": "to",
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "valmistua",
+   "frequency_rank": 12790,
+   "items": [
+    {
+     "key": "rection:ablative+elative:from",
+     "glosses": [
+      "to graduate (to be recognized by a learning institution as having completed its requirements for a degree)"
+     ],
+     "hint": "from",
+     "accept": [
+      "elative",
+      "ablative"
+     ]
+    },
+    {
+     "key": "rection:translative:as",
+     "glosses": [
+      "to graduate (to be recognized by a learning institution as having completed its requirements for a degree)"
+     ],
+     "hint": "as",
+     "accept": [
+      "translative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "riistää",
+   "frequency_rank": 12890,
+   "items": [
+    {
+     "key": "rection:ablative",
+     "glosses": [
+      "to deprive, bereave, strip of (especially through force or violent means)"
+     ],
+     "hint": null,
+     "accept": [
+      "ablative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "todeta",
+   "frequency_rank": 13336,
+   "items": [
+    {
+     "key": "rection:translative",
+     "glosses": [
+      "to pronounce (declare authoritatively, or as a formal expert opinion)"
+     ],
+     "hint": null,
+     "accept": [
+      "translative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "säikähtää",
+   "frequency_rank": 13493,
+   "items": [
+    {
+     "key": "rection:elative+partitive:by",
+     "glosses": [
+      "to be startled/frightened/scared, take fright, jump"
+     ],
+     "hint": "by",
+     "accept": [
+      "partitive",
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "tyytyä",
+   "frequency_rank": 13938,
+   "items": [
+    {
+     "key": "rection:illative:with",
+     "glosses": [
+      "to content oneself, settle"
+     ],
+     "hint": "with",
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "poiketa",
+   "frequency_rank": 15507,
+   "items": [
+    {
+     "key": "rection:elative",
+     "glosses": [
+      "to differ from, be different from, depart, deviate, diverge (not to have the same traits, characteristics)",
+      "to deviate, stray, wander; to diverge, swerve, veer, divert"
+     ],
+     "hint": null,
+     "accept": [
+      "elative"
+     ]
+    },
+    {
+     "key": "rection:adessive+inessive",
+     "glosses": [
+      "to drop by, drop in (to visit without an appointment)"
+     ],
+     "hint": null,
+     "accept": [
+      "inessive",
+      "adessive"
+     ]
+    },
+    {
+     "key": "rection:inf3_inessive:to-do",
+     "glosses": [
+      "to drop by, drop in (to visit without an appointment)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_inessive"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "laistaa",
+   "frequency_rank": 18434,
+   "items": [
+    {
+     "key": "rection:elative",
+     "glosses": [
+      "to shirk, neglect (to evade from one's duties or obligations)"
+     ],
+     "hint": null,
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "haaskata",
+   "frequency_rank": 18441,
+   "items": [
+    {
+     "key": "rection:illative:on",
+     "glosses": [
+      "to waste, squander (money, time, resources, food, etc.)"
+     ],
+     "hint": "on",
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "varustaa",
+   "frequency_rank": 19625,
+   "items": [
+    {
+     "key": "rection:adessive:with",
+     "glosses": [
+      "to equip, fit (up/out), supply, apparel, furnish; to provision; to arm, supply with arms"
+     ],
+     "hint": "with",
+     "accept": [
+      "adessive"
+     ]
+    },
+    {
+     "key": "rection:allative+illative+translative:to-be",
+     "glosses": [
+      "to equip, fit (up/out), supply, apparel, furnish; to provision; to arm, supply with arms"
+     ],
+     "hint": "to be",
+     "accept": [
+      "illative",
+      "allative",
+      "translative"
+     ]
+    },
+    {
+     "key": "rection:allative+illative:for",
+     "glosses": [
+      "to prepare, get someone ready; to make arrangements/preparations"
+     ],
+     "hint": "for",
+     "accept": [
+      "illative",
+      "allative"
+     ]
+    }
+   ]
+  }
+ ]
+}

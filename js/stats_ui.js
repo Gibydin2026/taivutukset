@@ -2,13 +2,14 @@
 // Pure DOM, no framework.
 
 import { summarize, summarizeByWord, accuracy, averageReviewsPerDay } from "./stats.js";
-import { nounLabel, verbLabel } from "./labels.js";
+import { nounLabel, verbLabel, rectionLabel } from "./labels.js";
 
 // UI-only state for the per-word tables. Persists across re-renders (toggle
 // open/close, stats record, etc.) so the user's sort + search don't reset.
 const wordUI = {
-  noun: { sort: "most-wrong", query: "", expanded: false },
-  verb: { sort: "most-wrong", query: "", expanded: false },
+  noun:    { sort: "most-wrong", query: "", expanded: false },
+  verb:    { sort: "most-wrong", query: "", expanded: false },
+  rection: { sort: "most-wrong", query: "", expanded: false },
 };
 
 // Show this many rows by default before the user clicks "Show all".
@@ -189,7 +190,8 @@ function escapeHtml(s) {
 function wordSectionBlock(mode, cfg, stats) {
   const ui = wordUI[mode];
   const labelFor = (key) =>
-    mode === "noun" ? nounLabel(key, cfg) : verbLabel(key, cfg);
+    mode === "noun"    ? nounLabel(key, cfg) :
+    mode === "rection" ? rectionLabel(key)   : verbLabel(key, cfg);
 
   const sec = document.createElement("section");
   sec.className = "stats-section stats-words";
@@ -387,6 +389,25 @@ export function renderStats(root, cfg, stats) {
   ));
   verbWrap.appendChild(wordSectionBlock("verb", cfg, stats));
   root.appendChild(verbWrap);
+
+  // ----- rection breakdowns -----
+  // Only rendered once the user has actually drilled rection — unlike the
+  // noun/verb groups, this style is off the beaten path and an always-on
+  // "No attempts yet" block would just be noise.
+  const rectionRows = summarize(stats.byRection || {});
+  if (rectionRows.length > 0) {
+    const rectionWrap = document.createElement("div");
+    rectionWrap.className = "stats-group";
+    const rectionHead = document.createElement("h2");
+    rectionHead.textContent = "Verb rection";
+    rectionWrap.appendChild(rectionHead);
+
+    rectionWrap.appendChild(sectionBlock(
+      "By complement", rectionRows, (id) => rectionLabel(id)
+    ));
+    rectionWrap.appendChild(wordSectionBlock("rection", cfg, stats));
+    root.appendChild(rectionWrap);
+  }
 }
 
 // Silence unused-import warning from accuracy — kept as a convenience export.

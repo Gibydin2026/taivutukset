@@ -23,9 +23,12 @@ pip install -r scripts/requirements.txt
 ## How it runs (once Phase 1 is built)
 
 ```
-python scripts/download.py      # grabs kaikki.org data + frequency list
-python scripts/extract.py       # filters and writes data/nouns.json + verbs.json
+python scripts/download.py        # grabs kaikki.org data + frequency list
+python scripts/extract.py         # filters and writes data/nouns.json + verbs.json
+python scripts/extract_rection.py # parses rection annotations out of verbs.json
+                                  # into data/rection.json (no network needed)
 ```
 
 Re-run these when you want fresh words or change filters (e.g. frequency cutoff,
-group mappings in `config/noun_groups.json`).
+group mappings in `config/noun_groups.json`). `extract_rection.py` reads
+`data/verbs.json`, so run it after `extract.py`.

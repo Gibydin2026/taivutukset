@@ -5,9 +5,9 @@ import { loadConfig } from "./config.js";
 import { loadData } from "./data.js";
 import {
   buildNounPool, buildVerbPool, nextChallenge, checkAnswer,
-  buildClozePool, clozeBlankRegex, parseVerbKey,
+  buildClozePool, clozeBlankRegex, buildRectionPool, parseVerbKey,
 } from "./drill.js";
-import { nounLabel, verbLabel } from "./labels.js";
+import { nounLabel, verbLabel, complementLabel } from "./labels.js";
 import {
   loadNounFilters, saveNounFilters, renderNounFilters,
   loadVerbFilters, saveVerbFilters, renderVerbFilters,
@@ -51,6 +51,11 @@ const state = {
   current: null,            // { word, key }
   awaitingNext: false,      // true after a right/wrong/shown-answer, Enter advances
   hintsShown: 0,            // number of letters revealed for current challenge
+  // Per-challenge multiple-choice state for the Rection drill style:
+  // { options: [complementId…], picked: complementId | null }. Lives outside
+  // state.current because pool entries are shared objects — stashing answered
+  // state on them would leak into the next time the same item is drawn.
+  rectionRound: null,
   scoredThisChallenge: false, // stats recorded at most once per challenge
   nounFilters: null,
   verbFilters: null,
@@ -112,6 +117,7 @@ const el = {
   clozeLine:       document.getElementById("cloze-line"),
   clozeFi:         document.getElementById("cloze-fi"),
   clozeEn:         document.getElementById("cloze-en"),
+  rectionChoices:  document.getElementById("rection-choices"),
   inflectionModal: document.getElementById("inflection-modal"),
   inflectionTitle: document.getElementById("inflection-title"),
   inflectionNote:  document.getElementById("inflection-note"),
@@ -192,21 +198,44 @@ function render() {
   }
   const { word, key } = state.current;
   el.headword.textContent = word.word;
-  el.translation.textContent = (word.translations || []).slice(0, 2).join(", ");
-  // Cloze style replaces the grammatical prompt + examples with the blanked
-  // sentence. Falls back to the standard prompt if the blank can't be
-  // located in the original text (shouldn't happen — the pool builder
-  // verified containment on the normalized form — but belt + braces).
-  const cloze = clozeActive() && renderClozeLine();
-  el.targetForm.classList.toggle("hidden", !!cloze);
-  el.clozeLine.classList.toggle("hidden", !cloze);
-  if (cloze) {
-    el.examples.innerHTML = "";
-    el.examples.classList.add("hidden");
+  // Rection style replaces the typed-answer flow entirely: the prompt is the
+  // verb plus a blank ("uskoa + ___"), the gloss disambiguates which sense is
+  // being asked, and the answer comes from the multiple-choice buttons.
+  const rection = rectionActive() && !!state.current.rection;
+  el.rectionChoices.classList.toggle("hidden", !rection);
+  if (rection) {
+    const item = state.current.rection;
+    el.translation.textContent = item.glosses.join("; ");
+    el.targetForm.classList.remove("hidden");
+    el.clozeLine.classList.add("hidden");
+    el.targetForm.textContent =
+      `${word.word} + ___` + (item.hint ? ` (‘${item.hint}’)` : "");
+    renderRectionChoices();
+    // Examples often use the rection complement, so they'd spoil the answer —
+    // hold them back until the challenge is resolved.
+    if (state.awaitingNext || state.scoredThisChallenge) {
+      renderExamples(word);
+    } else {
+      el.examples.innerHTML = "";
+      el.examples.classList.add("hidden");
+    }
   } else {
-    const label = state.mode === "noun" ? nounLabel(key, state.cfg) : verbLabel(key, state.cfg);
-    el.targetForm.textContent = label;
-    renderExamples(word, word.inflections[key]);
+    el.translation.textContent = (word.translations || []).slice(0, 2).join(", ");
+    // Cloze style replaces the grammatical prompt + examples with the blanked
+    // sentence. Falls back to the standard prompt if the blank can't be
+    // located in the original text (shouldn't happen — the pool builder
+    // verified containment on the normalized form — but belt + braces).
+    const cloze = clozeActive() && renderClozeLine();
+    el.targetForm.classList.toggle("hidden", !!cloze);
+    el.clozeLine.classList.toggle("hidden", !cloze);
+    if (cloze) {
+      el.examples.innerHTML = "";
+      el.examples.classList.add("hidden");
+    } else {
+      const label = state.mode === "noun" ? nounLabel(key, state.cfg) : verbLabel(key, state.cfg);
+      el.targetForm.textContent = label;
+      renderExamples(word, word.inflections[key]);
+    }
   }
   // Only reveal the challenge/answer row when we're actually on the drill
   // view. Some settings (excludeLong, maxAnswerLength, frequencyCap) rebuild
@@ -277,9 +306,28 @@ function renderExamples(word, targetForm) {
   el.examples.classList.remove("hidden");
 }
 
-// ---------- cloze rendering ----------
+// ---------- drill style helpers ----------
+// The persisted drillStyle can be "rection" while the user is on the noun
+// tab, where rection makes no sense. Rather than mutating the saved setting
+// on every mode switch, the EFFECTIVE style falls back to standard outside
+// verb mode — switch back to Verbs and rection resumes where you left it.
+function effectiveDrillStyle() {
+  const s = (state.settings && state.settings.drillStyle) || "standard";
+  return s === "rection" && state.mode !== "verb" ? "standard" : s;
+}
+
 function clozeActive() {
-  return !!(state.settings && state.settings.drillStyle === "cloze");
+  return effectiveDrillStyle() === "cloze";
+}
+
+function rectionActive() {
+  return effectiveDrillStyle() === "rection";
+}
+
+// Stats + SRS bucket rection outcomes under their own mode id, so rection
+// keys never collide with verb inflection keys in byItem or the schedule.
+function statsMode() {
+  return rectionActive() ? "rection" : state.mode;
 }
 
 // Build the blanked sentence into #cloze-fi. Returns false when the current
@@ -330,6 +378,90 @@ function revealCloze() {
     blank.textContent = expected;
     blank.classList.add("filled");
   }
+}
+
+// ---------- rection rendering ----------
+const RECTION_OPTION_COUNT = 4;
+
+function shuffleInPlace(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Build the option set for the current rection challenge: one randomly chosen
+// acceptable complement plus distractors drawn from the dataset-wide
+// vocabulary, minus anything that's a correct answer for ANY sense of this
+// verb (see buildRectionPool for why).
+function buildRectionRound() {
+  const { rection, rectionExclude } = state.current;
+  const vocab = (state.data.rection && state.data.rection.complements) || [];
+  const accept = rection.accept;
+  const correct = accept[Math.floor(Math.random() * accept.length)];
+  const distractors = shuffleInPlace(
+    vocab.filter((c) => !(rectionExclude || accept).includes(c))
+  );
+  const options = [correct, ...distractors.slice(0, RECTION_OPTION_COUNT - 1)];
+  return { options: shuffleInPlace(options), picked: null };
+}
+
+// (Re)paint the choice buttons. Builds the round lazily on first paint per
+// challenge; after the challenge resolves, repaints disabled with the
+// correct/wrong coloring so view switches don't lose the answered state.
+function renderRectionChoices() {
+  if (!state.rectionRound) state.rectionRound = buildRectionRound();
+  const { options, picked } = state.rectionRound;
+  const accept = state.current.rection.accept;
+  const resolved = state.awaitingNext || state.scoredThisChallenge;
+  el.rectionChoices.innerHTML = "";
+  options.forEach((c, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "rection-choice";
+    const kbd = document.createElement("kbd");
+    kbd.textContent = String(i + 1);
+    btn.appendChild(kbd);
+    btn.appendChild(document.createTextNode(" " + complementLabel(c)));
+    if (resolved) {
+      btn.disabled = true;
+      if (accept.includes(c)) btn.classList.add("correct");
+      else if (picked === c) btn.classList.add("wrong");
+    } else {
+      btn.addEventListener("click", () => answerRection(c));
+    }
+    el.rectionChoices.appendChild(btn);
+  });
+}
+
+// "uskoa + illative (mihin) (‘in’)" — the full pattern, shown as feedback
+// once the challenge resolves so the user always sees the complete rection,
+// not just right/wrong.
+function formatRectionPattern() {
+  const { word, rection } = state.current;
+  const comps = rection.accept.map(complementLabel).join(" or ");
+  return `${word.word} + ${comps}` + (rection.hint ? ` (‘${rection.hint}’)` : "");
+}
+
+function answerRection(choice) {
+  if (!state.current || state.awaitingNext || state.scoredThisChallenge) return;
+  const ok = state.current.rection.accept.includes(choice);
+  state.rectionRound.picked = choice;
+  state.awaitingNext = true;
+  score(ok ? "correct" : "wrong");
+  if (!ok) buzzIfWrong();
+  setFeedback(`${ok ? "✓" : "✗"} ${formatRectionPattern()}`, ok ? "ok" : "bad");
+  renderRectionChoices();
+  renderExamples(state.current.word);
+  // Auto-advance — a beat longer on a miss so the full pattern can be read.
+  // The challenge-identity check (not just awaitingNext) keeps a stale timer
+  // from skipping ahead when the user Enter-advanced and answered the next
+  // challenge before this one's window elapsed.
+  const answered = state.current;
+  setTimeout(() => {
+    if (state.awaitingNext && state.current === answered) newChallenge();
+  }, ok ? 1400 : 2600);
 }
 
 function appendHighlighted(parent, text, re) {
@@ -390,12 +522,17 @@ function setStatus(text) { el.statusLine.textContent = text; }
 
 function updateStatus() {
   const count = state.pool.length;
-  const style = clozeActive() ? " cloze" : "";
+  const styleId = effectiveDrillStyle();
+  const style = styleId === "standard" ? "" : ` ${styleId}`;
   let suffix = "";
   if (count === 0) {
-    suffix = clozeActive()
-      ? " \u2014 no example sentences match these filters; broaden them or switch to Standard"
-      : " \u2014 all filtered out, enable something above";
+    if (rectionActive()) {
+      suffix = " \u2014 no rection data within the current frequency cap; raise it under Options";
+    } else if (clozeActive()) {
+      suffix = " \u2014 no example sentences match these filters; broaden them or switch to Standard";
+    } else {
+      suffix = " \u2014 all filtered out, enable something above";
+    }
   }
   setStatus(`${state.mode}${style} mode \u2022 ${count.toLocaleString()} possible challenges${suffix}`);
 }
@@ -425,7 +562,7 @@ function score(outcome) {
   // counting e.g. "wrong" then "shown" on the same card.
   if (state.scoredThisChallenge) return;
   if (!state.current) return;
-  recordOutcome(state.stats, state.mode, state.current, outcome);
+  recordOutcome(state.stats, statsMode(), state.current, outcome);
   saveStats(state.stats);
   state.scoredThisChallenge = true;
 
@@ -439,10 +576,10 @@ function score(outcome) {
   // as custom dimensions in GA4 admin if you want to filter the default
   // reports by them — without that, params still land in Explorations /
   // DebugView, just not the headline reports.
-  track("drill_answer", { mode: state.mode, outcome });
+  track("drill_answer", { mode: statsMode(), outcome });
   if (!sessionFirstAnswerFired) {
     sessionFirstAnswerFired = true;
-    track("session_first_answer", { mode: state.mode });
+    track("session_first_answer", { mode: statsMode() });
   }
 
   if (outcome === "correct") {
@@ -461,7 +598,7 @@ function score(outcome) {
 function recordOutcomeToSchedule(outcome) {
   if (!state.current) return;
   const cap = CAP_PRESETS[state.settings.srsCap] || CAP_PRESETS.balanced;
-  const id = `${state.mode}|${state.current.word.word}|${state.current.key}`;
+  const id = `${statsMode()}|${state.current.word.word}|${state.current.key}`;
   const now = Date.now();
 
   if (outcome === "correct") {
@@ -548,6 +685,10 @@ function refreshStatsPanel() {
 // opens and the test is marked finished.
 
 function openTestModal() {
+  if (rectionActive()) {
+    setStatus("Test mode isn't available in the Rection style — switch to Standard or Cloze first.");
+    return;
+  }
   if (state.pool.length === 0) {
     setStatus("No challenges in the current pool — enable a filter first.");
     return;
@@ -732,6 +873,10 @@ function blitzActive() {
 }
 
 function openBlitzModal() {
+  if (rectionActive()) {
+    setStatus("Blitz isn't available in the Rection style — switch to Standard or Cloze first.");
+    return;
+  }
   if (state.pool.length === 0) {
     setStatus("No challenges in the current pool — enable a filter first.");
     return;
@@ -1035,7 +1180,7 @@ function newChallenge(opts) {
   const capPreset = CAP_PRESETS[state.settings && state.settings.srsCap] || CAP_PRESETS.balanced;
   state.current = nextChallenge(state.pool, state.current, {
     priority,
-    mode:     state.mode,
+    mode:     statsMode(),
     stats:    state.stats,
     schedule: state.schedule,
     srsFloor: capPreset.floor,
@@ -1044,6 +1189,7 @@ function newChallenge(opts) {
   state.awaitingNext = false;
   state.hintsShown = 0;
   state.scoredThisChallenge = false;
+  state.rectionRound = null;
   el.answer.value = "";
   setFeedback("");
   if (!state.current) {
@@ -1062,7 +1208,9 @@ function newChallenge(opts) {
   // skip it entirely when the caller asked us to (filter toggles, preset
   // applies) so we don't scroll mobile users away from the control they're
   // touching.
-  if (state.view === "drill" && !(opts && opts.suppressFocus)) el.answer.focus();
+  if (state.view === "drill" && !rectionActive() && !(opts && opts.suppressFocus)) {
+    el.answer.focus();
+  }
 }
 
 function submit() {
@@ -1141,6 +1289,7 @@ function buzzIfWrong() {
 function revealNextLetter() {
   if (!state.current || state.awaitingNext) return;
   if (blitzActive()) return;   // hints disabled during blitz
+  if (rectionActive()) return; // no typed answer to reveal letters of
   const expected = state.current.word.inflections[state.current.key];
   const input = el.answer.value;
   let correctPrefixLen = 0;
@@ -1175,6 +1324,7 @@ function revealNextLetter() {
 function showFullAnswer() {
   if (!state.current) return;
   if (blitzActive()) return;   // hints disabled during blitz
+  if (rectionActive()) return; // multiple choice — nothing to type-reveal
   if (testActive()) {
     score("shown");
     recordTestAnswer("shown", el.answer.value);
@@ -1206,19 +1356,30 @@ function skipChallenge() {
 // ---------- mode + filters ----------
 // `opts.suppressFocus` is forwarded to newChallenge — see the note there.
 function rebuildPool(opts) {
-  let pool = state.mode === "noun"
-    ? buildNounPool(state.data, state.nounFilters)
-    : buildVerbPool(state.data, state.verbFilters);
+  let pool;
+  if (rectionActive()) {
+    // Rection has its own challenge set — the case/tense filter grids don't
+    // apply (and are hidden); only the frequency cap below carries over.
+    pool = buildRectionPool(state.data);
+  } else {
+    pool = state.mode === "noun"
+      ? buildNounPool(state.data, state.nounFilters)
+      : buildVerbPool(state.data, state.verbFilters);
 
-  // Optional length filter — drops any challenge whose expected answer is
-  // longer than the configured threshold. Applied as a post-filter so the
-  // main pool builders stay agnostic.
-  if (state.settings && state.settings.excludeLong) {
-    const max = state.settings.maxAnswerLength;
-    pool = pool.filter(({ word, key }) => {
-      const ans = word.inflections[key] || "";
-      return ans.length <= max;
-    });
+    // Optional length filter — drops any challenge whose expected answer is
+    // longer than the configured threshold. Applied as a post-filter so the
+    // main pool builders stay agnostic.
+    if (state.settings && state.settings.excludeLong) {
+      const max = state.settings.maxAnswerLength;
+      pool = pool.filter(({ word, key }) => {
+        const ans = word.inflections[key] || "";
+        return ans.length <= max;
+      });
+    }
+
+    // Cloze style: keep only challenges whose word has an example sentence
+    // containing the target form, and remember which example it was.
+    if (clozeActive()) pool = buildClozePool(pool);
   }
 
   // Optional frequency cap — restrict to words whose best inflected-form rank
@@ -1230,10 +1391,6 @@ function rebuildPool(opts) {
       return typeof r === "number" && r <= cap;
     });
   }
-
-  // Cloze style: keep only challenges whose word has an example sentence
-  // containing the target form, and remember which example it was.
-  if (clozeActive()) pool = buildClozePool(pool);
 
   state.pool = pool;
   updateStatus();
@@ -1262,11 +1419,13 @@ function setView(view) {
   el.challenge.classList.toggle("hidden", !(drill && state.current));
   el.answerRow.classList.toggle("hidden", !(drill && state.current));
   el.drillStyleRow.classList.toggle("hidden", !drill);
+  // Rection ignores the filter grids and presets entirely (its pool isn't
+  // case/tense-shaped), so they hide along with the rest of the chrome.
   el.filtersNoun.classList.toggle("hidden", !(drill && state.mode === "noun"));
-  el.filtersVerb.classList.toggle("hidden", !(drill && state.mode === "verb"));
+  el.filtersVerb.classList.toggle("hidden", !(drill && state.mode === "verb" && !rectionActive()));
   // Presets live between filters and test mode; drill-only, and the list is
   // per-mode so it re-renders on any mode switch that reaches this code path.
-  el.presetsPanel.classList.toggle("hidden", !drill);
+  el.presetsPanel.classList.toggle("hidden", !(drill && !rectionActive()));
   if (drill) renderPresets();
   // Stats / status line are drill-only; settings now live in Options. The
   // test hud is gated on both: only show it on the drill view AND when a
@@ -1296,6 +1455,10 @@ function setMode(mode) {
     cancelBlitz();
   }
   state.mode = mode;
+  // The effective drill style can change with the mode (rection is verb-only),
+  // so the switch highlight and the body chrome both need a refresh here.
+  renderDrillStyleSwitch();
+  applyRectionChrome();
   setView("drill");
   // Rebuild the pool on a real mode switch, OR whenever there's no current
   // challenge on screen. The second case matters on first boot: state.mode
@@ -1308,11 +1471,16 @@ function setMode(mode) {
   else updateStatus();
 }
 
-// ---------- drill style (standard / cloze) ----------
+// ---------- drill style (standard / cloze / rection) ----------
 function renderDrillStyleSwitch() {
   if (!el.drillStyleSwitch) return;
-  const pref = (state.settings && state.settings.drillStyle) || "standard";
+  const pref = effectiveDrillStyle();
   for (const btn of el.drillStyleSwitch.querySelectorAll(".seg-btn")) {
+    // Rection only exists for verbs — hide its button on the noun tab rather
+    // than letting it sit there as a dead control.
+    if (btn.dataset.value === "rection") {
+      btn.classList.toggle("hidden", state.mode !== "verb");
+    }
     const active = btn.dataset.value === pref;
     btn.classList.toggle("active", active);
     btn.setAttribute("aria-checked", active ? "true" : "false");
@@ -1325,11 +1493,17 @@ function updateAnswerPlaceholder() {
     : "type the form and press Enter";
 }
 
+// Swap the answer chrome for rection: CSS keyed off this body class hides the
+// text input and the hint buttons that assume a typed answer (Skip stays).
+function applyRectionChrome() {
+  document.body.classList.toggle("rection-mode", rectionActive());
+}
+
 function setDrillStyle(style) {
-  if (style !== "standard" && style !== "cloze") return;
+  if (style !== "standard" && style !== "cloze" && style !== "rection") return;
   if (state.settings.drillStyle === style) return;
-  // The cloze pool is a different challenge set, so switching style mid-test
-  // or mid-blitz invalidates the run — same confirm flow as a mode switch.
+  // Each style is a different challenge set, so switching mid-test or
+  // mid-blitz invalidates the run — same confirm flow as a mode switch.
   if (testActive()) {
     if (!confirm("Switching drill style will cancel the current test. Continue?")) return;
     cancelTest();
@@ -1342,8 +1516,11 @@ function setDrillStyle(style) {
   saveSettings(state.settings);
   renderDrillStyleSwitch();
   updateAnswerPlaceholder();
+  applyRectionChrome();
   track("drill_style", { style });
   rebuildPool();
+  // Filter/preset panel visibility depends on the style — re-sync the view.
+  if (state.view === "drill") setView("drill");
 }
 
 // ---------- full inflection table ----------
@@ -1358,7 +1535,8 @@ function openInflectionTable() {
   if (blitzActive() || testActive()) return;
   const { word, key } = state.current;
   const expected = word.inflections[key];
-  const concealed = !(state.awaitingNext || state.scoredThisChallenge);
+  // Rection answers are case names, not table cells — nothing to mask.
+  const concealed = !rectionActive() && !(state.awaitingNext || state.scoredThisChallenge);
   el.inflectionTitle.textContent = word.word;
   el.inflectionNote.classList.toggle("hidden", !concealed);
   el.inflectionBody.innerHTML = "";
@@ -1896,6 +2074,26 @@ async function boot() {
       }
     });
 
+    // Rection keyboard support: the answer input is hidden in this style, so
+    // its keydown handler never fires. 1–4 pick a choice, Enter advances once
+    // the challenge is resolved, "-" skips. Skipped while typing in any other
+    // control or while a modal is up.
+    document.addEventListener("keydown", (e) => {
+      if (!rectionActive() || state.view !== "drill" || !state.current) return;
+      const t = e.target;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT")) return;
+      if (!el.inflectionModal.classList.contains("hidden")) return;
+      if (e.key === "Enter") {
+        if (state.awaitingNext) { e.preventDefault(); newChallenge(); }
+        return;
+      }
+      if (e.key === "-") { e.preventDefault(); skipChallenge(); return; }
+      if (e.key >= "1" && e.key <= "4") {
+        const btn = el.rectionChoices.querySelectorAll(".rection-choice")[Number(e.key) - 1];
+        if (btn && !btn.disabled) { e.preventDefault(); btn.click(); }
+      }
+    });
+
     // On-screen submit button — same path as Enter. Mousedown-preventDefault
     // keeps focus in the answer input so the mobile keyboard doesn't dismiss.
     if (el.submitAnswer) {
@@ -2006,6 +2204,7 @@ async function importStats(file) {
       renderThemeSwitch();
       renderDrillStyleSwitch();
       updateAnswerPlaceholder();
+      applyRectionChrome();
     }
     if (data.schedule && data.schedule.byItem) {
       state.schedule = { byItem: data.schedule.byItem };

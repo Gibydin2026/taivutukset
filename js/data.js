@@ -23,10 +23,22 @@ async function loadBlocklist() {
   }
 }
 
+// Rection data (scripts/extract_rection.py) is optional: a service worker
+// from an older deploy may serve a cached shell without the file, and the
+// drill itself must keep working — the Rection style just comes up empty.
+async function loadRection() {
+  try {
+    return await loadJson("data/rection.json");
+  } catch {
+    return { complements: [], words: [] };
+  }
+}
+
 export async function loadData() {
-  const [nouns, verbs, blocklist] = await Promise.all([
+  const [nouns, verbs, rection, blocklist] = await Promise.all([
     loadJson("data/nouns.json"),
     loadJson("data/verbs.json"),
+    loadRection(),
     loadBlocklist(),
   ]);
   if (blocklist.nouns.size) {
@@ -34,6 +46,7 @@ export async function loadData() {
   }
   if (blocklist.verbs.size) {
     verbs.words = verbs.words.filter((w) => !blocklist.verbs.has(w.word));
+    rection.words = rection.words.filter((w) => !blocklist.verbs.has(w.word));
   }
-  return { nouns, verbs };
+  return { nouns, verbs, rection };
 }

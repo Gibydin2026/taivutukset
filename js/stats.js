@@ -44,6 +44,7 @@ export function defaultStats() {
     byVerbPolarity: {},
     byVerbPerson:   {},
     byVerbGroup:    {},
+    byRection:      {},
     byItem:         {},
     // Timeline for the "avg reviews/day" summary. We don't store per-day
     // buckets — just the first-ever review timestamp and a running counter —
@@ -69,6 +70,7 @@ export function loadStats() {
     byVerbPolarity: stored.byVerbPolarity || {},
     byVerbPerson:   stored.byVerbPerson   || {},
     byVerbGroup:    stored.byVerbGroup    || {},
+    byRection:      stored.byRection      || {},
     byItem:         stored.byItem         || {},
     // Migration: older stores don't have these fields. Leaving firstReviewAt
     // null means the first recordOutcome after update stamps "now" — we'd
@@ -101,7 +103,7 @@ export function itemId(mode, challenge) {
 
 /**
  * Record one outcome against the right dimension buckets.
- *   mode:      "noun" | "verb"
+ *   mode:      "noun" | "verb" | "rection"
  *   challenge: { word, key }
  *   outcome:   "correct" | "wrong" | "shown" | "skipped"
  */
@@ -120,6 +122,12 @@ export function recordOutcome(stats, mode, challenge, outcome) {
   if (mode === "noun") {
     bump(stats.byNounCase,  challenge.key,        outcome);
     bump(stats.byNounGroup, challenge.word.group, outcome);
+  } else if (mode === "rection") {
+    // Rection keys aren't verb inflection keys — parseVerbKey would
+    // misclassify them, so they get their own dimension and skip the
+    // tense/voice/polarity/person buckets entirely.
+    if (!stats.byRection) stats.byRection = {};
+    bump(stats.byRection, challenge.key, outcome);
   } else {
     const p = parseVerbKey(challenge.key);
     bump(stats.byVerbTense,    p.tense,             outcome);
