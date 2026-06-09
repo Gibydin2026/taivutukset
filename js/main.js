@@ -3,7 +3,10 @@
 
 import { loadConfig } from "./config.js";
 import { loadData } from "./data.js";
-import { buildNounPool, buildVerbPool, nextChallenge, checkAnswer } from "./drill.js";
+import {
+  buildNounPool, buildVerbPool, nextChallenge, checkAnswer,
+  buildClozePool, clozeBlankRegex, parseVerbKey,
+} from "./drill.js";
 import { nounLabel, verbLabel } from "./labels.js";
 import {
   loadNounFilters, saveNounFilters, renderNounFilters,
@@ -104,6 +107,16 @@ const el = {
   headword:        document.getElementById("headword"),
   translation:     document.getElementById("translation"),
   targetForm:      document.getElementById("target-form"),
+  drillStyleRow:   document.getElementById("drill-style-row"),
+  drillStyleSwitch: document.getElementById("drill-style-switch"),
+  clozeLine:       document.getElementById("cloze-line"),
+  clozeFi:         document.getElementById("cloze-fi"),
+  clozeEn:         document.getElementById("cloze-en"),
+  inflectionModal: document.getElementById("inflection-modal"),
+  inflectionTitle: document.getElementById("inflection-title"),
+  inflectionNote:  document.getElementById("inflection-note"),
+  inflectionBody:  document.getElementById("inflection-body"),
+  inflectionClose: document.getElementById("inflection-close"),
   answer:          document.getElementById("answer"),
   submitAnswer:    document.getElementById("submit-answer"),
   feedback:        document.getElementById("feedback"),
@@ -180,9 +193,21 @@ function render() {
   const { word, key } = state.current;
   el.headword.textContent = word.word;
   el.translation.textContent = (word.translations || []).slice(0, 2).join(", ");
-  const label = state.mode === "noun" ? nounLabel(key, state.cfg) : verbLabel(key, state.cfg);
-  el.targetForm.textContent = label;
-  renderExamples(word, word.inflections[key]);
+  // Cloze style replaces the grammatical prompt + examples with the blanked
+  // sentence. Falls back to the standard prompt if the blank can't be
+  // located in the original text (shouldn't happen — the pool builder
+  // verified containment on the normalized form — but belt + braces).
+  const cloze = clozeActive() && renderClozeLine();
+  el.targetForm.classList.toggle("hidden", !!cloze);
+  el.clozeLine.classList.toggle("hidden", !cloze);
+  if (cloze) {
+    el.examples.innerHTML = "";
+    el.examples.classList.add("hidden");
+  } else {
+    const label = state.mode === "noun" ? nounLabel(key, state.cfg) : verbLabel(key, state.cfg);
+    el.targetForm.textContent = label;
+    renderExamples(word, word.inflections[key]);
+  }
   // Only reveal the challenge/answer row when we're actually on the drill
   // view. Some settings (excludeLong, maxAnswerLength, frequencyCap) rebuild
   // the pool as a side effect, and without this guard the challenge would
@@ -252,6 +277,61 @@ function renderExamples(word, targetForm) {
   el.examples.classList.remove("hidden");
 }
 
+// ---------- cloze rendering ----------
+function clozeActive() {
+  return !!(state.settings && state.settings.drillStyle === "cloze");
+}
+
+// Build the blanked sentence into #cloze-fi. Returns false when the current
+// challenge has no usable example (caller falls back to the standard prompt).
+// Every whole-word occurrence of the target form is blanked, not just the
+// first — leaving a later occurrence visible would spoil the answer.
+function renderClozeLine() {
+  const { word, key, exampleIndex } = state.current;
+  if (typeof exampleIndex !== "number" || exampleIndex < 0) return false;
+  const ex = (word.examples || [])[exampleIndex];
+  const fi = typeof ex === "string" ? ex : ex && ex.fi;
+  const en = typeof ex === "string" ? "" : (ex && ex.en) || "";
+  const expected = word.inflections[key];
+  if (!fi || !expected) return false;
+
+  const re = clozeBlankRegex(expected);
+  el.clozeFi.innerHTML = "";
+  let lastIdx = 0;
+  let found = false;
+  let m;
+  while ((m = re.exec(fi)) !== null) {
+    found = true;
+    if (m.index > lastIdx) {
+      el.clozeFi.appendChild(document.createTextNode(fi.slice(lastIdx, m.index)));
+    }
+    const blank = document.createElement("span");
+    blank.className = "cloze-blank";
+    blank.textContent = "_____";
+    el.clozeFi.appendChild(blank);
+    lastIdx = m.index + m[0].length;
+  }
+  if (!found) return false;
+  if (lastIdx < fi.length) {
+    el.clozeFi.appendChild(document.createTextNode(fi.slice(lastIdx)));
+  }
+  el.clozeEn.textContent = en;
+  el.clozeEn.classList.toggle("hidden", !en);
+  return true;
+}
+
+// Fill the blank(s) with the answer once the challenge resolves, so the user
+// sees the completed sentence while the feedback line is on screen. No-op in
+// standard style or when nothing is blanked (e.g. cloze render fell back).
+function revealCloze() {
+  if (!clozeActive() || !state.current) return;
+  const expected = state.current.word.inflections[state.current.key];
+  for (const blank of el.clozeFi.querySelectorAll(".cloze-blank")) {
+    blank.textContent = expected;
+    blank.classList.add("filled");
+  }
+}
+
 function appendHighlighted(parent, text, re) {
   if (!re) { parent.textContent = text; return; }
   let lastIdx = 0;
@@ -310,10 +390,14 @@ function setStatus(text) { el.statusLine.textContent = text; }
 
 function updateStatus() {
   const count = state.pool.length;
-  setStatus(
-    `${state.mode} mode \u2022 ${count.toLocaleString()} possible challenges` +
-    (count === 0 ? " \u2014 all filtered out, enable something above" : "")
-  );
+  const style = clozeActive() ? " cloze" : "";
+  let suffix = "";
+  if (count === 0) {
+    suffix = clozeActive()
+      ? " \u2014 no example sentences match these filters; broaden them or switch to Standard"
+      : " \u2014 all filtered out, enable something above";
+  }
+  setStatus(`${state.mode}${style} mode \u2022 ${count.toLocaleString()} possible challenges${suffix}`);
 }
 
 // ---------- analytics ----------
@@ -797,6 +881,7 @@ function blitzSubmit() {
     // to actually read on mobile.
     const expected = result.expected;
     setFeedback(`\u2717 was: ${expected}`, "bad");
+    revealCloze();
     el.answer.classList.add("blitz-flash-bad");
     buzzIfWrong();
     b.wrongFlashUntil = Date.now() + 800;
@@ -1014,6 +1099,7 @@ function submit() {
   const result = checkAnswer(state.current, input);
   if (result.ok) {
     setFeedback("\u2713 correct", "ok");
+    revealCloze();
     score(state.hintsShown > 0 ? "wrong" : "correct");
     state.awaitingNext = true;
     // Advance after the TTS finishes, not on a fixed timer. Finnish words
@@ -1038,6 +1124,7 @@ function submit() {
     score("wrong");
     buzzIfWrong();
     setFeedback(`\u2717 expected: ${result.expected}`, "bad");
+    revealCloze();
     maybeAutoPlayAnswer();
     state.awaitingNext = true;
   }
@@ -1076,6 +1163,7 @@ function revealNextLetter() {
     }
     score("wrong");
     setFeedback(`✗ ${expected}`, "bad");
+    revealCloze();
     maybeAutoPlayAnswer();
     state.awaitingNext = true;
   } else {
@@ -1096,6 +1184,7 @@ function showFullAnswer() {
   const expected = state.current.word.inflections[state.current.key];
   el.answer.value = expected;
   setFeedback(`answer shown: ${expected}`, "bad");
+  revealCloze();
   score("shown");
   maybeAutoPlayAnswer();
   state.awaitingNext = true;
@@ -1142,6 +1231,10 @@ function rebuildPool(opts) {
     });
   }
 
+  // Cloze style: keep only challenges whose word has an example sentence
+  // containing the target form, and remember which example it was.
+  if (clozeActive()) pool = buildClozePool(pool);
+
   state.pool = pool;
   updateStatus();
   newChallenge(opts);
@@ -1168,6 +1261,7 @@ function setView(view) {
   // to drill (otherwise the "hidden" class from newChallenge wins).
   el.challenge.classList.toggle("hidden", !(drill && state.current));
   el.answerRow.classList.toggle("hidden", !(drill && state.current));
+  el.drillStyleRow.classList.toggle("hidden", !drill);
   el.filtersNoun.classList.toggle("hidden", !(drill && state.mode === "noun"));
   el.filtersVerb.classList.toggle("hidden", !(drill && state.mode === "verb"));
   // Presets live between filters and test mode; drill-only, and the list is
@@ -1212,6 +1306,192 @@ function setMode(mode) {
   // prompt when you click the tab you're already on.
   if (changed || !state.current) rebuildPool();
   else updateStatus();
+}
+
+// ---------- drill style (standard / cloze) ----------
+function renderDrillStyleSwitch() {
+  if (!el.drillStyleSwitch) return;
+  const pref = (state.settings && state.settings.drillStyle) || "standard";
+  for (const btn of el.drillStyleSwitch.querySelectorAll(".seg-btn")) {
+    const active = btn.dataset.value === pref;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-checked", active ? "true" : "false");
+  }
+}
+
+function updateAnswerPlaceholder() {
+  el.answer.placeholder = clozeActive()
+    ? "type the missing form and press Enter"
+    : "type the form and press Enter";
+}
+
+function setDrillStyle(style) {
+  if (style !== "standard" && style !== "cloze") return;
+  if (state.settings.drillStyle === style) return;
+  // The cloze pool is a different challenge set, so switching style mid-test
+  // or mid-blitz invalidates the run — same confirm flow as a mode switch.
+  if (testActive()) {
+    if (!confirm("Switching drill style will cancel the current test. Continue?")) return;
+    cancelTest();
+  }
+  if (blitzActive()) {
+    if (!confirm("Switching drill style will cancel the current Blitz round. Continue?")) return;
+    cancelBlitz();
+  }
+  state.settings.drillStyle = style;
+  saveSettings(state.settings);
+  renderDrillStyleSwitch();
+  updateAnswerPlaceholder();
+  track("drill_style", { style });
+  rebuildPool();
+}
+
+// ---------- full inflection table ----------
+// Opened by tapping the headword. While the current challenge is unanswered,
+// every cell whose value matches the expected answer is masked, so the table
+// works as a paradigm reference without doubling as a free "show answer".
+
+function openInflectionTable() {
+  if (!state.current) return;
+  // A reference aid has no place inside timed or unaided runs — the hint
+  // buttons at least carry a stats penalty; this wouldn't.
+  if (blitzActive() || testActive()) return;
+  const { word, key } = state.current;
+  const expected = word.inflections[key];
+  const concealed = !(state.awaitingNext || state.scoredThisChallenge);
+  el.inflectionTitle.textContent = word.word;
+  el.inflectionNote.classList.toggle("hidden", !concealed);
+  el.inflectionBody.innerHTML = "";
+  if (state.mode === "noun") {
+    el.inflectionBody.appendChild(buildNounTable(word, key, expected, concealed));
+  } else {
+    buildVerbTables(el.inflectionBody, word, key, expected, concealed);
+  }
+  track("inflection_table_open", { mode: state.mode });
+  el.inflectionModal.classList.remove("hidden");
+}
+
+function closeInflectionTable() {
+  el.inflectionModal.classList.add("hidden");
+  if (state.view === "drill") el.answer.focus();
+}
+
+function inflectionCell(value, key, currentKey, expected, concealed) {
+  const td = document.createElement("td");
+  if (!value) {
+    td.textContent = "—";
+    td.className = "infl-empty";
+    return td;
+  }
+  if (key === currentKey) td.classList.add("infl-target");
+  if (concealed && value === expected) {
+    td.classList.add("infl-masked");
+    td.textContent = "•••";
+    td.title = "hidden until you answer";
+  } else {
+    td.textContent = value;
+  }
+  return td;
+}
+
+function inflectionTableSkeleton(headers) {
+  const table = document.createElement("table");
+  table.className = "infl-table";
+  const thead = document.createElement("thead");
+  const tr = document.createElement("tr");
+  for (const h of headers) {
+    const th = document.createElement("th");
+    th.textContent = h;
+    tr.appendChild(th);
+  }
+  thead.appendChild(tr);
+  table.appendChild(thead);
+  const tbody = document.createElement("tbody");
+  table.appendChild(tbody);
+  return { table, tbody };
+}
+
+function buildNounTable(word, currentKey, expected, concealed) {
+  const { table, tbody } = inflectionTableSkeleton(["", "Singular", "Plural"]);
+  for (const c of state.cfg.nounCases.cases) {
+    const sg = word.inflections[`${c.id}_singular`];
+    const pl = word.inflections[`${c.id}_plural`];
+    if (!sg && !pl) continue;
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    th.scope = "row";
+    th.textContent = c.label;
+    tr.appendChild(th);
+    tr.appendChild(inflectionCell(sg, `${c.id}_singular`, currentKey, expected, concealed));
+    tr.appendChild(inflectionCell(pl, `${c.id}_plural`, currentKey, expected, concealed));
+    tbody.appendChild(tr);
+  }
+  return table;
+}
+
+// Conventional Finnish conjugation layout: one table per tense/mood with
+// pronoun rows + a passive row, positive and negative columns. Participles
+// and infinitives don't fit that grid, so they land in a flat list at the end.
+const VERB_TABLE_PRONOUNS = {
+  "1sg": "minä", "2sg": "sinä", "3sg": "hän",
+  "1pl": "me",   "2pl": "te",   "3pl": "he",
+  passive: "passive",
+};
+
+function buildVerbTables(container, word, currentKey, expected, concealed) {
+  const byTense = new Map(); // tenseId → { rowId → { positive: key, negative: key } }
+  const nonFinite = [];
+  for (const k of Object.keys(word.inflections || {})) {
+    const p = parseVerbKey(k);
+    if (p.kind !== "finite") { nonFinite.push(k); continue; }
+    let rows = byTense.get(p.tense);
+    if (!rows) { rows = {}; byTense.set(p.tense, rows); }
+    const rowId = p.person || "passive"; // passive forms carry no person
+    const slot = rows[rowId] || (rows[rowId] = {});
+    slot[p.polarity] = k;
+  }
+
+  const rowOrder = [...state.cfg.verbForms.persons.map((p) => p.id), "passive"];
+  for (const tense of state.cfg.verbForms.tenses) {
+    const rows = byTense.get(tense.id);
+    if (!rows) continue;
+    const h = document.createElement("h3");
+    h.textContent = tense.label;
+    container.appendChild(h);
+    const { table, tbody } = inflectionTableSkeleton(["", "Positive", "Negative"]);
+    for (const rowId of rowOrder) {
+      const slot = rows[rowId];
+      if (!slot) continue;
+      const tr = document.createElement("tr");
+      const th = document.createElement("th");
+      th.scope = "row";
+      th.textContent = VERB_TABLE_PRONOUNS[rowId] || rowId;
+      tr.appendChild(th);
+      tr.appendChild(inflectionCell(
+        word.inflections[slot.positive], slot.positive, currentKey, expected, concealed));
+      tr.appendChild(inflectionCell(
+        word.inflections[slot.negative], slot.negative, currentKey, expected, concealed));
+      tbody.appendChild(tr);
+    }
+    container.appendChild(table);
+  }
+
+  if (nonFinite.length > 0) {
+    const h = document.createElement("h3");
+    h.textContent = "participles & infinitives";
+    container.appendChild(h);
+    const { table, tbody } = inflectionTableSkeleton(["", "Form"]);
+    for (const k of nonFinite) {
+      const tr = document.createElement("tr");
+      const th = document.createElement("th");
+      th.scope = "row";
+      th.textContent = verbLabel(k, state.cfg);
+      tr.appendChild(th);
+      tr.appendChild(inflectionCell(word.inflections[k], k, currentKey, expected, concealed));
+      tbody.appendChild(tr);
+    }
+    container.appendChild(table);
+  }
 }
 
 // ---------- presets ----------
@@ -1555,6 +1835,22 @@ async function boot() {
     el.hintAnswer.addEventListener("click", showFullAnswer);
     el.skip.addEventListener("click", skipChallenge);
 
+    // Drill style: Standard / Cloze segmented control above the challenge.
+    renderDrillStyleSwitch();
+    updateAnswerPlaceholder();
+    el.drillStyleSwitch.addEventListener("click", (e) => {
+      const btn = e.target.closest(".seg-btn");
+      if (!btn) return;
+      setDrillStyle(btn.dataset.value);
+    });
+
+    // Full inflection table — opened by tapping the headword.
+    el.headword.addEventListener("click", openInflectionTable);
+    el.inflectionClose.addEventListener("click", closeInflectionTable);
+    el.inflectionModal.addEventListener("click", (e) => {
+      if (e.target === el.inflectionModal) closeInflectionTable();
+    });
+
     // Blitz: launch button + duration picker + start/cancel + result actions.
     el.blitzOpen.addEventListener("click", openBlitzModal);
     el.blitzDurationPicker.addEventListener("click", (e) => {
@@ -1585,7 +1881,9 @@ async function boot() {
     // want the picker to steal focus from there.
     document.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
-      if (!el.blitzStartModal.classList.contains("hidden")) {
+      if (!el.inflectionModal.classList.contains("hidden")) {
+        closeInflectionTable();
+      } else if (!el.blitzStartModal.classList.contains("hidden")) {
         closeBlitzStartModal();
       } else if (!el.testStartModal.classList.contains("hidden")) {
         closeTestStartModal();
@@ -1706,6 +2004,8 @@ async function importStats(file) {
       updateSrsControlsVisibility();
       applyTheme(state.settings.theme);
       renderThemeSwitch();
+      renderDrillStyleSwitch();
+      updateAnswerPlaceholder();
     }
     if (data.schedule && data.schedule.byItem) {
       state.schedule = { byItem: data.schedule.byItem };

@@ -252,3 +252,95 @@ export function checkAnswer(challenge, input) {
   const ok = normalize(input) === normalize(expected);
   return { ok, expected, normalizedInput: normalize(input) };
 }
+
+// ---------- cloze ----------
+// A cloze challenge shows one of the word's example sentences with the
+// inflected form blanked out — the user reconstructs the form from sentence
+// context instead of a grammatical prompt. Pool entries gain an
+// `exampleIndex` pointing at the example that contains the target form.
+
+// Per-word cache of normalized example sentences so buildClozePool stays
+// O(pool): without it we'd re-normalize the same handful of sentences once
+// per inflection key (133 keys per verb). WeakMap keys on the word object,
+// so a data reload drops the cache automatically.
+const normExampleCache = new WeakMap();
+
+function normalizedExamples(word) {
+  let cached = normExampleCache.get(word);
+  if (cached) return cached;
+  cached = (word.examples || []).map((ex) => {
+    const fi = typeof ex === "string" ? ex : ex && ex.fi;
+    return fi ? normalize(fi) : null;
+  });
+  normExampleCache.set(word, cached);
+  return cached;
+}
+
+function isLetterChar(ch) {
+  return !!ch && /\p{L}/u.test(ch);
+}
+
+// Whole-word containment on normalized strings. indexOf is the hot path
+// (runs for every pool entry); the per-char boundary test only runs on
+// candidate hits. Boundaries are "not a letter" rather than \b so Finnish
+// diacritics don't split words — same semantics as the spoiler filter.
+function containsWholeWord(haystack, needle) {
+  let idx = 0;
+  while ((idx = haystack.indexOf(needle, idx)) !== -1) {
+    const before = idx > 0 ? haystack[idx - 1] : "";
+    const after = haystack[idx + needle.length] || "";
+    if (!isLetterChar(before) && !isLetterChar(after)) return idx;
+    idx += 1;
+  }
+  return -1;
+}
+
+function findClozeExampleIndex(word, key) {
+  const form = word.inflections[key];
+  if (!form) return -1;
+  const needle = normalize(form);
+  const exs = normalizedExamples(word);
+  for (let i = 0; i < exs.length; i++) {
+    if (exs[i] && containsWholeWord(exs[i], needle) !== -1) return i;
+  }
+  return -1;
+}
+
+/**
+ * Filter a standard pool down to cloze-able challenges: entries whose word
+ * has an example sentence containing the target form as a whole word.
+ * Multi-word forms (negative verbs like "en voinut") match across spaces.
+ */
+export function buildClozePool(pool) {
+  const out = [];
+  // Identical surface forms under different keys (voi = present 3sg, past
+  // 3sg, imperative 2sg…) would otherwise produce the same on-screen
+  // challenge several times over, so dedupe on what the user actually sees.
+  const seen = new Set();
+  for (const { word, key } of pool) {
+    // Skip the nominative singular: its blank is just the headword already
+    // shown in the hint line, so typing it teaches nothing.
+    if (key === "nominative_singular") continue;
+    const exampleIndex = findClozeExampleIndex(word, key);
+    if (exampleIndex < 0) continue;
+    const dedupeKey = `${word.word}|${exampleIndex}|${normalize(word.inflections[key])}`;
+    if (seen.has(dedupeKey)) continue;
+    seen.add(dedupeKey);
+    out.push({ word, key, exampleIndex });
+  }
+  return out;
+}
+
+/**
+ * Regex matching `form` as a whole word in original (non-normalized) text.
+ * Used to locate the blank when rendering a cloze sentence: case-insensitive,
+ * Unicode-aware boundaries, tolerant of typographic apostrophes and flexible
+ * whitespace inside multi-word forms.
+ */
+export function clozeBlankRegex(form) {
+  const esc = form
+    .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    .replace(/'/g, "['‘’‚‛ʼ´`]")
+    .replace(/ /g, "\\s+");
+  return new RegExp(`(?<!\\p{L})${esc}(?!\\p{L})`, "giu");
+}

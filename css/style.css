@@ -248,10 +248,12 @@ h1::before {
  * itself doesn't flicker. */
 .challenge.card-in .word-line,
 .challenge.card-in .target-form,
+.challenge.card-in .cloze-line,
 .challenge.card-in .examples {
   animation: rise-in 240ms var(--ease) both;
 }
 .challenge.card-in .target-form { animation-delay: 40ms; }
+.challenge.card-in .cloze-line  { animation-delay: 40ms; }
 .challenge.card-in .examples    { animation-delay: 80ms; }
 .word-line {
   display: flex;
@@ -278,6 +280,47 @@ h1::before {
   color: var(--text-dim);
   letter-spacing: 0.01em;
   font-weight: 500;
+}
+
+/* The headword is a button now — tapping it opens the full inflection table.
+ * Strip the UA button chrome so it still reads as the big accent word; the
+ * dashed underline is the tap affordance. */
+button.headword {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  cursor: pointer;
+  border-bottom: 1px dashed var(--border-strong);
+  transition: border-color var(--dur) var(--ease);
+}
+button.headword:hover { border-bottom-color: var(--accent); }
+
+/* Cloze prompt: an example sentence with the target form blanked out.
+ * Replaces .target-form + .examples when the Cloze drill style is active. */
+.cloze-line { margin-top: 0.9rem; }
+.cloze-fi {
+  font-size: 1.25rem;
+  color: var(--text);
+  line-height: 1.55;
+}
+.cloze-blank {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 0 0.1em;
+}
+.cloze-en {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+/* Drill style switch (Standard / Cloze) — slim centered row above the card. */
+.drill-style-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.75rem;
 }
 
 /* Speaker button — inline with the headword. */
@@ -753,6 +796,71 @@ kbd {
   gap: 0.6rem;
   margin-top: 1rem;
   flex-wrap: wrap;
+}
+
+/* ---------- Full inflection table modal ---------- */
+/* Reuses the .test-modal chrome; this inner variant is wider, left-aligned,
+ * and scrolls its body (verb paradigms are long). */
+.inflection-inner {
+  max-width: 560px;
+  text-align: left;
+}
+.inflection-inner h2 {
+  text-align: center;
+  color: var(--accent);
+}
+.inflection-note {
+  font-size: 0.8rem !important;
+  color: var(--muted) !important;
+  text-align: center;
+}
+.inflection-body {
+  max-height: 60vh;
+  overflow-y: auto;
+  margin-top: 0.6rem;
+}
+.inflection-body h3 {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 1rem 0 0.3rem;
+}
+.inflection-body h3:first-child { margin-top: 0; }
+.infl-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.infl-table th,
+.infl-table td {
+  padding: 0.32rem 0.5rem;
+  text-align: left;
+  border-top: 1px solid var(--border);
+}
+.infl-table thead th {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-top: none;
+}
+.infl-table tbody th {
+  color: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
+  width: 1%;       /* shrink to content so the form columns get the space */
+}
+.infl-table td { color: var(--text); }
+.infl-empty    { color: var(--muted-soft); }
+.infl-target   { color: var(--accent); font-weight: 600; }
+.infl-masked   { color: var(--muted); letter-spacing: 0.15em; }
+@media (max-width: 420px) {
+  .infl-table { font-size: 0.8rem; }
+  .infl-table th,
+  .infl-table td { padding: 0.26rem 0.35rem; }
 }
 
 /* Post-round summary: giant number so the result is the hero of the screen. */
