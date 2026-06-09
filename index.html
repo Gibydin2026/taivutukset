@@ -68,14 +68,31 @@
       </div>
     </header>
 
+    <!-- Drill style: Standard (lemma + grammatical prompt) vs Cloze (example
+         sentence with the form blanked out). Drill view only. -->
+    <div id="drill-style-row" class="drill-style-row hidden">
+      <div id="drill-style-switch" class="seg-switch" role="radiogroup" aria-label="Drill style">
+        <button type="button" class="seg-btn" data-value="standard" role="radio">Standard</button>
+        <button type="button" class="seg-btn" data-value="cloze"    role="radio">Cloze</button>
+      </div>
+    </div>
+
     <section id="challenge" class="panel challenge hidden">
       <div class="word-line">
-        <span id="headword" class="headword">&mdash;</span>
+        <button id="headword" type="button" class="headword"
+                title="Show all forms of this word">&mdash;</button>
         <button id="speak-headword" type="button" class="speak-btn"
                 title="Hear the lemma" aria-label="Speak lemma">&#128266;</button>
         <span id="translation" class="translation"></span>
       </div>
       <div id="target-form" class="target-form">&mdash;</div>
+      <!-- Cloze prompt: the example sentence with the target form blanked,
+           plus its English translation. Replaces #target-form + #examples
+           when the Cloze drill style is active. -->
+      <div id="cloze-line" class="cloze-line hidden">
+        <div id="cloze-fi" class="cloze-fi"></div>
+        <div id="cloze-en" class="cloze-en"></div>
+      </div>
       <ul id="examples" class="examples hidden"></ul>
     </section>
 
@@ -111,6 +128,23 @@
         </button>
       </div>
     </section>
+
+    <!-- Full inflection table for the current word, opened by tapping the
+         headword. Until the challenge is answered, cells matching the current
+         answer are masked so the table can't be used as a free reveal. -->
+    <div id="inflection-modal" class="test-modal hidden" role="dialog" aria-labelledby="inflection-title" aria-modal="true">
+      <div class="test-modal-inner inflection-inner">
+        <h2 id="inflection-title">&mdash;</h2>
+        <p id="inflection-note" class="inflection-note">
+          &bull;&bull;&bull; cells match the current answer and stay hidden
+          until you've answered.
+        </p>
+        <div id="inflection-body" class="inflection-body"></div>
+        <div class="test-modal-actions">
+          <button id="inflection-close" type="button" class="mode-btn">Close</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Test in-progress strip: shown only while a test is running. Holds the
          "Question X of Y" counter and a Cancel button. Idle and result states
@@ -263,6 +297,28 @@
           verb type (1&ndash;6).
         </li>
       </ul>
+
+      <h3>Drill styles</h3>
+      <p>
+        The switch above the drill card picks how challenges are presented.
+        <strong>Standard</strong> shows the lemma plus a grammatical prompt
+        (&ldquo;inessive singular&rdquo;) and you type the form.
+        <strong>Cloze</strong> flips it: you get a real example sentence with
+        the inflected form blanked out, plus its English translation, and you
+        reconstruct the missing form from context &mdash; no case or tense
+        label to lean on. Cloze only draws on words whose example sentences
+        actually contain the target form, so its pool is smaller than
+        Standard's; your case, type, and frequency filters still apply.
+      </p>
+
+      <h3>Full inflection table</h3>
+      <p>
+        Tap the headword on any challenge to open the complete declension or
+        conjugation table for that word. Until you've answered, any cell that
+        matches the current answer is masked, so peeking at the paradigm
+        doesn't spoil the form you're being asked for. Not available during
+        tests or Blitz rounds.
+      </p>
 
       <h3>Filter presets</h3>
       <p>
