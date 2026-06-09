@@ -13,6 +13,51 @@ function byId(list, id) {
   return list.find((x) => x.id === id);
 }
 
+// Rection complement labels. The drill answer is a case (or infinitive form)
+// name, so each option carries a quick reminder of what that complement looks
+// like — the question word for locative cases, the suffix or a model form
+// elsewhere. Infinitive complements use the school-grammar names with a
+// "tehdä" model so they're recognizable without knowing the numbering.
+const COMPLEMENT_LABELS = {
+  nominative:    "nominative (mikä)",
+  genitive:      "genitive (kenen / minkä)",
+  partitive:     "partitive (mitä)",
+  accusative:    "accusative (object form)",
+  inessive:      "inessive (missä)",
+  elative:       "elative (mistä)",
+  illative:      "illative (mihin)",
+  adessive:      "adessive (millä)",
+  ablative:      "ablative (miltä)",
+  allative:      "allative (mille)",
+  essive:        "essive (-na/-nä)",
+  translative:   "translative (-ksi)",
+  abessive:      "abessive (-tta/-ttä)",
+  instructive:   "instructive (-in)",
+  comitative:    "comitative (-ine-)",
+  inf1:          "basic infinitive (tehdä)",
+  inf2_inessive: "E-infinitive inessive (tehdessä)",
+  inf3_illative: "MA-infinitive illative (tekemään)",
+  inf3_elative:  "MA-infinitive elative (tekemästä)",
+  inf3_inessive: "MA-infinitive inessive (tekemässä)",
+};
+
+export function complementLabel(id) {
+  return COMPLEMENT_LABELS[id] || id;
+}
+
+// Label for a rection item key: "rection:<comp>[+<comp>…][:<hint-slug>]".
+// Used by the stats tables, where the full per-option labels would be noisy —
+// strip the parenthetical reminders and re-space the hint slug.
+export function rectionLabel(key) {
+  const parts = key.split(":");
+  const comps = (parts[1] || "")
+    .split("+")
+    .map((c) => complementLabel(c).replace(/\s*\(.*\)$/, ""))
+    .join(" or ");
+  const hint = parts[2] ? ` ‘${parts[2].replace(/-/g, " ")}’` : "";
+  return `+ ${comps}${hint}`;
+}
+
 export function nounLabel(key, cfg) {
   const [caseId, numberId] = key.split("_");
   const c = byId(cfg.nounCases.cases, caseId);

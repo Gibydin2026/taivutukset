@@ -316,11 +316,68 @@ button.headword:hover { border-bottom-color: var(--accent); }
   margin-top: 0.5rem;
 }
 
-/* Drill style switch (Standard / Cloze) — slim centered row above the card. */
+/* Drill style switch (Standard / Cloze / Rection) — slim centered row above
+ * the card. The Rection button itself is hidden outside verb mode (JS). */
 .drill-style-row {
   display: flex;
   justify-content: center;
   margin-bottom: 0.75rem;
+}
+
+/* Rection drill style: the answer is one of four multiple-choice complement
+ * buttons, so the typed-answer chrome (input + letter hints + speak + the
+ * test/blitz launchers, which don't support this style) collapses away.
+ * Skip stays — it's the only hint-row action that still applies. */
+body.rection-mode .answer-wrap,
+body.rection-mode #hint-letter,
+body.rection-mode #hint-answer,
+body.rection-mode #speak-answer,
+body.rection-mode #test-open,
+body.rection-mode #blitz-open { display: none; }
+
+.rection-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+.rection-choice {
+  background: var(--panel-2);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.8rem;
+  cursor: pointer;
+  font-size: 0.92rem;
+  font-family: inherit;
+  text-align: left;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+              background var(--dur) var(--ease), transform 80ms var(--ease);
+}
+.rection-choice:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--border-strong);
+  background: var(--panel-hover);
+}
+.rection-choice:active:not(:disabled) { transform: translateY(1px); }
+.rection-choice:disabled { cursor: default; opacity: 0.55; }
+.rection-choice.correct {
+  border-color: var(--ok);
+  background: var(--ok-soft);
+  color: var(--text);
+  opacity: 1;
+}
+.rection-choice.wrong {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+  color: var(--text);
+  opacity: 1;
+}
+@media (max-width: 480px) {
+  .rection-choices { grid-template-columns: 1fr; }
 }
 
 /* Speaker button — inline with the headword. */
@@ -1055,6 +1112,7 @@ kbd {
 }
 .seg-btn:hover  { color: var(--text); }
 .seg-btn:active { transform: scale(0.96); }
+.beta-tag { font-size: 0.7em; opacity: 0.65; }
 .seg-btn.active {
   background: linear-gradient(180deg, var(--accent), var(--accent-soft));
   color: var(--on-accent);

@@ -68,12 +68,14 @@
       </div>
     </header>
 
-    <!-- Drill style: Standard (lemma + grammatical prompt) vs Cloze (example
-         sentence with the form blanked out). Drill view only. -->
+    <!-- Drill style: Standard (lemma + grammatical prompt), Cloze (example
+         sentence with the form blanked out), or Rection (which case does this
+         verb govern — multiple choice, verb mode only). Drill view only. -->
     <div id="drill-style-row" class="drill-style-row hidden">
       <div id="drill-style-switch" class="seg-switch" role="radiogroup" aria-label="Drill style">
         <button type="button" class="seg-btn" data-value="standard" role="radio">Standard</button>
-        <button type="button" class="seg-btn" data-value="cloze"    role="radio">Cloze</button>
+        <button type="button" class="seg-btn" data-value="cloze"    role="radio">Cloze <span class="beta-tag">(beta)</span></button>
+        <button type="button" class="seg-btn" data-value="rection"  role="radio">Rection <span class="beta-tag">(beta)</span></button>
       </div>
     </div>
 
@@ -104,6 +106,9 @@
         <button id="submit-answer" type="button" class="submit-btn"
                 title="Submit answer" aria-label="Submit answer">&#10132;</button>
       </div>
+      <!-- Rection multiple choice: replaces the text input when the Rection
+           drill style is active. Buttons are built per-challenge by main.js. -->
+      <div id="rection-choices" class="rection-choices hidden"></div>
       <div id="feedback" class="feedback"></div>
       <div class="hint-row">
         <button id="hint-letter" type="button" class="hint-btn" title="Reveal next letter (;)">
@@ -309,6 +314,19 @@
         label to lean on. Cloze only draws on words whose example sentences
         actually contain the target form, so its pool is smaller than
         Standard's; your case, type, and frequency filters still apply.
+      </p>
+      <p>
+        <strong>Rection</strong> (verb mode only) drills which case or
+        infinitive form a verb's complement takes &mdash; the thing that makes
+        <em>uskoa <strong>jumalaan</strong></em> illative but <em>pitää
+        <strong>musiikista</strong></em> elative. Each challenge shows a verb
+        and its English sense; pick the right complement from four options
+        (keys <kbd>1</kbd>&ndash;<kbd>4</kbd> work too). Where one sense
+        governs several patterns, the English hint in the prompt (&ldquo;+
+        ___ (&lsquo;to&rsquo;)&rdquo;) tells you which one is being asked.
+        The patterns come from the rection annotations Wiktionary editors
+        attach to Finnish verb senses &mdash; about 90 common verbs and 120
+        patterns. Tests and Blitz aren't available in this style.
       </p>
 
       <h3>Full inflection table</h3>

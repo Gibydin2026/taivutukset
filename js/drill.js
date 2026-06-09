@@ -247,6 +247,39 @@ function srsPick(pool, mode, schedule, floor, now) {
   return pool[pool.length - 1];
 }
 
+// ---------- rection ----------
+// A rection challenge asks which complement (case or infinitive form) a verb
+// governs, answered by multiple choice. Items come from data/rection.json
+// (parsed Wiktionary annotations — see scripts/extract_rection.py) and join
+// back to the verb objects in verbs.json for the headword, audio, examples,
+// and inflection table.
+
+export function buildRectionPool(data) {
+  const out = [];
+  if (!data.rection || !Array.isArray(data.rection.words)) return out;
+  const byWord = new Map();
+  for (const w of data.verbs.words) byWord.set(w.word, w);
+  for (const r of data.rection.words) {
+    const word = byWord.get(r.word);
+    if (!word) continue;
+    // Union of acceptable complements across ALL of this verb's items. A
+    // complement that's correct for one sense (pitää + elative "to like")
+    // must never appear as a distractor on another (pitää + partitive
+    // "to hold") — the user would be right for the wrong reasons, or worse,
+    // marked wrong for a correct pattern.
+    const exclude = [];
+    for (const item of r.items) {
+      for (const c of item.accept) {
+        if (!exclude.includes(c)) exclude.push(c);
+      }
+    }
+    for (const item of r.items) {
+      out.push({ word, key: item.key, rection: item, rectionExclude: exclude });
+    }
+  }
+  return out;
+}
+
 export function checkAnswer(challenge, input) {
   const expected = challenge.word.inflections[challenge.key];
   const ok = normalize(input) === normalize(expected);
