@@ -21,6 +21,15 @@ function fmtPct(a) {
   return `${Math.round(a * 100)}%`;
 }
 
+// Color class for accuracy cells: green \u2265 90%, amber \u2265 70%, red below.
+// Null (no attempts) stays neutral.
+function accClass(a) {
+  if (a == null) return "";
+  if (a >= 0.9) return " acc-good";
+  if (a >= 0.7) return " acc-mid";
+  return " acc-bad";
+}
+
 function overallLine(stats) {
   const totals = stats.totals;
   const attempted = totals.correct + totals.wrong;
@@ -75,12 +84,12 @@ function renderTable(rows, labelFor) {
     const tr = document.createElement("tr");
     const b = r.bucket;
     tr.innerHTML = `
-      <td>${labelFor(r.id)}</td>
+      <td>${escapeHtml(labelFor(r.id))}</td>
       <td class="num">${b.correct}</td>
       <td class="num">${b.wrong}</td>
       <td class="num mob-hide">${b.shown}</td>
       <td class="num mob-hide">${b.skipped}</td>
-      <td class="num">${fmtPct(r.accuracy)}</td>`;
+      <td class="num${accClass(r.accuracy)}">${fmtPct(r.accuracy)}</td>`;
     tbody.appendChild(tr);
   }
   table.appendChild(tbody);
@@ -158,7 +167,7 @@ function renderWordTable(rows, labelFor) {
       <td class="num mob-hide">${r.formsAttempted}</td>
       <td class="num">${r.attempts}</td>
       <td class="num">${r.wrong}</td>
-      <td class="num">${fmtPct(r.accuracy)}</td>
+      <td class="num${accClass(r.accuracy)}">${fmtPct(r.accuracy)}</td>
       <td class="mob-hide">${worstCell}</td>`;
     tbody.appendChild(tr);
   }

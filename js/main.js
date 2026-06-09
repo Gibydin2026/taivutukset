@@ -105,6 +105,7 @@ const el = {
   translation:     document.getElementById("translation"),
   targetForm:      document.getElementById("target-form"),
   answer:          document.getElementById("answer"),
+  submitAnswer:    document.getElementById("submit-answer"),
   feedback:        document.getElementById("feedback"),
   hintLetter:      document.getElementById("hint-letter"),
   hintAnswer:      document.getElementById("hint-answer"),
@@ -295,6 +296,14 @@ function maybeAutoPlayAnswer() {
 function setFeedback(text, cls) {
   el.feedback.textContent = text;
   el.feedback.className = "feedback" + (cls ? " " + cls : "");
+  // Physical cue on wrong answers: brief shake on the input. Re-trigger by
+  // removing + forcing reflow, since the class may still be applied from a
+  // previous wrong answer. CSS strips all animation under reduced-motion.
+  if (cls === "bad") {
+    el.answer.classList.remove("input-shake");
+    void el.answer.offsetWidth;
+    el.answer.classList.add("input-shake");
+  }
 }
 
 function setStatus(text) { el.statusLine.textContent = text; }
@@ -736,6 +745,7 @@ function blitzTick() {
 }
 
 function updateBlitzHud(remainingMs) {
+  if (!state.blitz) return;
   const remaining = remainingMs !== undefined
     ? remainingMs
     : Math.max(0, state.blitz.endAt - Date.now());
@@ -957,6 +967,11 @@ function newChallenge(opts) {
     return;
   }
   render();
+  // Entrance animation for the fresh card. Remove + reflow + re-add so it
+  // re-triggers on every challenge, not just the first.
+  el.challenge.classList.remove("card-in");
+  void el.challenge.offsetWidth;
+  el.challenge.classList.add("card-in");
   // Keep focus management scoped to the drill view — don't yank focus into
   // a hidden answer input while the user is interacting with Options — and
   // skip it entirely when the caller asked us to (filter toggles, preset
@@ -1051,6 +1066,14 @@ function revealNextLetter() {
 
   if (state.hintsShown >= expected.length) {
     // Last letter revealed — score as wrong and auto-advance.
+    if (testActive()) {
+      // Tests stay silent: record the miss and move on without leaking
+      // feedback or leaving the flow stuck on awaitingNext.
+      score("wrong");
+      recordTestAnswer("wrong", el.answer.value);
+      if (!state.test.finished) newChallenge();
+      return;
+    }
     score("wrong");
     setFeedback(`✗ ${expected}`, "bad");
     maybeAutoPlayAnswer();
@@ -1575,6 +1598,16 @@ async function boot() {
       }
     });
 
+    // On-screen submit button — same path as Enter. Mousedown-preventDefault
+    // keeps focus in the answer input so the mobile keyboard doesn't dismiss.
+    if (el.submitAnswer) {
+      el.submitAnswer.addEventListener("mousedown", (e) => e.preventDefault());
+      el.submitAnswer.addEventListener("click", () => {
+        submit();
+        if (state.view === "drill") el.answer.focus();
+      });
+    }
+
     el.answer.addEventListener("keydown", (e) => {
       if (e.key === "Enter") { e.preventDefault(); submit();            return; }
       if (e.key === ";")     { e.preventDefault(); revealNextLetter();  return; }
@@ -1797,7 +1830,10 @@ function wireUpdateBanner(reg) {
           reg.removeEventListener("updatefound", onUpdateFound);
           if (!applied) el.appVersion.textContent = orig;
         }, 4000))
-        .catch(() => { el.appVersion.textContent = orig; });
+        .catch(() => {
+          reg.removeEventListener("updatefound", onUpdateFound);
+          el.appVersion.textContent = orig;
+        });
     });
   }
 }

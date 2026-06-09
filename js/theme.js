@@ -6,9 +6,11 @@
 // The actual styling lives in CSS. We just set data-theme="light" | "dark" on
 // <html> and flip the theme-color meta so mobile status bars match.
 
+// Must match --bg in css/style.css for each theme, or the mobile status bar
+// visibly clashes with the page background.
 const THEME_COLOR = {
-  dark:  "#1a1a1d",
-  light: "#f7f8fa",
+  dark:  "#0f1115",
+  light: "#f6f7fa",
 };
 
 export function resolveEffective(pref) {
