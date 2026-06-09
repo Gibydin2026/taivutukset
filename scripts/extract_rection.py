@@ -1,36 +1,25 @@
 """
-Build data/rection.json from the rection annotations already present in
-data/verbs.json.
+Build data/rection.json from the kaikki.org Finnish Wiktionary extract.
 
-English Wiktionary marks verb rection (which case or infinitive form a verb's
-complement takes) inside the sense gloss as a bracketed editorial note, e.g.
+Reads scripts/raw/kaikki_finnish.jsonl directly so that all senses are
+processed — data/verbs.json caps glosses at 5 per verb and would miss
+rection annotations in later senses.
 
-    "to believe, have faith [with illative 'in'] (someone's abilities ...)"
-    "to hold [with partitive; or with elative 'onto' (often with kiinni)] (...)"
-    "to speak, talk [with elative 'about, of' and allative 'to'] (...)"
+Two annotation sources are checked per sense:
+  1. Bracketed text in the English gloss: "to hold [with partitive]"
+  2. The sense's raw_tags field when it contains a "+ <case>" pattern
+     emitted by Wiktionary rection templates.
 
-Those brackets travel verbatim into the `translations` field that
-scripts/extract.py copies out of the kaikki.org dump, so this script needs no
-network access and no re-download — it parses what's already shipped. The
-annotations are human-written Wiktionary content (CC BY-SA), not generated.
-
-Annotation grammar, as observed across the dataset:
+Annotation grammar (unchanged from previous version):
   - `;`-separated clauses are alternative patterns for the same sense
   - `and` / `along with` joins complements with DIFFERENT roles
-    ("elative 'about' and allative 'to'" — two separate things to learn)
   - `or` joins interchangeable cases within one role
-    ("with illative or allative")
   - a quoted gloss after a case is the English meaning of that complement
   - `<case> of third infinitive` is the MA-infinitive in that case
-    ("illative of third infinitive 'to do'" → tekemään)
-  - parentheticals are usage conditions, not rection — stripped before parsing
+  - parentheticals are usage conditions — stripped before parsing
 
-Each (verb, role) pair becomes one drill item: the prompt shows the verb, its
-gloss, and the role's English hint (if any); the acceptable answers are the
-role's interchangeable complements. Roles whose hints are missing get merged
-per-verb-sense, since without a hint the drill question can't distinguish them.
-
-Run:  python scripts/extract_rection.py
+Run: python scripts/extract_rection.py
+     (requires scripts/raw/kaikki_finnish.jsonl from download.py)
 """
 
 from __future__ import annotations
@@ -42,6 +31,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
+RAW = ROOT / "scripts" / "raw" / "kaikki_finnish.jsonl"
+FREQ_FILE = ROOT / "scripts" / "raw" / "frequency_fi.txt"
+
+FREQUENCY_CUTOFF = 20000
 
 CASES = (
     "nominative|genitive|partitive|inessive|elative|illative|adessive|"
@@ -50,22 +43,31 @@ CASES = (
 )
 ORDINAL = {"first": "1", "second": "2", "third": "3"}
 
-# One complement mention: a case or infinitive, optionally "of Nth infinitive",
-# optionally followed by a curly-quoted English hint.
 TOKEN = re.compile(
     rf"\b({CASES}|first infinitive|second infinitive|third infinitive)\b"
     r"(?:\s+of\s+(first|second|third)\s+infinitive)?"
-    r"(?:\s+‘([^’]*)’)?"
+    r"(?:\s+'([^']*)')?"
 )
 
 BRACKET = re.compile(r"\s*\[([^\]]*)\]")
 PAREN = re.compile(r"\([^()]*\)")
+PLUS_TAG = re.compile(rf"^\+\s*({CASES})\s*$")
+
+
+def load_frequency() -> dict[str, int]:
+    if not FREQ_FILE.exists():
+        print(f"[warn] frequency list not found at {FREQ_FILE}; skipping freq filter")
+        return {}
+    ranks: dict[str, int] = {}
+    with FREQ_FILE.open("r", encoding="utf-8") as f:
+        for i, line in enumerate(f, start=1):
+            parts = line.strip().split()
+            if parts and parts[0] not in ranks:
+                ranks[parts[0]] = i
+    return ranks
 
 
 def parse_segment(seg: str) -> dict | None:
-    """One role segment → {complements: [...], hint: str|None} or None."""
-    # Complements expressed through participles or verbal nouns aren't case
-    # rection in the drillable sense — skip those segments entirely.
     if "participle" in seg or "verbal noun" in seg:
         return None
     comps: list[str] = []
@@ -88,10 +90,6 @@ def parse_segment(seg: str) -> dict | None:
 
 
 def parse_annotation(text: str) -> list[dict]:
-    """Bracket text → list of role candidates [{complements, hint}]."""
-    # Strip usage-condition parentheticals ("(of direction)", "(uncommon)")
-    # so e.g. "(with adjectives or participles) with ablative" isn't dropped
-    # by the participle filter. Hints use curly quotes, so nothing is lost.
     cleaned = PAREN.sub(" ", text)
     candidates = []
     for clause in re.split(r";\s*(?:or\s+)?", cleaned):
@@ -103,13 +101,6 @@ def parse_annotation(text: str) -> list[dict]:
 
 
 def merge_candidates(candidates: list[dict]) -> list[dict]:
-    """Group role candidates by hint.
-
-    Hintless candidates from alternative clauses collapse into one item whose
-    acceptable set is the union — without a hint the prompt can't tell the
-    alternatives apart, so all of them must count as correct. Hinted
-    candidates stay separate items (the hint disambiguates the prompt).
-    """
     by_hint: dict[str | None, list[str]] = {}
     for c in candidates:
         acc = by_hint.setdefault(c["hint"], [])
@@ -124,7 +115,6 @@ def slug(text: str) -> str:
 
 
 def display_gloss(gloss: str) -> str:
-    """Strip the rection bracket; trim an over-long trailing parenthetical."""
     g = BRACKET.sub("", gloss)
     g = re.sub(r"\s{2,}", " ", g).strip().strip(";").strip()
     if len(g) > 120:
@@ -134,57 +124,122 @@ def display_gloss(gloss: str) -> str:
     return g
 
 
+def items_from_sense(sense: dict) -> list[tuple[str, str | None, list[str], str]]:
+    """Return (key, hint, accept, display_gloss) tuples from one sense."""
+    results = []
+    glosses = sense.get("glosses") or []
+    first_gloss = glosses[0] if glosses and isinstance(glosses[0], str) else ""
+
+    # Source 1: [with X] brackets in any gloss line
+    for gloss in glosses:
+        if not isinstance(gloss, str):
+            continue
+        for m in BRACKET.finditer(gloss):
+            merged = merge_candidates(parse_annotation(m.group(1)))
+            for item in merged:
+                shown = display_gloss(gloss)
+                if not shown:
+                    continue
+                key = "rection:" + "+".join(sorted(item["accept"]))
+                if item["hint"]:
+                    key += ":" + slug(item["hint"])
+                results.append((key, item["hint"], item["accept"], shown))
+
+    # Source 2: raw_tags matching "+ <case>" (Wiktionary rection templates)
+    shown_fallback = display_gloss(first_gloss) if first_gloss else ""
+    for tag in sense.get("raw_tags") or []:
+        if not isinstance(tag, str):
+            continue
+        m = PLUS_TAG.match(tag.strip())
+        if m and shown_fallback:
+            comp = m.group(1)
+            key = f"rection:{comp}"
+            results.append((key, None, [comp], shown_fallback))
+
+    return results
+
+
 def main() -> int:
-    verbs = json.loads((DATA / "verbs.json").read_text(encoding="utf-8"))
+    if not RAW.exists():
+        raise SystemExit(f"Missing {RAW}. Run scripts/download.py first.")
+
+    print("Loading frequency list...")
+    freq = load_frequency()
 
     out_words = []
     vocab: set[str] = set()
     n_items = 0
 
-    for w in verbs["words"]:
-        # key → item, keyed on (accept-set, hint) so identical patterns from
-        # different glosses of the same verb merge instead of duplicating.
-        items: dict[str, dict] = {}
-        for gloss in w.get("translations") or []:
-            for m in BRACKET.finditer(gloss):
-                merged = merge_candidates(parse_annotation(m.group(1)))
-                if not merged:
+    print(f"Streaming {RAW.name}...")
+    with RAW.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                entry = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+
+            if entry.get("pos") != "verb":
+                continue
+            if not entry.get("inflection_templates"):
+                continue
+            word = entry.get("word")
+            if not word:
+                continue
+
+            # Frequency filter (same logic as extract.py)
+            rank = freq.get(word.lower())
+            for f in entry.get("forms") or []:
+                s = f.get("form")
+                if not s:
                     continue
-                shown = display_gloss(gloss)
-                for item in merged:
-                    key = "rection:" + "+".join(sorted(item["accept"]))
-                    if item["hint"]:
-                        key += ":" + slug(item["hint"])
-                    existing = items.get(key)
-                    if existing:
-                        if shown not in existing["glosses"] and len(existing["glosses"]) < 2:
-                            existing["glosses"].append(shown)
-                        continue
-                    items[key] = {
-                        "key": key,
-                        "glosses": [shown],
-                        "hint": item["hint"],
-                        "accept": item["accept"],
-                    }
-        if not items:
-            continue
-        for it in items.values():
-            vocab.update(it["accept"])
-        n_items += len(items)
-        out_words.append({
-            "word": w["word"],
-            "frequency_rank": w.get("frequency_rank"),
-            "items": list(items.values()),
-        })
+                r = freq.get(s.lower())
+                if r is not None and (rank is None or r < rank):
+                    rank = r
+            if freq and (rank is None or rank > FREQUENCY_CUTOFF):
+                continue
+
+            # Collect items from all senses and sub-senses
+            items: dict[str, dict] = {}
+            for sense in entry.get("senses") or []:
+                for sense_like in [sense] + list(sense.get("subsenses") or []):
+                    for key, hint, accept, shown in items_from_sense(sense_like):
+                        existing = items.get(key)
+                        if existing:
+                            if shown not in existing["glosses"] and len(existing["glosses"]) < 3:
+                                existing["glosses"].append(shown)
+                        else:
+                            items[key] = {
+                                "key":    key,
+                                "glosses": [shown],
+                                "hint":   hint,
+                                "accept": accept,
+                            }
+
+            if not items:
+                continue
+
+            for it in items.values():
+                vocab.update(it["accept"])
+            n_items += len(items)
+            out_words.append({
+                "word":           word,
+                "frequency_rank": rank,
+                "items":          list(items.values()),
+            })
+
+    out_words.sort(key=lambda w: w.get("frequency_rank") or 10**9)
 
     payload = {
         "_source": (
-            "Rection annotations from English Wiktionary Finnish verb glosses "
+            "Rection annotations from English Wiktionary Finnish verb senses "
             "(en.wiktionary.org, via the kaikki.org extract), CC BY-SA 4.0. "
-            "Parsed by scripts/extract_rection.py from data/verbs.json."
+            "Parsed by scripts/extract_rection.py."
         ),
         "complements": sorted(vocab),
-        "words": out_words,
+        "words":       out_words,
     }
     (DATA / "rection.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8"
@@ -192,9 +247,9 @@ def main() -> int:
 
     print(f"Wrote {len(out_words)} verbs, {n_items} rection items")
     print(f"Complement vocabulary ({len(vocab)}): {', '.join(sorted(vocab))}")
-    for w in out_words[:8]:
+    for w in out_words[:10]:
         for it in w["items"]:
-            hint = f" ‘{it['hint']}’" if it["hint"] else ""
+            hint = f" '{it['hint']}'" if it["hint"] else ""
             print(f"  {w['word']:14s} + {' or '.join(it['accept'])}{hint}")
     return 0
 
