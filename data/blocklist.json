@@ -15,7 +15,12 @@
     "palvi", "sei", "tomi", "perus", "pura", "nuke", "kallas", "verto",
     "kelle", "soni", "tantere", "puolus", "kiiri", "hämi", "dona", "mumma",
     "kyynele", "kokoaja", "suljettu", "kirjoitin",
-    "odottama", "vetämä", "nostama", "nousema", "laskema", "kasvama", "tarjoama"
+    "odottama", "vetämä", "nostama", "nousema", "laskema", "kasvama", "tarjoama",
+    "juudas", "selus", "pieksu", "lieke", "kata", "merkintö", "face", "edus",
+    "oppilapsi", "petra", "aurora", "nobel", "piiranen", "piira", "laskeutuma",
+    "laksi", "perjantaki", "sunnuntaki", "lauantaki", "peni", "talka", "hapene",
+    "live", "kuninkaanna", "leivo", "saga", "hyssykkä", "heavy", "passa",
+    "kaapeli-tv", "tappelus", "ex"
   ],
   "verbs": [
     "ei", "eikä", "tarvii", "dallaa", "seistä",
@@ -26,6 +31,9 @@
     "sormia", "halajaa", "rikollistaa", "huoria", "maania", "heitiä",
     "henkilöittää", "kammoa", "puhkia", "hirvitä", "jauhata", "suuttaa",
     "julaista", "taustaa", "ruuhkata", "annostaa", "suklata", "onnestaa",
-    "kullastaa", "rankaista", "pohtaa"
+    "kullastaa", "rankaista", "pohtaa",
+    "saastata", "iloittaa", "ylttää", "tervehtää", "puistaa", "kuvioittaa",
+    "solmita", "tarttee", "juleta", "pieksää", "loppuunmyydä", "varjota",
+    "reunata", "vanhettaa", "suoria"
   ]
 }
