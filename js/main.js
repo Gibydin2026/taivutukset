@@ -1539,10 +1539,12 @@ function updateAnswerPlaceholder() {
     : "type the form and press Enter";
 }
 
-// Swap the answer chrome for rection: CSS keyed off this body class hides the
-// text input and the hint buttons that assume a typed answer (Skip stays).
+// Swap body classes for mode-specific chrome.
+// rection-mode: hides the typed-answer input + hint buttons (multiple choice instead).
+// possessive-mode: reveals the Possessor filter section in the noun panel.
 function applyRectionChrome() {
-  document.body.classList.toggle("rection-mode", rectionActive());
+  document.body.classList.toggle("rection-mode",    rectionActive());
+  document.body.classList.toggle("possessive-mode", possessiveActive());
 }
 
 function setDrillStyle(style) {
