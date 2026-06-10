@@ -1,5 +1,5 @@
 {
- "_source": "Rection annotations from English Wiktionary Finnish verb glosses (en.wiktionary.org, via the kaikki.org extract), CC BY-SA 4.0. Parsed by scripts/extract_rection.py from data/verbs.json.",
+ "_source": "Rection annotations from English Wiktionary Finnish verb senses (en.wiktionary.org, via the kaikki.org extract), CC BY-SA 4.0. Parsed by scripts/extract_rection.py.",
  "complements": [
   "ablative",
   "accusative",
@@ -18,6 +18,22 @@
   "translative"
  ],
  "words": [
+  {
+   "word": "voida",
+   "frequency_rank": 20,
+   "items": [
+    {
+     "key": "rection:allative:about",
+     "glosses": [
+      "can do (be able to influence)"
+     ],
+     "hint": "about",
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
   {
    "word": "pitää",
    "frequency_rank": 53,
@@ -73,6 +89,36 @@
      "accept": [
       "elative"
      ]
+    },
+    {
+     "key": "rection:inf3_illative",
+     "glosses": [
+      "to make (to cause the direct object to be the subject of a verb)"
+     ],
+     "hint": null,
+     "accept": [
+      "inf3_illative"
+     ]
+    },
+    {
+     "key": "rection:inf1",
+     "glosses": [
+      "will (expresses hope that something will happen in the future; usually used with a qualifier)"
+     ],
+     "hint": null,
+     "accept": [
+      "inf1"
+     ]
+    },
+    {
+     "key": "rection:ablative:by",
+     "glosses": [
+      "to get laid (if the partner is mentioned)"
+     ],
+     "hint": "by",
+     "accept": [
+      "ablative"
+     ]
     }
    ]
   },
@@ -89,6 +135,32 @@
      "accept": [
       "translative"
      ]
+    },
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to come into, get (enter a state of being)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "antaa",
+   "frequency_rank": 89,
+   "items": [
+    {
+     "key": "rection:allative:with",
+     "glosses": [
+      "to consent to have sex, put out"
+     ],
+     "hint": "with",
+     "accept": [
+      "allative"
+     ]
     }
    ]
   },
@@ -104,6 +176,17 @@
      "hint": "to do",
      "accept": [
       "inf1"
+     ]
+    },
+    {
+     "key": "rection:essive+translative:as",
+     "glosses": [
+      "to see, regard, view, consider"
+     ],
+     "hint": "as",
+     "accept": [
+      "translative",
+      "essive"
      ]
     }
    ]
@@ -131,6 +214,16 @@
      "accept": [
       "illative",
       "translative"
+     ]
+    },
+    {
+     "key": "rection:inf3_illative",
+     "glosses": [
+      "to go (and) (do an action, implying that someone should be criticized for doing it)"
+     ],
+     "hint": null,
+     "accept": [
+      "inf3_illative"
      ]
     }
    ]
@@ -281,6 +374,16 @@
      "accept": [
       "allative"
      ]
+    },
+    {
+     "key": "rection:elative",
+     "glosses": [
+      "to be in charge of (to have the responsibility of leading or overseeing)"
+     ],
+     "hint": null,
+     "accept": [
+      "elative"
+     ]
     }
    ]
   },
@@ -296,6 +399,22 @@
      "hint": "in",
      "accept": [
       "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "käydä",
+   "frequency_rank": 233,
+   "items": [
+    {
+     "key": "rection:translative",
+     "glosses": [
+      "to get, grow, become (used with adjectives)"
+     ],
+     "hint": null,
+     "accept": [
+      "translative"
      ]
     }
    ]
@@ -572,6 +691,22 @@
    ]
   },
   {
+   "word": "nousta",
+   "frequency_rank": 1121,
+   "items": [
+    {
+     "key": "rection:allative",
+     "glosses": [
+      "to mount (get upon, e.g. on a horse)"
+     ],
+     "hint": null,
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
    "word": "haista",
    "frequency_rank": 1161,
    "items": [
@@ -647,6 +782,32 @@
    ]
   },
   {
+   "word": "kannattaa",
+   "frequency_rank": 1265,
+   "items": [
+    {
+     "key": "rection:adessive:by",
+     "glosses": [
+      "to have somebody/something carried, make somebody carry something"
+     ],
+     "hint": "by",
+     "accept": [
+      "adessive"
+     ]
+    },
+    {
+     "key": "rection:adessive",
+     "glosses": [
+      "to have somebody/something carried, make somebody carry something"
+     ],
+     "hint": null,
+     "accept": [
+      "adessive"
+     ]
+    }
+   ]
+  },
+  {
    "word": "kiittää",
    "frequency_rank": 1310,
    "items": [
@@ -658,6 +819,22 @@
      "hint": "for",
      "accept": [
       "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "vetää",
+   "frequency_rank": 1376,
+   "items": [
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to drag in, drag into (get into a course of action by forceful means)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
      ]
     }
    ]
@@ -813,6 +990,22 @@
      "hint": "to",
      "accept": [
       "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "osoittaa",
+   "frequency_rank": 2228,
+   "items": [
+    {
+     "key": "rection:translative:as-to-be",
+     "glosses": [
+      "to show, demonstrate (to indicate (a fact) to be true)"
+     ],
+     "hint": "as, to be",
+     "accept": [
+      "translative"
      ]
     }
    ]
@@ -978,7 +1171,8 @@
      "key": "rection:elative",
      "glosses": [
       "to resign, quit (quit a job or position)",
-      "to divorce (dissolve a marriage)"
+      "to divorce (dissolve a marriage)",
+      "to secede (split from or to withdraw from membership of a political union, an alliance or an organisation)"
      ],
      "hint": null,
      "accept": [
@@ -1008,6 +1202,33 @@
      ],
      "hint": "on",
      "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "kääntää",
+   "frequency_rank": 3258,
+   "items": [
+    {
+     "key": "rection:elative:from",
+     "glosses": [
+      "to translate (express in another language)"
+     ],
+     "hint": "from",
+     "accept": [
+      "elative"
+     ]
+    },
+    {
+     "key": "rection:illative+translative:to",
+     "glosses": [
+      "to translate (express in another language)"
+     ],
+     "hint": "to",
+     "accept": [
+      "translative",
       "illative"
      ]
     }
@@ -1078,6 +1299,16 @@
      "hint": "as",
      "accept": [
       "translative"
+     ]
+    },
+    {
+     "key": "rection:allative:for",
+     "glosses": [
+      "to prescribe, order (a medication)"
+     ],
+     "hint": "for",
+     "accept": [
+      "allative"
      ]
     }
    ]
@@ -1179,6 +1410,22 @@
      "hint": null,
      "accept": [
       "allative",
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "kulua",
+   "frequency_rank": 4112,
+   "items": [
+    {
+     "key": "rection:illative:on",
+     "glosses": [
+      "to get spent, be spent, go (of money)"
+     ],
+     "hint": "on",
+     "accept": [
       "illative"
      ]
     }
@@ -1314,6 +1561,24 @@
    ]
   },
   {
+   "word": "hajota",
+   "frequency_rank": 6071,
+   "items": [
+    {
+     "key": "rection:allative+elative+illative",
+     "glosses": [
+      "to lose one's spirit due to, get depressed by (esp. a camp or heavy physical education)"
+     ],
+     "hint": null,
+     "accept": [
+      "elative",
+      "illative",
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
    "word": "mahtua",
    "frequency_rank": 6530,
    "items": [
@@ -1373,13 +1638,29 @@
    ]
   },
   {
+   "word": "kiristää",
+   "frequency_rank": 6689,
+   "items": [
+    {
+     "key": "rection:ablative:from",
+     "glosses": [
+      "to wring, extort (to obtain by force)"
+     ],
+     "hint": "from",
+     "accept": [
+      "ablative"
+     ]
+    }
+   ]
+  },
+  {
    "word": "laskettaa",
    "frequency_rank": 7010,
    "items": [
     {
      "key": "rection:adessive:by",
      "glosses": [
-      "To have (something) calculated, make (someone) calculate (something)"
+      "to have (something) calculated, make (someone) calculate (something)"
      ],
      "hint": "by",
      "accept": [
@@ -1428,7 +1709,8 @@
      "key": "rection:allative:to",
      "glosses": [
       "to reach, hand out (to give by stretching out)",
-      "to hand, give, reach, pass (to give, pass or transmit with the hand)"
+      "to hand, give, reach, pass (to give, pass or transmit with the hand)",
+      "to present, bestow (to present a thing as a gift or honour)"
      ],
      "hint": "to",
      "accept": [
@@ -1487,6 +1769,22 @@
    ]
   },
   {
+   "word": "murtautua",
+   "frequency_rank": 8308,
+   "items": [
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to break in (enter a place by force or illicit means)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
    "word": "inhottaa",
    "frequency_rank": 8727,
    "items": [
@@ -1512,6 +1810,16 @@
       "to set, locate, backdrop (a story into a location or point in time)"
      ],
      "hint": "in",
+     "accept": [
+      "illative"
+     ]
+    },
+    {
+     "key": "rection:illative:to",
+     "glosses": [
+      "to assign (to a variable)"
+     ],
+     "hint": "to",
      "accept": [
       "illative"
      ]
@@ -1724,7 +2032,8 @@
      "key": "rection:elative",
      "glosses": [
       "to differ from, be different from, depart, deviate, diverge (not to have the same traits, characteristics)",
-      "to deviate, stray, wander; to diverge, swerve, veer, divert"
+      "to deviate, stray, wander; to diverge, swerve, veer, divert",
+      "to digress, deviate (to turn aside from the main subject of attention, or course of argument)"
      ],
      "hint": null,
      "accept": [
