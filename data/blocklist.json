@@ -1,8 +1,39 @@
 {
-  "_comment": "Words to drop from the drill pool. Update manually as junk entries are reported. Match is exact against the lemma.",
+  "_comment": "Words to drop from the drill pool. Update manually as junk entries are reported. Match is exact against the lemma. Categories: Finnish letter names (aa..öö), foreign letter names (he, jota...), music notes (as, es, b..h), all-caps abbreviations that decline with a colon (DNA:ssa), malformed/misspelled lemmas, proper nouns, multi-word phrases, and obscure dialect/synonym-of entries whose frequency rank comes from an unrelated homograph (e.g. the noun 'ja' = AND gate inherits rank 3 from the conjunction).",
   "nouns": [
     "aa", "dee", "ee", "ii", "koo", "oo", "pee", "see", "uu", "vee",
-    "yy", "äl", "äm", "äs", "ää", "öö"
+    "yy", "äl", "äm", "äs", "ää", "öö",
+    "he", "pe", "šin", "jota", "ioota", "san", "myy", "tau",
+    "as", "es", "des", "b", "c", "d", "e", "f", "g", "h",
+    "a/languages A to L",
+    "tv", "TV", "DNA", "DJ", "CD", "WC", "AIDS", "UKK", "P/E-luku", "business",
+    "avo", "teka", "nro",
+    "lontoo", "chester", "Lentokenttä", "Joulupukki", "t-paita",
+    "oman onnensa seppä", "toissapäivä",
+    "ja", "vitu", "esi", "sii", "jotka", "aino", "anne", "iso", "onsi",
+    "aion", "steve", "virhi", "jenny", "kati", "korja", "käsis", "louna",
+    "palvi", "sei", "tomi", "perus", "pura", "nuke", "kallas", "verto",
+    "kelle", "soni", "tantere", "puolus", "kiiri", "hämi", "dona", "mumma",
+    "kyynele", "kokoaja", "suljettu", "kirjoitin",
+    "odottama", "vetämä", "nostama", "nousema", "laskema", "kasvama", "tarjoama",
+    "juudas", "selus", "pieksu", "lieke", "kata", "merkintö", "face", "edus",
+    "oppilapsi", "petra", "aurora", "nobel", "piiranen", "piira", "laskeutuma",
+    "laksi", "perjantaki", "sunnuntaki", "lauantaki", "peni", "talka", "hapene",
+    "live", "kuninkaanna", "leivo", "saga", "hyssykkä", "heavy", "passa",
+    "kaapeli-tv", "tappelus", "ex"
   ],
-  "verbs": []
+  "verbs": [
+    "ei", "eikä", "tarvii", "dallaa", "seistä",
+    "asea", "peljätä", "kettää", "maattaa", "kivata", "jututa", "matkata",
+    "tarkata", "voitaa", "jutustaa", "naisistaa", "samastaa", "syrjätä",
+    "uskottaa", "illallistaa", "hyljätä", "kattoa", "halvata", "hajuta",
+    "hymytä", "koottaa", "kuivaa", "leikitä", "lukittaa", "toimita",
+    "sormia", "halajaa", "rikollistaa", "huoria", "maania", "heitiä",
+    "henkilöittää", "kammoa", "puhkia", "hirvitä", "jauhata", "suuttaa",
+    "julaista", "taustaa", "ruuhkata", "annostaa", "suklata", "onnestaa",
+    "kullastaa", "rankaista", "pohtaa",
+    "saastata", "iloittaa", "ylttää", "tervehtää", "puistaa", "kuvioittaa",
+    "solmita", "tarttee", "juleta", "pieksää", "loppuunmyydä", "varjota",
+    "reunata", "vanhettaa", "suoria"
+  ]
 }

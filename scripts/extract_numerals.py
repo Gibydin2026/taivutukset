@@ -26,7 +26,13 @@ RAW    = ROOT / "scripts" / "raw" / "kaikki_finnish.jsonl"
 
 # Canonical list in display order; gloss used only as fallback if Wiktionary
 # has no English translation for an entry.
+#
+# The compound cardinals (11-19, tens) can also be generated offline from the
+# base paradigms by scripts/gen_compound_numerals.py — run it AFTER this
+# script; it only fills in words that are missing, so Wiktionary paradigms
+# extracted here always win.
 NUMERALS: list[tuple[str, str]] = [
+    ("nolla",     "zero"),
     ("yksi",      "one"),
     ("kaksi",     "two"),
     ("kolme",     "three"),
@@ -37,9 +43,40 @@ NUMERALS: list[tuple[str, str]] = [
     ("kahdeksan", "eight"),
     ("yhdeksän",  "nine"),
     ("kymmenen",  "ten"),
+    ("yksitoista",        "eleven"),
+    ("kaksitoista",       "twelve"),
+    ("kolmetoista",       "thirteen"),
+    ("neljätoista",       "fourteen"),
+    ("viisitoista",       "fifteen"),
+    ("kuusitoista",       "sixteen"),
+    ("seitsemäntoista",   "seventeen"),
+    ("kahdeksantoista",   "eighteen"),
+    ("yhdeksäntoista",    "nineteen"),
+    ("kaksikymmentä",     "twenty"),
+    ("kolmekymmentä",     "thirty"),
+    ("neljäkymmentä",     "forty"),
+    ("viisikymmentä",     "fifty"),
+    ("kuusikymmentä",     "sixty"),
+    ("seitsemänkymmentä", "seventy"),
+    ("kahdeksankymmentä", "eighty"),
+    ("yhdeksänkymmentä",  "ninety"),
     ("sata",      "hundred"),
     ("tuhat",     "thousand"),
     ("miljoona",  "million"),
+    ("miljardi",  "billion"),
+    # Ordinals — decline like adjectives, full paradigms on Wiktionary.
+    ("ensimmäinen", "first"),
+    ("toinen",      "second"),
+    ("kolmas",      "third"),
+    ("neljäs",      "fourth"),
+    ("viides",      "fifth"),
+    ("kuudes",      "sixth"),
+    ("seitsemäs",   "seventh"),
+    ("kahdeksas",   "eighth"),
+    ("yhdeksäs",    "ninth"),
+    ("kymmenes",    "tenth"),
+    ("sadas",       "hundredth"),
+    ("tuhannes",    "thousandth"),
 ]
 NUMERAL_WORDS   = {w for w, _ in NUMERALS}
 NUMERAL_FALLBACK = {w: g for w, g in NUMERALS}

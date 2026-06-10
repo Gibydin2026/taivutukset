@@ -34,7 +34,7 @@ DATA = ROOT / "data"
 RAW = ROOT / "scripts" / "raw" / "kaikki_finnish.jsonl"
 FREQ_FILE = ROOT / "scripts" / "raw" / "frequency_fi.txt"
 
-FREQUENCY_CUTOFF = 20000
+FREQUENCY_CUTOFF = 30000
 
 CASES = (
     "nominative|genitive|partitive|inessive|elative|illative|adessive|"

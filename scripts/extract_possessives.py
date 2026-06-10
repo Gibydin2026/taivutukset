@@ -75,14 +75,18 @@ def split_into_tables(forms: list[dict]) -> list[dict[str, str]]:
 
 
 def detect_person(table: dict[str, str]) -> str:
-    """Infer possessor person from the nominative singular form's suffix.
+    """Infer possessor person from the nominative form's suffix.
 
-    Finnish possessive suffixes on the nominative singular are unambiguous:
+    Finnish possessive suffixes are unambiguous:
       -ni   → 1sg    -si   → 2sg
       -mme  → 1pl    -nne  → 2pl
       anything else → 3rd  (-nsa/-nsä/-Vn/-an/-ään etc.)
+
+    Regular nouns: use nominative_singular.
+    Plural-only nouns (plurale tantum like kasvot, housut): fall back to
+    nominative_plural — the suffix pattern is identical.
     """
-    nom = table.get("nominative_singular", "")
+    nom = table.get("nominative_singular") or table.get("nominative_plural", "")
     if nom.endswith("mme"):
         return "1pl"
     if nom.endswith("nne"):

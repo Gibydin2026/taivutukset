@@ -141,6 +141,21 @@ function verbKeyAllowed(key, filters) {
 
 // ---------- shared ----------
 
+// Variety guard: remember the last few lemmas served and steer the picker
+// away from them. Without this, nothing stops several forms of the same word
+// arriving back-to-back — the old avoid-repeat only matched the exact
+// (word, key) pair, so "käsissä" → "käsiä" → "kätenä" was a legal streak.
+// The guard is soft (bounded retries), so tiny pools — a filtered drill with
+// fewer distinct lemmas than the cooldown window — still always serve
+// something rather than spinning.
+const RECENT_LEMMA_LIMIT = 4;
+const recentLemmas = [];
+
+function noteServed(item) {
+  recentLemmas.push(item.word.word);
+  if (recentLemmas.length > RECENT_LEMMA_LIMIT) recentLemmas.shift();
+}
+
 /**
  * Pick the next challenge. `opts.priority` selects the strategy:
  *   "uniform"  — plain random
@@ -148,7 +163,8 @@ function verbKeyAllowed(key, filters) {
  *                pre-SRS — kept as an option for users who preferred it)
  *   "srs"      — FSRS-lite: weight by (1 - retrievability), floored so
  *                mastered items still surface occasionally
- * The `previous` avoid-repeat nudge fires for all modes.
+ * The avoid-repeat nudge (exact previous item + recent-lemma cooldown) fires
+ * for all modes.
  */
 export function nextChallenge(pool, previous, opts) {
   if (pool.length === 0) return null;
@@ -162,10 +178,14 @@ export function nextChallenge(pool, previous, opts) {
     }
     return randomChoice(pool);
   };
+  const shouldRetry = (c) =>
+    (previous && c.word === previous.word && c.key === previous.key) ||
+    recentLemmas.includes(c.word.word);
   let chosen = pick();
-  for (let tries = 0; tries < 5 && previous && chosen.word === previous.word && chosen.key === previous.key; tries++) {
+  for (let tries = 0; tries < 8 && shouldRetry(chosen); tries++) {
     chosen = pick();
   }
+  noteServed(chosen);
   return chosen;
 }
 
@@ -180,6 +200,15 @@ export function nextChallenge(pool, previous, opts) {
  *     + 2.0 * itemMissRate        (main signal; 0 if never attempted)
  *     + 0.5 * wordMissRate        (small cross-form nudge)
  *     + 0.6 if never attempted    (explore bonus)
+ *
+ * Both rates are Laplace-smoothed so a single data point can't saturate
+ * them. Raw miss/attempts hits 1.0 after one wrong answer, and the word-level
+ * rate then boosts EVERY form of that lemma (26 for nouns, 133 for verbs) at
+ * once — a feedback loop that kept serving the same stem until the user
+ * ground it down. Smoothed, one miss reads as itemMiss 0.5 / wordMiss 0.2,
+ * and the bias only grows as evidence accumulates:
+ *   itemMiss = misses / (attempts + 1)
+ *   wordMiss = misses / (attempts + 4)
  */
 function weightedPick(pool, mode, stats) {
   const byItem = stats.byItem || {};
@@ -211,10 +240,10 @@ function weightedPick(pool, mode, stats) {
     const id   = `${wkey}|${item.key}`;
     const b    = byItem[id];
     const attempted = b ? b.correct + b.wrong + b.shown + b.skipped : 0;
-    const itemMiss  = attempted > 0 ? (b.wrong + b.shown + b.skipped) / attempted : 0;
+    const itemMiss  = attempted > 0 ? (b.wrong + b.shown + b.skipped) / (attempted + 1) : 0;
 
     const wa = wordAgg.get(wkey);
-    const wordMiss = wa && wa.att > 0 ? wa.miss / wa.att : 0;
+    const wordMiss = wa && wa.att > 0 ? wa.miss / (wa.att + 4) : 0;
 
     let w = 1 + 2.0 * itemMiss + 0.5 * wordMiss;
     if (attempted === 0) w += 0.6; // small explore bonus for unseen forms

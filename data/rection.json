@@ -2133,6 +2133,192 @@
      ]
     }
    ]
+  },
+  {
+   "word": "pistäytyä",
+   "frequency_rank": 20219,
+   "items": [
+    {
+     "key": "rection:inessive",
+     "glosses": [
+      "to drop by (visit spontaneously)"
+     ],
+     "hint": null,
+     "accept": [
+      "inessive"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "panostaa",
+   "frequency_rank": 21346,
+   "items": [
+    {
+     "key": "rection:illative:in",
+     "glosses": [
+      "to invest, put (effort) (to spend money, time, effort, or energy into something)"
+     ],
+     "hint": "in",
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "suvaita",
+   "frequency_rank": 22098,
+   "items": [
+    {
+     "key": "rection:inf1:to-do",
+     "glosses": [
+      "to deign, condescend (to do despite a perceived affront to one's dignity)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf1"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "välttyä",
+   "frequency_rank": 22906,
+   "items": [
+    {
+     "key": "rection:ablative",
+     "glosses": [
+      "to escape (from), avoid (a negative situation, often implying that one escaped unscathed)"
+     ],
+     "hint": null,
+     "accept": [
+      "ablative"
+     ]
+    },
+    {
+     "key": "rection:inf3_elative:doing",
+     "glosses": [
+      "to escape (from), avoid (a negative situation, often implying that one escaped unscathed)"
+     ],
+     "hint": "doing",
+     "accept": [
+      "inf3_elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "langeta",
+   "frequency_rank": 23492,
+   "items": [
+    {
+     "key": "rection:illative:into",
+     "glosses": [
+      "to lapse (morally); to sin"
+     ],
+     "hint": "into",
+     "accept": [
+      "illative"
+     ]
+    },
+    {
+     "key": "rection:illative",
+     "glosses": [
+      "to fall for, to be fooled"
+     ],
+     "hint": null,
+     "accept": [
+      "illative"
+     ]
+    },
+    {
+     "key": "rection:allative",
+     "glosses": [
+      "to fall on, fall upon; to occur, happen"
+     ],
+     "hint": null,
+     "accept": [
+      "allative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "höyrytä",
+   "frequency_rank": 26166,
+   "items": [
+    {
+     "key": "rection:elative",
+     "glosses": [
+      "to obsess (over), be obsessed about (to talk obsessively about)"
+     ],
+     "hint": null,
+     "accept": [
+      "elative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "vajota",
+   "frequency_rank": 26534,
+   "items": [
+    {
+     "key": "rection:illative:in",
+     "glosses": [
+      "to sink (something heavier than water)"
+     ],
+     "hint": "in",
+     "accept": [
+      "illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "ylettyä",
+   "frequency_rank": 27496,
+   "items": [
+    {
+     "key": "rection:allative+illative",
+     "glosses": [
+      "to (be able to) reach (usually with one's limbs)"
+     ],
+     "hint": null,
+     "accept": [
+      "illative",
+      "allative"
+     ]
+    },
+    {
+     "key": "rection:inf3_illative:to-do",
+     "glosses": [
+      "to (be able to) reach (usually with one's limbs)"
+     ],
+     "hint": "to do",
+     "accept": [
+      "inf3_illative"
+     ]
+    }
+   ]
+  },
+  {
+   "word": "joutaa",
+   "frequency_rank": 28416,
+   "items": [
+    {
+     "key": "rection:allative+illative:for-a-place",
+     "glosses": [
+      "to be ready/fit, ought to be"
+     ],
+     "hint": "for a place",
+     "accept": [
+      "illative",
+      "allative"
+     ]
+    }
+   ]
   }
  ]
 }
