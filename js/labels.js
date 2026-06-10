@@ -18,31 +18,48 @@ function byId(list, id) {
 // like — the question word for locative cases, the suffix or a model form
 // elsewhere. Infinitive complements use the school-grammar names with a
 // "tehdä" model so they're recognizable without knowing the numbering.
+// Each entry has a primary name (the grammar term) and a hint (the question
+// word or suffix that reminds learners what the case looks/sounds like).
+// The hint is shown as secondary text in choice buttons and folded into the
+// combined label string used by stats tables.
 const COMPLEMENT_LABELS = {
-  nominative:    "nominative (mikä)",
-  genitive:      "genitive (kenen / minkä)",
-  partitive:     "partitive (mitä)",
-  accusative:    "accusative (object form)",
-  inessive:      "inessive (missä)",
-  elative:       "elative (mistä)",
-  illative:      "illative (mihin)",
-  adessive:      "adessive (millä)",
-  ablative:      "ablative (miltä)",
-  allative:      "allative (mille)",
-  essive:        "essive (-na/-nä)",
-  translative:   "translative (-ksi)",
-  abessive:      "abessive (-tta/-ttä)",
-  instructive:   "instructive (-in)",
-  comitative:    "comitative (-ine-)",
-  inf1:          "basic infinitive (tehdä)",
-  inf2_inessive: "E-infinitive inessive (tehdessä)",
-  inf3_illative: "MA-infinitive illative (tekemään)",
-  inf3_elative:  "MA-infinitive elative (tekemästä)",
-  inf3_inessive: "MA-infinitive inessive (tekemässä)",
+  nominative:    { name: "nominative",          hint: "mikä" },
+  genitive:      { name: "genitive",            hint: "kenen / minkä" },
+  partitive:     { name: "partitive",           hint: "mitä" },
+  accusative:    { name: "accusative",          hint: "kenet / minkä" },
+  inessive:      { name: "inessive",            hint: "missä" },
+  elative:       { name: "elative",             hint: "mistä" },
+  illative:      { name: "illative",            hint: "mihin" },
+  adessive:      { name: "adessive",            hint: "millä" },
+  ablative:      { name: "ablative",            hint: "miltä" },
+  allative:      { name: "allative",            hint: "mille" },
+  essive:        { name: "essive",              hint: "-na / -nä" },
+  translative:   { name: "translative",         hint: "-ksi" },
+  abessive:      { name: "abessive",            hint: "-tta / -ttä" },
+  instructive:   { name: "instructive",         hint: "-in" },
+  comitative:    { name: "comitative",          hint: "-ine-" },
+  inf1:          { name: "1st infinitive",      hint: "tehdä" },
+  inf2_inessive: { name: "2nd inf. inessive",   hint: "tehdessä" },
+  inf3_illative: { name: "MA-inf. illative",    hint: "tekemään" },
+  inf3_elative:  { name: "MA-inf. elative",     hint: "tekemästä" },
+  inf3_inessive: { name: "MA-inf. inessive",    hint: "tekemässä" },
 };
 
+// Full "name (hint)" string — used in stats tables where space is limited.
 export function complementLabel(id) {
-  return COMPLEMENT_LABELS[id] || id;
+  const e = COMPLEMENT_LABELS[id];
+  if (!e) return id;
+  return e.hint ? `${e.name} (${e.hint})` : e.name;
+}
+
+// Just the grammar term, for use as the primary button label.
+export function complementName(id) {
+  return (COMPLEMENT_LABELS[id] || {}).name || id;
+}
+
+// Just the question-word / suffix reminder, for secondary button text.
+export function complementHint(id) {
+  return (COMPLEMENT_LABELS[id] || {}).hint || "";
 }
 
 // Label for a rection item key: "rection:<comp>[+<comp>…][:<hint-slug>]".

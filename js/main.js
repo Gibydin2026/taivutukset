@@ -7,7 +7,7 @@ import {
   buildNounPool, buildVerbPool, nextChallenge, checkAnswer,
   buildClozePool, clozeBlankRegex, buildRectionPool, parseVerbKey,
 } from "./drill.js";
-import { nounLabel, verbLabel, complementLabel } from "./labels.js";
+import { nounLabel, verbLabel, complementLabel, complementName, complementHint } from "./labels.js";
 import {
   loadNounFilters, saveNounFilters, renderNounFilters,
   loadVerbFilters, saveVerbFilters, renderVerbFilters,
@@ -423,7 +423,17 @@ function renderRectionChoices() {
     const kbd = document.createElement("kbd");
     kbd.textContent = String(i + 1);
     btn.appendChild(kbd);
-    btn.appendChild(document.createTextNode(" " + complementLabel(c)));
+    const nameEl = document.createElement("span");
+    nameEl.className = "choice-name";
+    nameEl.textContent = complementName(c);
+    btn.appendChild(nameEl);
+    const h = complementHint(c);
+    if (h) {
+      const hintEl = document.createElement("span");
+      hintEl.className = "choice-hint";
+      hintEl.textContent = h;
+      btn.appendChild(hintEl);
+    }
     if (resolved) {
       btn.disabled = true;
       if (accept.includes(c)) btn.classList.add("correct");
@@ -435,13 +445,15 @@ function renderRectionChoices() {
   });
 }
 
-// "uskoa + illative (mihin) (‘in’)" — the full pattern, shown as feedback
-// once the challenge resolves so the user always sees the complete rection,
-// not just right/wrong.
+// "uskoa + illative (mihin) ‘in’" — shown as feedback after the challenge
+// resolves so the user always sees the full rection pattern.
 function formatRectionPattern() {
   const { word, rection } = state.current;
-  const comps = rection.accept.map(complementLabel).join(" or ");
-  return `${word.word} + ${comps}` + (rection.hint ? ` (‘${rection.hint}’)` : "");
+  const comps = rection.accept.map((c) => {
+    const h = complementHint(c);
+    return h ? `${complementName(c)} (${h})` : complementName(c);
+  }).join(" or ");
+  return `${word.word} + ${comps}` + (rection.hint ? ` ‘${rection.hint}’` : "");
 }
 
 function answerRection(choice) {

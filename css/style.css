@@ -357,6 +357,15 @@ body.rection-mode #blitz-open { display: none; }
   transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
               background var(--dur) var(--ease), transform 80ms var(--ease);
 }
+.rection-choice .choice-name {
+  flex: 1;
+}
+.rection-choice .choice-hint {
+  font-size: 0.8em;
+  opacity: 0.6;
+  text-align: right;
+  white-space: nowrap;
+}
 .rection-choice:hover:not(:disabled) {
   color: var(--text);
   border-color: var(--border-strong);
