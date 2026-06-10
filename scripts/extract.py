@@ -34,6 +34,7 @@ Run:  python scripts/extract.py
 from __future__ import annotations
 
 import json
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -115,6 +116,43 @@ def iter_entries(path: Path) -> Iterable[dict]:
                 yield json.loads(line)
             except json.JSONDecodeError:
                 continue
+
+
+# -------- junk filtering ---------------------------------------------------
+
+# Lemma shape: lowercase Finnish letters (incl. š/ž loans) plus hyphen and
+# apostrophe, OR a single-capital hyphenated compound like "T-paita". This
+# rejects all-caps abbreviations (their declined forms need a colon — "DNA:ssa"
+# — which is miserable to type in a drill), proper nouns, digits, slashes and
+# multi-word phrases. The audit that motivated this found only junk on the
+# wrong side of the regex (TV, UKK, "a/languages A to L", "oman onnensa
+# seppä", Joulupukki, ...) and zero legitimate words.
+LEMMA_OK = re.compile(r"^(?:[a-zåäöšž'-]+|[A-ZÅÄÖ]-[a-zåäöšž-]+)$")
+
+# Gloss patterns for entries that are dictionary metadata rather than words a
+# learner should drill. Letter names ("name of the Latin script letter L/l",
+# Hebrew/Greek letters), music notes ("A-flat", "D (note)") and misspelling /
+# letter-case pointers. Deliberately does NOT match "synonym of" /
+# "alternative form of" — many of those are genuinely common words (mummi,
+# askele, harrastus) and the curated blocklist handles the obscure ones.
+LETTER_NAME_GLOSS = re.compile(
+    r"name of the .{0,40}letter|letter (?:of|in) (?:the )?.{0,40}(?:script|alphabet)", re.I
+)
+MISSPELLING_GLOSS = re.compile(
+    r"^\s*(?:misspelling of|alternative letter-case form of)", re.I
+)
+MUSIC_NOTE_GLOSS = re.compile(r"^\s*[A-G][ -]?(?:flat|sharp)?\s*(?:\(note\))?\s*$")
+
+
+def is_junk_entry(word: str, glosses: list[str]) -> bool:
+    if len(word) <= 1 or not LEMMA_OK.match(word):
+        return True
+    first = glosses[0] if glosses else ""
+    if MISSPELLING_GLOSS.match(first) or MUSIC_NOTE_GLOSS.match(first):
+        return True
+    if any(LETTER_NAME_GLOSS.search(g) for g in glosses):
+        return True
+    return False
 
 
 # -------- tag normalization ----------------------------------------------
@@ -382,6 +420,10 @@ def main() -> int:
         if freq and (rank is None or rank > FREQUENCY_CUTOFF):
             continue
         counts[f"in_freq_{pos}"] += 1
+
+        if is_junk_entry(word, extract_translations(entry)):
+            counts[f"junk_{pos}"] += 1
+            continue
 
         tpl_map = noun_tpl if pos == "noun" else verb_tpl
         group_of = noun_group_of if pos == "noun" else verb_group_of

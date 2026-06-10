@@ -23,12 +23,17 @@ pip install -r scripts/requirements.txt
 ## How it runs (once Phase 1 is built)
 
 ```
-python scripts/download.py        # grabs kaikki.org data + frequency list
-python scripts/extract.py         # filters and writes data/nouns.json + verbs.json
-python scripts/extract_rection.py # parses rection annotations out of verbs.json
-                                  # into data/rection.json (no network needed)
+python scripts/download.py              # grabs kaikki.org data + frequency list
+python scripts/extract.py               # filters and writes data/nouns.json + verbs.json
+python scripts/extract_rection.py       # rection annotations → data/rection.json
+python scripts/extract_possessives.py   # possessive paradigms → data/possessives.json
+python scripts/extract_numerals.py      # numeral paradigms → data/numerals.json
+python scripts/gen_compound_numerals.py # fills in any 11-19 / tens missing from
+                                        # Wiktionary by composing base paradigms
+                                        # (no raw dump needed)
 ```
 
-Re-run these when you want fresh words or change filters (e.g. frequency cutoff,
-group mappings in `config/noun_groups.json`). `extract_rection.py` reads
-`data/verbs.json`, so run it after `extract.py`.
+Re-run these when you want fresh words or change filters (e.g. `FREQUENCY_CUTOFF`
+in extract.py, group mappings in `config/noun_groups.json`). Run
+`gen_compound_numerals.py` last — it only adds numerals that are missing, so
+real Wiktionary paradigms always win.

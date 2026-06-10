@@ -18,7 +18,7 @@
     { "id": "r_l",          "label": "-r / -l stems",              "example": "sisar, askel",         "kotus_types": [32] },
     { "id": "other_cons",   "label": "other consonant stems",      "example": "olut, tuhat, hame",    "kotus_types": [43, 44, 46, 48, 49] },
     { "id": "irregular",    "label": "irregular / rare",           "example": "vanhempi, l\u00e4mmin, sisin, vasen", "kotus_types": [16, 35, 36, 37] },
-    { "id": "numeral",      "label": "Numerals (yksi\u2013kymmenen, sata, tuhat, miljoona)", "example": "kaksi, tuhat", "kotus_types": [] },
+    { "id": "numeral",      "label": "Numerals (yksi\u2013yhdeks\u00e4nkymment\u00e4, sata, tuhat, miljoona)", "example": "kaksitoista, tuhat", "kotus_types": [] },
     { "id": "other",        "label": "other / uncategorized",      "example": "",                     "kotus_types": [] }
   ]
 }

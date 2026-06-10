@@ -472,6 +472,346 @@
     "instructive_plural": "miljoonin",
     "comitative_plural": "miljoonine"
    }
+  },
+  {
+   "word": "yksitoista",
+   "translations": [
+    "eleven"
+   ],
+   "inflections": {
+    "nominative_singular": "yksitoista",
+    "genitive_singular": "yhdentoista",
+    "partitive_singular": "yhtätoista",
+    "inessive_singular": "yhdessätoista",
+    "elative_singular": "yhdestätoista",
+    "illative_singular": "yhteentoista",
+    "adessive_singular": "yhdellätoista",
+    "ablative_singular": "yhdeltätoista",
+    "allative_singular": "yhdelletoista",
+    "essive_singular": "yhtenätoista",
+    "translative_singular": "yhdeksitoista",
+    "abessive_singular": "yhdettätoista"
+   }
+  },
+  {
+   "word": "kaksitoista",
+   "translations": [
+    "twelve"
+   ],
+   "inflections": {
+    "nominative_singular": "kaksitoista",
+    "genitive_singular": "kahdentoista",
+    "partitive_singular": "kahtatoista",
+    "inessive_singular": "kahdessatoista",
+    "elative_singular": "kahdestatoista",
+    "illative_singular": "kahteentoista",
+    "adessive_singular": "kahdellatoista",
+    "ablative_singular": "kahdeltatoista",
+    "allative_singular": "kahdelletoista",
+    "essive_singular": "kahtenatoista",
+    "translative_singular": "kahdeksitoista",
+    "abessive_singular": "kahdettatoista"
+   }
+  },
+  {
+   "word": "kaksikymmentä",
+   "translations": [
+    "twenty"
+   ],
+   "inflections": {
+    "nominative_singular": "kaksikymmentä",
+    "genitive_singular": "kahdenkymmenen",
+    "partitive_singular": "kahtakymmentä",
+    "inessive_singular": "kahdessakymmenessä",
+    "elative_singular": "kahdestakymmenestä",
+    "illative_singular": "kahteenkymmeneen",
+    "adessive_singular": "kahdellakymmenellä",
+    "ablative_singular": "kahdeltakymmeneltä",
+    "allative_singular": "kahdellekymmenelle",
+    "essive_singular": "kahtenakymmenenä",
+    "translative_singular": "kahdeksikymmeneksi",
+    "abessive_singular": "kahdettakymmenettä"
+   }
+  },
+  {
+   "word": "kolmetoista",
+   "translations": [
+    "thirteen"
+   ],
+   "inflections": {
+    "nominative_singular": "kolmetoista",
+    "genitive_singular": "kolmentoista",
+    "partitive_singular": "kolmeatoista",
+    "inessive_singular": "kolmessatoista",
+    "elative_singular": "kolmestatoista",
+    "illative_singular": "kolmeentoista",
+    "adessive_singular": "kolmellatoista",
+    "ablative_singular": "kolmeltatoista",
+    "allative_singular": "kolmelletoista",
+    "essive_singular": "kolmenatoista",
+    "translative_singular": "kolmeksitoista",
+    "abessive_singular": "kolmettatoista"
+   }
+  },
+  {
+   "word": "kolmekymmentä",
+   "translations": [
+    "thirty"
+   ],
+   "inflections": {
+    "nominative_singular": "kolmekymmentä",
+    "genitive_singular": "kolmenkymmenen",
+    "partitive_singular": "kolmeakymmentä",
+    "inessive_singular": "kolmessakymmenessä",
+    "elative_singular": "kolmestakymmenestä",
+    "illative_singular": "kolmeenkymmeneen",
+    "adessive_singular": "kolmellakymmenellä",
+    "ablative_singular": "kolmeltakymmeneltä",
+    "allative_singular": "kolmellekymmenelle",
+    "essive_singular": "kolmenakymmenenä",
+    "translative_singular": "kolmeksikymmeneksi",
+    "abessive_singular": "kolmettakymmenettä"
+   }
+  },
+  {
+   "word": "neljätoista",
+   "translations": [
+    "fourteen"
+   ],
+   "inflections": {
+    "nominative_singular": "neljätoista",
+    "genitive_singular": "neljäntoista",
+    "partitive_singular": "neljäätoista",
+    "inessive_singular": "neljässätoista",
+    "elative_singular": "neljästätoista",
+    "illative_singular": "neljääntoista",
+    "adessive_singular": "neljällätoista",
+    "ablative_singular": "neljältätoista",
+    "allative_singular": "neljälletoista",
+    "essive_singular": "neljänätoista",
+    "translative_singular": "neljäksitoista",
+    "abessive_singular": "neljättätoista"
+   }
+  },
+  {
+   "word": "neljäkymmentä",
+   "translations": [
+    "forty"
+   ],
+   "inflections": {
+    "nominative_singular": "neljäkymmentä",
+    "genitive_singular": "neljänkymmenen",
+    "partitive_singular": "neljääkymmentä",
+    "inessive_singular": "neljässäkymmenessä",
+    "elative_singular": "neljästäkymmenestä",
+    "illative_singular": "neljäänkymmeneen",
+    "adessive_singular": "neljälläkymmenellä",
+    "ablative_singular": "neljältäkymmeneltä",
+    "allative_singular": "neljällekymmenelle",
+    "essive_singular": "neljänäkymmenenä",
+    "translative_singular": "neljäksikymmeneksi",
+    "abessive_singular": "neljättäkymmenettä"
+   }
+  },
+  {
+   "word": "viisitoista",
+   "translations": [
+    "fifteen"
+   ],
+   "inflections": {
+    "nominative_singular": "viisitoista",
+    "genitive_singular": "viidentoista",
+    "partitive_singular": "viittätoista",
+    "inessive_singular": "viidessätoista",
+    "elative_singular": "viidestätoista",
+    "illative_singular": "viiteentoista",
+    "adessive_singular": "viidellätoista",
+    "ablative_singular": "viideltätoista",
+    "allative_singular": "viidelletoista",
+    "essive_singular": "viitenätoista",
+    "translative_singular": "viideksitoista",
+    "abessive_singular": "viidettätoista"
+   }
+  },
+  {
+   "word": "viisikymmentä",
+   "translations": [
+    "fifty"
+   ],
+   "inflections": {
+    "nominative_singular": "viisikymmentä",
+    "genitive_singular": "viidenkymmenen",
+    "partitive_singular": "viittäkymmentä",
+    "inessive_singular": "viidessäkymmenessä",
+    "elative_singular": "viidestäkymmenestä",
+    "illative_singular": "viiteenkymmeneen",
+    "adessive_singular": "viidelläkymmenellä",
+    "ablative_singular": "viideltäkymmeneltä",
+    "allative_singular": "viidellekymmenelle",
+    "essive_singular": "viitenäkymmenenä",
+    "translative_singular": "viideksikymmeneksi",
+    "abessive_singular": "viidettäkymmenettä"
+   }
+  },
+  {
+   "word": "kuusitoista",
+   "translations": [
+    "sixteen"
+   ],
+   "inflections": {
+    "nominative_singular": "kuusitoista",
+    "genitive_singular": "kuudentoista",
+    "partitive_singular": "kuuttatoista",
+    "inessive_singular": "kuudessatoista",
+    "elative_singular": "kuudestatoista",
+    "illative_singular": "kuuteentoista",
+    "adessive_singular": "kuudellatoista",
+    "ablative_singular": "kuudeltatoista",
+    "allative_singular": "kuudelletoista",
+    "essive_singular": "kuutenatoista",
+    "translative_singular": "kuudeksitoista",
+    "abessive_singular": "kuudettatoista"
+   }
+  },
+  {
+   "word": "kuusikymmentä",
+   "translations": [
+    "sixty"
+   ],
+   "inflections": {
+    "nominative_singular": "kuusikymmentä",
+    "genitive_singular": "kuudenkymmenen",
+    "partitive_singular": "kuuttakymmentä",
+    "inessive_singular": "kuudessakymmenessä",
+    "elative_singular": "kuudestakymmenestä",
+    "illative_singular": "kuuteenkymmeneen",
+    "adessive_singular": "kuudellakymmenellä",
+    "ablative_singular": "kuudeltakymmeneltä",
+    "allative_singular": "kuudellekymmenelle",
+    "essive_singular": "kuutenakymmenenä",
+    "translative_singular": "kuudeksikymmeneksi",
+    "abessive_singular": "kuudettakymmenettä"
+   }
+  },
+  {
+   "word": "seitsemäntoista",
+   "translations": [
+    "seventeen"
+   ],
+   "inflections": {
+    "nominative_singular": "seitsemäntoista",
+    "genitive_singular": "seitsemäntoista",
+    "partitive_singular": "seitsemäätoista",
+    "inessive_singular": "seitsemässätoista",
+    "elative_singular": "seitsemästätoista",
+    "illative_singular": "seitsemääntoista",
+    "adessive_singular": "seitsemällätoista",
+    "ablative_singular": "seitsemältätoista",
+    "allative_singular": "seitsemälletoista",
+    "essive_singular": "seitsemänätoista",
+    "translative_singular": "seitsemäksitoista",
+    "abessive_singular": "seitsemättätoista"
+   }
+  },
+  {
+   "word": "seitsemänkymmentä",
+   "translations": [
+    "seventy"
+   ],
+   "inflections": {
+    "nominative_singular": "seitsemänkymmentä",
+    "genitive_singular": "seitsemänkymmenen",
+    "partitive_singular": "seitsemääkymmentä",
+    "inessive_singular": "seitsemässäkymmenessä",
+    "elative_singular": "seitsemästäkymmenestä",
+    "illative_singular": "seitsemäänkymmeneen",
+    "adessive_singular": "seitsemälläkymmenellä",
+    "ablative_singular": "seitsemältäkymmeneltä",
+    "allative_singular": "seitsemällekymmenelle",
+    "essive_singular": "seitsemänäkymmenenä",
+    "translative_singular": "seitsemäksikymmeneksi",
+    "abessive_singular": "seitsemättäkymmenettä"
+   }
+  },
+  {
+   "word": "kahdeksantoista",
+   "translations": [
+    "eighteen"
+   ],
+   "inflections": {
+    "nominative_singular": "kahdeksantoista",
+    "genitive_singular": "kahdeksantoista",
+    "partitive_singular": "kahdeksaatoista",
+    "inessive_singular": "kahdeksassatoista",
+    "elative_singular": "kahdeksastatoista",
+    "illative_singular": "kahdeksaantoista",
+    "adessive_singular": "kahdeksallatoista",
+    "ablative_singular": "kahdeksaltatoista",
+    "allative_singular": "kahdeksalletoista",
+    "essive_singular": "kahdeksanatoista",
+    "translative_singular": "kahdeksaksitoista",
+    "abessive_singular": "kahdeksattatoista"
+   }
+  },
+  {
+   "word": "kahdeksankymmentä",
+   "translations": [
+    "eighty"
+   ],
+   "inflections": {
+    "nominative_singular": "kahdeksankymmentä",
+    "genitive_singular": "kahdeksankymmenen",
+    "partitive_singular": "kahdeksaakymmentä",
+    "inessive_singular": "kahdeksassakymmenessä",
+    "elative_singular": "kahdeksastakymmenestä",
+    "illative_singular": "kahdeksaankymmeneen",
+    "adessive_singular": "kahdeksallakymmenellä",
+    "ablative_singular": "kahdeksaltakymmeneltä",
+    "allative_singular": "kahdeksallekymmenelle",
+    "essive_singular": "kahdeksanakymmenenä",
+    "translative_singular": "kahdeksaksikymmeneksi",
+    "abessive_singular": "kahdeksattakymmenettä"
+   }
+  },
+  {
+   "word": "yhdeksäntoista",
+   "translations": [
+    "nineteen"
+   ],
+   "inflections": {
+    "nominative_singular": "yhdeksäntoista",
+    "genitive_singular": "yhdeksäntoista",
+    "partitive_singular": "yhdeksäätoista",
+    "inessive_singular": "yhdeksässätoista",
+    "elative_singular": "yhdeksästätoista",
+    "illative_singular": "yhdeksääntoista",
+    "adessive_singular": "yhdeksällätoista",
+    "ablative_singular": "yhdeksältätoista",
+    "allative_singular": "yhdeksälletoista",
+    "essive_singular": "yhdeksänätoista",
+    "translative_singular": "yhdeksäksitoista",
+    "abessive_singular": "yhdeksättätoista"
+   }
+  },
+  {
+   "word": "yhdeksänkymmentä",
+   "translations": [
+    "ninety"
+   ],
+   "inflections": {
+    "nominative_singular": "yhdeksänkymmentä",
+    "genitive_singular": "yhdeksänkymmenen",
+    "partitive_singular": "yhdeksääkymmentä",
+    "inessive_singular": "yhdeksässäkymmenessä",
+    "elative_singular": "yhdeksästäkymmenestä",
+    "illative_singular": "yhdeksäänkymmeneen",
+    "adessive_singular": "yhdeksälläkymmenellä",
+    "ablative_singular": "yhdeksältäkymmeneltä",
+    "allative_singular": "yhdeksällekymmenelle",
+    "essive_singular": "yhdeksänäkymmenenä",
+    "translative_singular": "yhdeksäksikymmeneksi",
+    "abessive_singular": "yhdeksättäkymmenettä"
+   }
   }
  ]
 }
