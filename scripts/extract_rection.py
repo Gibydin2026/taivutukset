@@ -43,10 +43,12 @@ CASES = (
 )
 ORDINAL = {"first": "1", "second": "2", "third": "3"}
 
+_Q  = r"[‘’']"   # left/right single curly quote or plain apostrophe
+_NQ = r"[^‘’']"  # anything that isn't one of those
 TOKEN = re.compile(
     rf"\b({CASES}|first infinitive|second infinitive|third infinitive)\b"
     r"(?:\s+of\s+(first|second|third)\s+infinitive)?"
-    r"(?:\s+'([^']*)')?"
+    rf"(?:\s+{_Q}({_NQ}+){_Q})?"
 )
 
 BRACKET = re.compile(r"\s*\[([^\]]*)\]")
