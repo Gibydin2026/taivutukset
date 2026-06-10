@@ -52,7 +52,7 @@ FREQ_FILE = RAW / "frequency_fi.txt"
 # frequency list. Using inflected-form ranks rather than the lemma's own rank
 # lets us catch common verbs whose dictionary form is rarer than their
 # conjugations (e.g. "olla" is much rarer than "on", "oli", "olen").
-FREQUENCY_CUTOFF = 20000
+FREQUENCY_CUTOFF = 30000
 
 # -------- helpers --------------------------------------------------------
 
