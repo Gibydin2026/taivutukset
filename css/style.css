@@ -335,6 +335,10 @@ body.rection-mode #speak-answer,
 body.rection-mode #test-open,
 body.rection-mode #blitz-open { display: none; }
 
+/* Possessor filter section: hidden by default, shown only in possessive style. */
+.possessive-only { display: none; }
+body.possessive-mode .possessive-only { display: block; }
+
 .rection-choices {
   display: grid;
   grid-template-columns: 1fr 1fr;

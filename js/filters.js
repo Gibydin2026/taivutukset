@@ -18,6 +18,14 @@ import * as storage from "./storage.js";
 const NOUN_KEY = "filters_noun_v1";
 const VERB_KEY = "filters_verb_v1";
 
+const POSSESSIVE_PERSONS = [
+  { id: "1sg", label: "1sg — my (minun)" },
+  { id: "2sg", label: "2sg — your (sinun)" },
+  { id: "3rd", label: "3rd — his / her / its (hänen)" },
+  { id: "1pl", label: "1pl — our (meidän)" },
+  { id: "2pl", label: "2pl — your pl. (teidän)" },
+];
+
 // =========================================================================
 // Defaults + load/save
 // =========================================================================
@@ -32,7 +40,9 @@ export function defaultNounFilters(cfg) {
   }
   const groups = {};
   for (const g of cfg.nounGroups.groups) groups[g.id] = true;
-  return { cases, groups };
+  const persons = {};
+  for (const p of POSSESSIVE_PERSONS) persons[p.id] = true;
+  return { cases, groups, persons };
 }
 
 export function defaultVerbFilters(cfg) {
@@ -99,6 +109,14 @@ export function renderNounFilters(root, cfg, state, onChange) {
   }
   groupSection.appendChild(list);
   root.appendChild(groupSection);
+
+  // Possessor persons — only relevant in Possessive drill style.
+  // CSS hides this section unless body.possessive-mode is active.
+  const personSection = simpleCheckboxSection(
+    "Possessor", POSSESSIVE_PERSONS, state.persons, changed, "group-list"
+  );
+  personSection.classList.add("possessive-only");
+  root.appendChild(personSection);
 }
 
 function renderCaseGrid(cfg, state, changed) {

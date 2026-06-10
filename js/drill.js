@@ -298,6 +298,7 @@ export function buildPossessivePool(data, nounFilters) {
     if (nounFilters?.groups && nounFilters.groups[pw.group] !== true) continue;
     const baseWord = nounMap.get(pw.word);
     for (const person of POSSESSIVE_PERSONS) {
+      if (nounFilters?.persons && nounFilters.persons[person] !== true) continue;
       const pInfl = (pw.inflections || {})[person];
       if (!pInfl) continue;
       for (const [caseKey, form] of Object.entries(pInfl)) {
