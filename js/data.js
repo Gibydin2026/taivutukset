@@ -1,4 +1,4 @@
-// Loads the generated word data (nouns.json, verbs.json).
+// Loads the generated word data (nouns.json, verbs.json, etc.).
 // These files come from the Python pipeline in scripts/extract.py.
 //
 // A hand-curated blocklist (data/blocklist.json) is applied at load time so
@@ -23,30 +23,46 @@ async function loadBlocklist() {
   }
 }
 
-// Rection data (scripts/extract_rection.py) is optional: a service worker
-// from an older deploy may serve a cached shell without the file, and the
-// drill itself must keep working — the Rection style just comes up empty.
+// Optional data files — older cached shells may not have them; all callers
+// gracefully fall back to empty structures when they're missing.
 async function loadRection() {
-  try {
-    return await loadJson("data/rection.json");
-  } catch {
-    return { complements: [], words: [] };
-  }
+  try { return await loadJson("data/rection.json"); }
+  catch { return { complements: [], words: [] }; }
+}
+
+async function loadPossessives() {
+  try { return await loadJson("data/possessives.json"); }
+  catch { return { possessors: [], cases: [], numbers: [], words: [] }; }
+}
+
+async function loadNumerals() {
+  try { return await loadJson("data/numerals.json"); }
+  catch { return { cases: [], numbers: [], words: [] }; }
 }
 
 export async function loadData() {
-  const [nouns, verbs, rection, blocklist] = await Promise.all([
+  const [nouns, verbs, rection, possessives, numerals, blocklist] = await Promise.all([
     loadJson("data/nouns.json"),
     loadJson("data/verbs.json"),
     loadRection(),
+    loadPossessives(),
+    loadNumerals(),
     loadBlocklist(),
   ]);
   if (blocklist.nouns.size) {
     nouns.words = nouns.words.filter((w) => !blocklist.nouns.has(w.word));
+    possessives.words = possessives.words.filter((w) => !blocklist.nouns.has(w.word));
   }
   if (blocklist.verbs.size) {
     verbs.words = verbs.words.filter((w) => !blocklist.verbs.has(w.word));
     rection.words = rection.words.filter((w) => !blocklist.verbs.has(w.word));
   }
-  return { nouns, verbs, rection };
+  // Numeral words share the noun inflection key format (case_number), so they
+  // fold into the noun pool under their own group id "numeral". Adding them here
+  // keeps pool-building logic unchanged — the noun group filter just controls
+  // whether numerals surface alongside regular nouns.
+  for (const w of numerals.words) {
+    nouns.words.push({ ...w, group: "numeral" });
+  }
+  return { nouns, verbs, rection, possessives };
 }

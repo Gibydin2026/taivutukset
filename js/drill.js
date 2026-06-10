@@ -280,8 +280,42 @@ export function buildRectionPool(data) {
   return out;
 }
 
+// ---------- possessive pool ----------
+// Challenge shape: { word, key: "{person}_{case}_{number}", answer, baseWord }
+// The `answer` field carries the expected form directly so checkAnswer doesn't
+// need to navigate the nested inflection structure. `baseWord` is the matching
+// entry from nouns.words (flat inflections + examples), used for the inflection
+// table and example sentences.
+
+const POSSESSIVE_PERSONS = ["1sg", "2sg", "3rd", "1pl", "2pl"];
+
+export function buildPossessivePool(data, nounFilters) {
+  const out = [];
+  if (!data.possessives || !Array.isArray(data.possessives.words)) return out;
+  const nounMap = new Map();
+  for (const w of data.nouns.words) nounMap.set(w.word, w);
+  for (const pw of data.possessives.words) {
+    if (nounFilters?.groups && nounFilters.groups[pw.group] !== true) continue;
+    const baseWord = nounMap.get(pw.word);
+    for (const person of POSSESSIVE_PERSONS) {
+      const pInfl = (pw.inflections || {})[person];
+      if (!pInfl) continue;
+      for (const [caseKey, form] of Object.entries(pInfl)) {
+        if (!form || form === "-" || form === "—") continue;
+        if (nounFilters?.cases && nounFilters.cases[caseKey] !== true) continue;
+        out.push({ word: pw, key: `${person}_${caseKey}`, answer: form, baseWord });
+      }
+    }
+  }
+  return out;
+}
+
 export function checkAnswer(challenge, input) {
-  const expected = challenge.word.inflections[challenge.key];
+  // Possessive challenges carry the expected answer directly to avoid navigating
+  // the nested possessive inflection structure in challenge.word.inflections.
+  const expected = challenge.answer !== undefined
+    ? challenge.answer
+    : challenge.word.inflections[challenge.key];
   const ok = normalize(input) === normalize(expected);
   return { ok, expected, normalizedInput: normalize(input) };
 }

@@ -5,7 +5,7 @@ import { loadConfig } from "./config.js";
 import { loadData } from "./data.js";
 import {
   buildNounPool, buildVerbPool, nextChallenge, checkAnswer,
-  buildClozePool, clozeBlankRegex, buildRectionPool, parseVerbKey,
+  buildClozePool, clozeBlankRegex, buildRectionPool, buildPossessivePool, parseVerbKey,
 } from "./drill.js";
 import { nounLabel, verbLabel, complementLabel, complementName, complementHint } from "./labels.js";
 import {
@@ -219,6 +219,15 @@ function render() {
       el.examples.innerHTML = "";
       el.examples.classList.add("hidden");
     }
+  } else if (possessiveActive()) {
+    el.translation.textContent = (word.translations || []).slice(0, 2).join(", ");
+    el.clozeLine.classList.add("hidden");
+    el.targetForm.classList.remove("hidden");
+    const { person, caseKey } = parsePossessiveKey(key);
+    el.targetForm.textContent = `${nounLabel(caseKey, state.cfg)} — ${PERSON_LABELS[person] || person}`;
+    const base = state.current.baseWord;
+    if (base) renderExamples(base, state.current.answer);
+    else { el.examples.innerHTML = ""; el.examples.classList.add("hidden"); }
   } else {
     el.translation.textContent = (word.translations || []).slice(0, 2).join(", ");
     // Cloze style replaces the grammatical prompt + examples with the blanked
@@ -307,27 +316,40 @@ function renderExamples(word, targetForm) {
 }
 
 // ---------- drill style helpers ----------
-// The persisted drillStyle can be "rection" while the user is on the noun
-// tab, where rection makes no sense. Rather than mutating the saved setting
-// on every mode switch, the EFFECTIVE style falls back to standard outside
-// verb mode — switch back to Verbs and rection resumes where you left it.
+// The persisted drillStyle can be mode-specific ("rection" is verb-only,
+// "possessive" is noun-only). Rather than mutating the saved setting on every
+// mode switch, effectiveDrillStyle() falls back to standard outside the right
+// mode — switch back and the style resumes where you left it.
 function effectiveDrillStyle() {
   const s = (state.settings && state.settings.drillStyle) || "standard";
-  return s === "rection" && state.mode !== "verb" ? "standard" : s;
+  if (s === "rection"   && state.mode !== "verb") return "standard";
+  if (s === "possessive" && state.mode !== "noun") return "standard";
+  return s;
 }
 
-function clozeActive() {
-  return effectiveDrillStyle() === "cloze";
+function clozeActive()      { return effectiveDrillStyle() === "cloze"; }
+function rectionActive()    { return effectiveDrillStyle() === "rection"; }
+function possessiveActive() { return effectiveDrillStyle() === "possessive"; }
+
+// Possessive key format: "{person}_{case}_{number}", e.g. "1sg_inessive_singular"
+function parsePossessiveKey(key) {
+  const idx = key.indexOf("_");
+  return { person: key.slice(0, idx), caseKey: key.slice(idx + 1) };
 }
 
-function rectionActive() {
-  return effectiveDrillStyle() === "rection";
-}
+const PERSON_LABELS = {
+  "1sg": "my (minun)",
+  "2sg": "your (sinun)",
+  "3rd": "his / her / its (hänen)",
+  "1pl": "our (meidän)",
+  "2pl": "your pl. (teidän)",
+};
 
-// Stats + SRS bucket rection outcomes under their own mode id, so rection
-// keys never collide with verb inflection keys in byItem or the schedule.
+// Stats + SRS bucket each style under its own mode id so keys never collide.
 function statsMode() {
-  return rectionActive() ? "rection" : state.mode;
+  if (rectionActive())    return "rection";
+  if (possessiveActive()) return "possessive";
+  return state.mode;
 }
 
 // Build the blanked sentence into #cloze-fi. Returns false when the current
@@ -499,7 +521,8 @@ function speakHeadword() {
 
 function speakAnswer() {
   if (!state.current) return;
-  const expected = state.current.word.inflections[state.current.key];
+  const ch = state.current;
+  const expected = ch.answer !== undefined ? ch.answer : ch.word.inflections[ch.key];
   speak(expected);
 }
 
@@ -513,7 +536,8 @@ function maybeAutoPlayAnswer() {
   // Suppress audio during an active test — hearing the answer is a spoiler.
   if (testActive()) return Promise.resolve();
   if (!state.current) return Promise.resolve();
-  const expected = state.current.word.inflections[state.current.key];
+  const ch = state.current;
+  const expected = ch.answer !== undefined ? ch.answer : ch.word.inflections[ch.key];
   return speak(expected);
 }
 
@@ -542,6 +566,8 @@ function updateStatus() {
       suffix = " \u2014 no rection data within the current frequency cap; raise it under Options";
     } else if (clozeActive()) {
       suffix = " \u2014 no example sentences match these filters; broaden them or switch to Standard";
+    } else if (possessiveActive()) {
+      suffix = " \u2014 no possessive data within the current filters; enable more noun groups above";
     } else {
       suffix = " \u2014 all filtered out, enable something above";
     }
@@ -737,7 +763,7 @@ function startTest() {
 function recordTestAnswer(outcome, input) {
   if (!state.test || state.test.finished) return;
   const ch = state.current;
-  const expected = ch.word.inflections[ch.key];
+  const expected = ch.answer !== undefined ? ch.answer : ch.word.inflections[ch.key];
   state.test.results.push({
     word: ch.word.word,
     key: ch.key,
@@ -1302,7 +1328,8 @@ function revealNextLetter() {
   if (!state.current || state.awaitingNext) return;
   if (blitzActive()) return;   // hints disabled during blitz
   if (rectionActive()) return; // no typed answer to reveal letters of
-  const expected = state.current.word.inflections[state.current.key];
+  const ch = state.current;
+  const expected = ch.answer !== undefined ? ch.answer : ch.word.inflections[ch.key];
   const input = el.answer.value;
   let correctPrefixLen = 0;
   while (correctPrefixLen < input.length && correctPrefixLen < expected.length && input[correctPrefixLen] === expected[correctPrefixLen]) {
@@ -1343,7 +1370,8 @@ function showFullAnswer() {
     if (!state.test.finished) newChallenge();
     return;
   }
-  const expected = state.current.word.inflections[state.current.key];
+  const ch = state.current;
+  const expected = ch.answer !== undefined ? ch.answer : ch.word.inflections[ch.key];
   el.answer.value = expected;
   setFeedback(`answer shown: ${expected}`, "bad");
   revealCloze();
@@ -1373,6 +1401,10 @@ function rebuildPool(opts) {
     // Rection has its own challenge set — the case/tense filter grids don't
     // apply (and are hidden); only the frequency cap below carries over.
     pool = buildRectionPool(state.data);
+  } else if (possessiveActive()) {
+    // Possessive drill uses the possessives dataset filtered by the same noun
+    // group/case checkboxes. Length and cloze filters don't apply here.
+    pool = buildPossessivePool(state.data, state.nounFilters);
   } else {
     pool = state.mode === "noun"
       ? buildNounPool(state.data, state.nounFilters)
@@ -1488,10 +1520,12 @@ function renderDrillStyleSwitch() {
   if (!el.drillStyleSwitch) return;
   const pref = effectiveDrillStyle();
   for (const btn of el.drillStyleSwitch.querySelectorAll(".seg-btn")) {
-    // Rection only exists for verbs — hide its button on the noun tab rather
-    // than letting it sit there as a dead control.
+    // Rection is verb-only; Possessive is noun-only — hide each outside its mode.
     if (btn.dataset.value === "rection") {
       btn.classList.toggle("hidden", state.mode !== "verb");
+    }
+    if (btn.dataset.value === "possessive") {
+      btn.classList.toggle("hidden", state.mode !== "noun");
     }
     const active = btn.dataset.value === pref;
     btn.classList.toggle("active", active);
@@ -1512,7 +1546,7 @@ function applyRectionChrome() {
 }
 
 function setDrillStyle(style) {
-  if (style !== "standard" && style !== "cloze" && style !== "rection") return;
+  if (style !== "standard" && style !== "cloze" && style !== "rection" && style !== "possessive") return;
   if (state.settings.drillStyle === style) return;
   // Each style is a different challenge set, so switching mid-test or
   // mid-blitz invalidates the run — same confirm flow as a mode switch.
@@ -1546,16 +1580,26 @@ function openInflectionTable() {
   // buttons at least carry a stats penalty; this wouldn't.
   if (blitzActive() || testActive()) return;
   const { word, key } = state.current;
-  const expected = word.inflections[key];
-  // Rection answers are case names, not table cells — nothing to mask.
-  const concealed = !rectionActive() && !(state.awaitingNext || state.scoredThisChallenge);
-  el.inflectionTitle.textContent = word.word;
-  el.inflectionNote.classList.toggle("hidden", !concealed);
   el.inflectionBody.innerHTML = "";
-  if (state.mode === "noun") {
-    el.inflectionBody.appendChild(buildNounTable(word, key, expected, concealed));
+  if (possessiveActive()) {
+    // Show the base noun's plain inflection table as a paradigm reference.
+    // No masking — the possessive form isn't in the base table, so there's
+    // nothing to conceal that would spoil the answer.
+    const base = state.current.baseWord || word;
+    el.inflectionTitle.textContent = base.word;
+    el.inflectionNote.classList.add("hidden");
+    el.inflectionBody.appendChild(buildNounTable(base, null, null, false));
   } else {
-    buildVerbTables(el.inflectionBody, word, key, expected, concealed);
+    const expected = word.inflections[key];
+    // Rection answers are case names, not table cells — nothing to mask.
+    const concealed = !rectionActive() && !(state.awaitingNext || state.scoredThisChallenge);
+    el.inflectionTitle.textContent = word.word;
+    el.inflectionNote.classList.toggle("hidden", !concealed);
+    if (state.mode === "noun") {
+      el.inflectionBody.appendChild(buildNounTable(word, key, expected, concealed));
+    } else {
+      buildVerbTables(el.inflectionBody, word, key, expected, concealed);
+    }
   }
   track("inflection_table_open", { mode: state.mode });
   el.inflectionModal.classList.remove("hidden");
