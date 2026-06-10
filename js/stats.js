@@ -128,6 +128,9 @@ export function recordOutcome(stats, mode, challenge, outcome) {
     // tense/voice/polarity/person buckets entirely.
     if (!stats.byRection) stats.byRection = {};
     bump(stats.byRection, challenge.key, outcome);
+  } else if (mode === "possessive") {
+    // Possessive keys are "{person}_{case}_{number}" — tracked per-item via
+    // byItem below; no additional dimension breakdown yet.
   } else {
     const p = parseVerbKey(challenge.key);
     bump(stats.byVerbTense,    p.tense,             outcome);

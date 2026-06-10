@@ -1,5 +1,8 @@
 {
   "_comment": "Words to drop from the drill pool. Update manually as junk entries are reported. Match is exact against the lemma.",
-  "nouns": [],
+  "nouns": [
+    "aa", "dee", "ee", "ii", "koo", "oo", "pee", "see", "uu", "vee",
+    "yy", "äl", "äm", "äs", "ää", "öö"
+  ],
   "verbs": []
 }
