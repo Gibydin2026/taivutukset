@@ -394,7 +394,12 @@ def main() -> int:
     for entry in iter_entries(KAIKKI_FILE):
         pos = entry.get("pos")
         word = entry.get("word")
-        if not word or pos not in ("noun", "verb"):
+        # Adjectives decline exactly like nouns (same KOTUS classes, same case
+        # endings, same gradation), so they go through the noun machinery and
+        # are merged into the noun pool — no separate drill or data file.
+        # Comparative/superlative rows in their tables carry no case+number
+        # tags, so noun_form_key() drops them automatically.
+        if not word or pos not in ("noun", "adj", "verb"):
             continue
         counts[f"seen_{pos}"] += 1
 
@@ -425,9 +430,10 @@ def main() -> int:
             counts[f"junk_{pos}"] += 1
             continue
 
-        tpl_map = noun_tpl if pos == "noun" else verb_tpl
-        group_of = noun_group_of if pos == "noun" else verb_group_of
-        shaper = shape_noun if pos == "noun" else shape_verb
+        nounlike = pos in ("noun", "adj")
+        tpl_map = noun_tpl if nounlike else verb_tpl
+        group_of = noun_group_of if nounlike else verb_group_of
+        shaper = shape_noun if nounlike else shape_verb
 
         ktype = extract_kotus_type(entry, tpl_map)
         if ktype is None:
@@ -441,7 +447,7 @@ def main() -> int:
             counts[f"no_inflections_{pos}"] += 1
             continue
         shaped["frequency_rank"] = rank
-        (nouns if pos == "noun" else verbs).append(shaped)
+        (nouns if nounlike else verbs).append(shaped)
 
     # Deduplicate by word (keep the one with most inflection entries).
     def dedupe(items: list[dict]) -> list[dict]:
@@ -475,7 +481,8 @@ def main() -> int:
     print("Counts:", dict(counts))
 
     # Sanity check: show inflection key counts for a handful of common lemmas.
-    sample_nouns = {"kala", "talo", "nainen", "k\u00e4si", "vastaus"}
+    sample_nouns = {"kala", "talo", "nainen", "k\u00e4si", "vastaus",
+                    "hyv\u00e4", "pieni", "suuri", "uusi", "kaunis"}
     sample_verbs = {"sanoa", "olla", "tehd\u00e4", "menn\u00e4", "puhua"}
     print("\nSanity check — inflection keys extracted for sample lemmas:")
     for n in nouns:

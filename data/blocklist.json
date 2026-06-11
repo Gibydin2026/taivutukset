@@ -1,5 +1,5 @@
 {
-  "_comment": "Words to drop from the drill pool. Update manually as junk entries are reported. Match is exact against the lemma. Categories: Finnish letter names (aa..öö), foreign letter names (he, jota...), music notes (as, es, b..h), all-caps abbreviations that decline with a colon (DNA:ssa), malformed/misspelled lemmas, proper nouns, multi-word phrases, and obscure dialect/synonym-of entries whose frequency rank comes from an unrelated homograph (e.g. the noun 'ja' = AND gate inherits rank 3 from the conjunction).",
+  "_comment": "Words to drop from the drill pool. Update manually as junk entries are reported. Match is exact against the lemma. Categories: Finnish letter names (aa..öö), foreign letter names (he, jota...), music notes (as, es, b..h), all-caps abbreviations that decline with a colon (DNA:ssa), malformed/misspelled lemmas, proper nouns, multi-word phrases, obscure dialect/synonym-of entries whose frequency rank comes from an unrelated homograph (e.g. the noun 'ja' = AND gate inherits rank 3 from the conjunction), and adjective superlative lemmas that are really common adverbs (takaisin, oikein, usein, öisin...) or archaic variants (parahin, kaunehin). Common comparatives/superlatives like parempi, paras, suurin are deliberately kept — their declension is worth drilling.",
   "nouns": [
     "aa", "dee", "ee", "ii", "koo", "oo", "pee", "see", "uu", "vee",
     "yy", "äl", "äm", "äs", "ää", "öö",
@@ -10,17 +10,24 @@
     "avo", "teka", "nro",
     "lontoo", "chester", "Lentokenttä", "Joulupukki", "t-paita",
     "oman onnensa seppä", "toissapäivä",
-    "ja", "vitu", "esi", "sii", "jotka", "aino", "anne", "iso", "onsi",
+    "ja", "vitu", "esi", "sii", "jotka", "aino", "anne", "onsi",
     "aion", "steve", "virhi", "jenny", "kati", "korja", "käsis", "louna",
     "palvi", "sei", "tomi", "perus", "pura", "nuke", "kallas", "verto",
     "kelle", "soni", "tantere", "puolus", "kiiri", "hämi", "dona", "mumma",
-    "kyynele", "kokoaja", "suljettu", "kirjoitin",
+    "kyynele", "kokoaja", "kirjoitin",
     "odottama", "vetämä", "nostama", "nousema", "laskema", "kasvama", "tarjoama",
     "juudas", "selus", "pieksu", "lieke", "kata", "merkintö", "face", "edus",
     "oppilapsi", "petra", "aurora", "nobel", "piiranen", "piira", "laskeutuma",
     "laksi", "perjantaki", "sunnuntaki", "lauantaki", "peni", "talka", "hapene",
     "live", "kuninkaanna", "leivo", "saga", "hyssykkä", "heavy", "passa",
-    "kaapeli-tv", "tappelus", "ex"
+    "kaapeli-tv", "tappelus", "ex",
+    "vaka", "kuulu", "vasempi", "käyvä", "naisinen", "iloisa", "katoava",
+    "huomaava", "helvetinmoinen", "suloisa", "kelpaava", "totteleva",
+    "rinnakas", "normaalinen",
+    "takaisin", "oikein", "voisin", "täysin", "kovin", "väärin", "usein",
+    "sekaisin", "tosin", "kotoisin", "aikaisin", "öisin", "iltaisin",
+    "aamuisin", "kesäisin", "viikonloppuisin", "rinnakkain", "jäisin",
+    "paljain", "jaloin", "parahin", "kaunehin", "rakkahin"
   ],
   "verbs": [
     "ei", "eikä", "tarvii", "dallaa", "seistä",
