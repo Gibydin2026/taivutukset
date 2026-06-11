@@ -30,6 +30,7 @@ import {
   loadBlitzStats, saveBlitzStats, recordBlitzRound, bestScoreAt, BLITZ_DURATIONS,
 } from "./blitz.js";
 import { APP_VERSION } from "./version.js";
+import { loadMarks, saveMarks, cycleMark, getMark, MARK } from "./wordmarks.js";
 import {
   GRADE_PATTERNS, GRADE_NONE,
   detectNounGradation, detectVerbGradation, isWeakGrade,
@@ -89,6 +90,7 @@ const state = {
   // Separate storage key from drill stats so resetting one doesn't nuke the
   // other.
   blitzStats: null,
+  marks: null,   // Pin / Forget / Normal per lemma
 };
 
 // ---------- DOM refs ----------
@@ -191,6 +193,7 @@ const el = {
   blitzResultDone: document.getElementById("blitz-result-done"),
   blitzShareFeedback: document.getElementById("blitz-share-feedback"),
   settingShowBlitz:document.getElementById("setting-show-blitz"),
+  wordMark:        document.getElementById("word-mark"),
   kptOpen:         document.getElementById("kpt-open"),
   kptModal:        document.getElementById("kpt-modal"),
   kptBody:         document.getElementById("kpt-body"),
@@ -263,6 +266,28 @@ function render() {
     el.challenge.classList.remove("hidden");
     el.answerRow.classList.remove("hidden");
   }
+  renderMarkButton();
+}
+
+// Render the Pin/Forget/Normal button on the current challenge card.
+const MARK_LABEL = {
+  [MARK.NORMAL]: "⚪ Normal",
+  [MARK.PIN]:    "📌 Pinned",
+  [MARK.FORGET]: "🙈 Forget it",
+};
+const MARK_TITLE = {
+  [MARK.NORMAL]: "Mark this word — click to Pin (show more often)",
+  [MARK.PIN]:    "Pinned — shows frequently. Click to set Forget it",
+  [MARK.FORGET]: "Forget it — shows rarely. Click to clear mark",
+};
+
+function renderMarkButton() {
+  if (!el.wordMark || !state.current) return;
+  const lemma = state.current.word.word;
+  const mark = getMark(state.marks, lemma);
+  el.wordMark.textContent = MARK_LABEL[mark];
+  el.wordMark.dataset.mark = mark;
+  el.wordMark.title = MARK_TITLE[mark];
 }
 
 // Word stem sharing: Finnish inflections often share a stem with the lemma
@@ -1000,6 +1025,7 @@ function newBlitzChallenge() {
     priority: "uniform",
     mode:     state.mode,
     now:      Date.now(),
+    marks:    state.marks,
   });
   state.awaitingNext = false;
   state.hintsShown = 0;
@@ -1231,6 +1257,7 @@ function newChallenge(opts) {
     schedule: state.schedule,
     srsFloor: capPreset.floor,
     now:      Date.now(),
+    marks:    state.marks,
   });
   state.awaitingNext = false;
   state.hintsShown = 0;
@@ -1923,6 +1950,7 @@ async function boot() {
     saveStreak(state.streak); // persist any expiry reset immediately
     renderStreak();
     state.blitzStats  = loadBlitzStats();
+    state.marks       = loadMarks();
 
     // Theme: the inline script in <head> already applied the persisted value
     // pre-paint. Here we just sync the segmented control and subscribe to OS
@@ -2148,6 +2176,15 @@ async function boot() {
     });
 
     // KPT reference modal.
+    // Word mark button — cycles Normal → Pin → Forget → Normal.
+    if (el.wordMark) {
+      el.wordMark.addEventListener("click", () => {
+        if (!state.current) return;
+        cycleMark(state.marks, state.current.word.word);
+        renderMarkButton();
+      });
+    }
+
     el.kptOpen.addEventListener("click", openKptModal);
     el.kptClose.addEventListener("click", closeKptModal);
     el.kptModal.addEventListener("click", (e) => {
@@ -2273,6 +2310,7 @@ function exportStats() {
     streak: state.streak,
     schedule: state.schedule,
     presets: state.presets,
+    marks:   state.marks,
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -2351,6 +2389,10 @@ async function importStats(file) {
       };
       savePresets(state.presets);
       renderPresets();
+    }
+    if (data.marks && typeof data.marks === "object") {
+      state.marks = data.marks;
+      saveMarks(state.marks);
     }
     if (data.streak) {
       state.streak = checkStreakExpired({ ...state.streak, ...data.streak });
