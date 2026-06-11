@@ -6,6 +6,7 @@
 
 import { retrievability } from "./srs.js";
 import { detectNounGradation, detectVerbGradation } from "./gradation.js";
+import { getMark, applyMark } from "./wordmarks.js";
 
 function randomChoice(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -169,14 +170,15 @@ function noteServed(item) {
 export function nextChallenge(pool, previous, opts) {
   if (pool.length === 0) return null;
   const priority = (opts && opts.priority) || "uniform";
+  const marks = (opts && opts.marks) || {};
   const pick = () => {
     if (priority === "srs" && opts.schedule && opts.mode) {
-      return srsPick(pool, opts.mode, opts.schedule, opts.srsFloor, opts.now);
+      return srsPick(pool, opts.mode, opts.schedule, opts.srsFloor, opts.now, marks);
     }
     if (priority === "weighted" && opts.stats && opts.mode) {
-      return weightedPick(pool, opts.mode, opts.stats);
+      return weightedPick(pool, opts.mode, opts.stats, marks);
     }
-    return randomChoice(pool);
+    return markedRandomPick(pool, marks);
   };
   const shouldRetry = (c) =>
     (previous && c.word === previous.word && c.key === previous.key) ||
@@ -210,7 +212,28 @@ export function nextChallenge(pool, previous, opts) {
  *   itemMiss = misses / (attempts + 1)
  *   wordMiss = misses / (attempts + 4)
  */
-function weightedPick(pool, mode, stats) {
+/**
+ * Like randomChoice but respects word marks: PIN words get 8x weight,
+ * FORGET words get 0.05x weight. Used for the "uniform" priority mode.
+ */
+function markedRandomPick(pool, marks) {
+  if (!marks || Object.keys(marks).length === 0) return randomChoice(pool);
+  let total = 0;
+  const weights = new Array(pool.length);
+  for (let i = 0; i < pool.length; i++) {
+    const w = applyMark(1.0, getMark(marks, pool[i].word.word));
+    weights[i] = w;
+    total += w;
+  }
+  let r = Math.random() * total;
+  for (let i = 0; i < pool.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return pool[i];
+  }
+  return pool[pool.length - 1];
+}
+
+function weightedPick(pool, mode, stats, marks) {
   const byItem = stats.byItem || {};
 
   // One pass over byItem to build a per-word miss-rate table. This avoids the
@@ -247,6 +270,7 @@ function weightedPick(pool, mode, stats) {
 
     let w = 1 + 2.0 * itemMiss + 0.5 * wordMiss;
     if (attempted === 0) w += 0.6; // small explore bonus for unseen forms
+    if (marks) w = applyMark(w, getMark(marks, item.word.word));
     weights[i] = w;
     total += w;
   }
@@ -266,7 +290,7 @@ function weightedPick(pool, mode, stats) {
  * keeps mastered items (R≈1) from vanishing entirely. One O(pool) pass, the
  * schedule lookup is O(1) per item (plain object map).
  */
-function srsPick(pool, mode, schedule, floor, now) {
+function srsPick(pool, mode, schedule, floor, now, marks) {
   const byItem = (schedule && schedule.byItem) || {};
   const f = typeof floor === "number" ? floor : 0.1;
   const t = typeof now === "number" ? now : Date.now();
@@ -278,7 +302,8 @@ function srsPick(pool, mode, schedule, floor, now) {
     const id = `${mode}|${item.word.word}|${item.key}`;
     const entry = byItem[id];
     const R = retrievability(entry, t);
-    const w = Math.max(f, 1 - R);
+    let w = Math.max(f, 1 - R);
+    if (marks) w = applyMark(w, getMark(marks, item.word.word));
     weights[i] = w;
     total += w;
   }
