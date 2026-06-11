@@ -25,12 +25,17 @@ pip install -r scripts/requirements.txt
 ```
 python scripts/download.py              # grabs kaikki.org data + frequency list
 python scripts/extract.py               # filters and writes data/nouns.json + verbs.json
+                                        # (adjectives are merged into nouns.json —
+                                        # they decline identically)
 python scripts/extract_rection.py       # rection annotations → data/rection.json
 python scripts/extract_possessives.py   # possessive paradigms → data/possessives.json
 python scripts/extract_numerals.py      # numeral paradigms → data/numerals.json
 python scripts/gen_compound_numerals.py # fills in any 11-19 / tens missing from
                                         # Wiktionary by composing base paradigms
                                         # (no raw dump needed)
+python scripts/extract_tatoeba.py       # tops up example sentences in nouns.json
+                                        # + verbs.json from Tatoeba (run after
+                                        # extract.py; downloads ~150 MB once)
 ```
 
 Re-run these when you want fresh words or change filters (e.g. `FREQUENCY_CUTOFF`
