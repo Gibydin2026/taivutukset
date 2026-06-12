@@ -1517,3 +1517,7 @@ input[type="checkbox"]:focus-visible {
   *::before,
   *::after { transition: none !important; animation: none !important; }
 }
+/* Lisää tämä CSS-tiedoston loppuun [Add this to the end of the CSS file] */
+td.weak-grade { background-color: #fff3e0; /* heikko aste [weak grade] */ }
+td.strong-grade { background-color: #e8f5e9; /* vahva aste [strong grade] */ }
+.conjugation-table { border-collapse: collapse; width: 100%; }
